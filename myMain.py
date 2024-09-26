@@ -7,7 +7,7 @@ import time
 # Library must match according your cpu, eg. PI3 has arm v7
 # EPOS Comand Library can be found here, when EPOS Studio has been installed:
 # C:\Program Files (x86)\maxon motor ag\EPOS IDX\EPOS4\04 Programming\Linux Library
-path = 'C:\\Users\\emilr\\Documents\\P5\\exo\\EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
+path = 'EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
 cdll.LoadLibrary(path)
 epos=CDLL(path)
 
@@ -101,7 +101,6 @@ def GetCurrentVelocity(keyhandle):
         return pVelocityIs.value
     else:
         return None
-    
 
 def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
         # Activate Velocity Mode
@@ -120,7 +119,7 @@ def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
 
 def main():
     keyhandle = init()
-    speed = 100
+    speed = 00
     velocity_control(keyhandle, speed, NodeID, pErrorCode)
     time.sleep(2)
     currentVel = GetCurrentVelocity(keyhandle)
