@@ -117,6 +117,7 @@ def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
 
     print(f'Moving with velocity: {setVelocity} rpm')
 
+
 def main():
     keyhandle = init()
     speed = 1100
