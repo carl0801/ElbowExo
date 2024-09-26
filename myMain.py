@@ -119,11 +119,15 @@ def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
 
 def main():
     keyhandle = init()
-    speed = 00
+    speed = 1100
     velocity_control(keyhandle, speed, NodeID, pErrorCode)
     time.sleep(2)
     currentVel = GetCurrentVelocity(keyhandle)
     print(f'Current velocity: {currentVel}')
+    a = input("press Enter to stop motor: " )
+    if a is not None:
+        # Stop Motor, disable EPOS4
+        ret = epos.VCS_SetDisableState(keyhandle, NodeID, byref(pErrorCode))
     
 if __name__ == '__main__':
     main()

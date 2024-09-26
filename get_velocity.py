@@ -2,7 +2,7 @@
 from ctypes import *
 import sys
 
-path = 'C:\\Users\\emilr\\Documents\\P5\\exo\\EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
+path = 'EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
 cdll.LoadLibrary(path)
 epos = CDLL(path)
 
