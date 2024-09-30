@@ -1,0 +1,4 @@
+Invoking command in '/root/workspace/src/build/emg_sensor': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_sensor -DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_sensor
+Invoked command in '/root/workspace/src/build/emg_sensor' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_sensor -DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_sensor
+Invoking command in '/root/workspace/src/build/emg_sensor': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/src/build/emg_sensor -- -j12 -l12
+Invoked command in '/root/workspace/src/build/emg_sensor' returned '2': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/src/build/emg_sensor -- -j12 -l12

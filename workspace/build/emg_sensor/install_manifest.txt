@@ -1,0 +1,16 @@
+/root/workspace/install/emg_sensor/lib/emg_sensor/sensor
+/root/workspace/install/emg_sensor/share/ament_index/resource_index/package_run_dependencies/emg_sensor
+/root/workspace/install/emg_sensor/share/ament_index/resource_index/parent_prefix_path/emg_sensor
+/root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.sh
+/root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.dsv
+/root/workspace/install/emg_sensor/share/emg_sensor/environment/path.sh
+/root/workspace/install/emg_sensor/share/emg_sensor/environment/path.dsv
+/root/workspace/install/emg_sensor/share/emg_sensor/local_setup.bash
+/root/workspace/install/emg_sensor/share/emg_sensor/local_setup.sh
+/root/workspace/install/emg_sensor/share/emg_sensor/local_setup.zsh
+/root/workspace/install/emg_sensor/share/emg_sensor/local_setup.dsv
+/root/workspace/install/emg_sensor/share/emg_sensor/package.dsv
+/root/workspace/install/emg_sensor/share/ament_index/resource_index/packages/emg_sensor
+/root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig.cmake
+/root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig-version.cmake
+/root/workspace/install/emg_sensor/share/emg_sensor/package.xml

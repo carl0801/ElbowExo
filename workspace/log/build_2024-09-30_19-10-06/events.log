@@ -1,0 +1,76 @@
+[0.000000] (-) TimerEvent: {}
+[0.004880] (emg_listener) JobQueued: {'identifier': 'emg_listener', 'dependencies': OrderedDict()}
+[0.005383] (emg_sensor) JobQueued: {'identifier': 'emg_sensor', 'dependencies': OrderedDict()}
+[0.005490] (emg_listener) JobStarted: {'identifier': 'emg_listener'}
+[0.012038] (emg_sensor) JobStarted: {'identifier': 'emg_sensor'}
+[0.037783] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'cmake'}
+[0.046446] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '/root/workspace/src/emg_listener', '-DCMAKE_INSTALL_PREFIX=/root/workspace/install/emg_listener'], 'cwd': '/root/workspace/build/emg_listener', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '9d495891ef6f'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace/src'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1')]), 'shell': False}
+[0.051748] (emg_sensor) JobProgress: {'identifier': 'emg_sensor', 'progress': 'cmake'}
+[0.053103] (emg_sensor) Command: {'cmd': ['/usr/bin/cmake', '/root/workspace/src/emg_sensor', '-DCMAKE_INSTALL_PREFIX=/root/workspace/install/emg_sensor'], 'cwd': '/root/workspace/build/emg_sensor', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '9d495891ef6f'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace/src'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/build/emg_sensor'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1')]), 'shell': False}
+[0.097478] (-) TimerEvent: {}
+[0.117897] (emg_listener) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[0.122648] (emg_sensor) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[0.198535] (-) TimerEvent: {}
+[0.215730] (emg_listener) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[0.220707] (emg_sensor) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[0.299506] (-) TimerEvent: {}
+[0.405556] (-) TimerEvent: {}
+[0.479542] (emg_listener) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[0.486720] (emg_sensor) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[0.506454] (-) TimerEvent: {}
+[0.515156] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.518686] (emg_sensor) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.518880] (emg_listener) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[0.519055] (emg_sensor) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[0.607472] (-) TimerEvent: {}
+[0.659867] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.660416] (emg_sensor) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.702578] (emg_sensor) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[0.703102] (emg_listener) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[0.704074] (emg_sensor) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.704465] (emg_listener) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.708676] (-) TimerEvent: {}
+[0.810374] (-) TimerEvent: {}
+[0.911492] (-) TimerEvent: {}
+[0.942824] (emg_listener) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[0.944008] (emg_listener) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 21, in <module>\n'}
+[0.946587] (emg_sensor) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[0.946840] (emg_sensor) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 21, in <module>\n'}
+[0.947012] (emg_listener) StderrLine: {'line': b'    from catkin_pkg.package import parse_package_string\n'}
+[0.947185] (emg_listener) StderrLine: {'line': b"ModuleNotFoundError: No module named 'catkin_pkg'\n"}
+[0.947354] (emg_sensor) StderrLine: {'line': b'    from catkin_pkg.package import parse_package_string\n'}
+[0.947545] (emg_sensor) StderrLine: {'line': b"ModuleNotFoundError: No module named 'catkin_pkg'\n"}
+[0.950069] (emg_listener) StderrLine: {'line': b'CMake Error at /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:94 (message):\n'}
+[0.950265] (emg_listener) StderrLine: {'line': b'  execute_process(/opt/conda/envs/myenv/bin/python3\n'}
+[0.950442] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py\n'}
+[0.950726] (emg_listener) StderrLine: {'line': b'  /root/workspace/src/emg_listener/package.xml\n'}
+[0.950963] (emg_listener) StderrLine: {'line': b'  /root/workspace/build/emg_listener/ament_cmake_core/package.cmake) returned\n'}
+[0.951172] (emg_listener) StderrLine: {'line': b'  error code 1\n'}
+[0.951371] (emg_listener) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[0.951705] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)\n'}
+[0.951910] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)\n'}
+[0.952155] (emg_listener) StderrLine: {'line': b'  CMakeLists.txt:21 (ament_package)\n'}
+[0.952338] (emg_listener) StderrLine: {'line': b'\n'}
+[0.952546] (emg_listener) StderrLine: {'line': b'\n'}
+[0.952842] (emg_sensor) StderrLine: {'line': b'CMake Error at /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:94 (message):\n'}
+[0.953034] (emg_sensor) StderrLine: {'line': b'  execute_process(/opt/conda/envs/myenv/bin/python3\n'}
+[0.953224] (emg_sensor) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py\n'}
+[0.953485] (emg_sensor) StderrLine: {'line': b'  /root/workspace/src/emg_sensor/package.xml\n'}
+[0.953676] (emg_sensor) StderrLine: {'line': b'  /root/workspace/build/emg_sensor/ament_cmake_core/package.cmake) returned\n'}
+[0.953858] (emg_sensor) StderrLine: {'line': b'  error code 1\n'}
+[0.954041] (emg_sensor) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[0.954212] (emg_sensor) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)\n'}
+[0.954379] (emg_sensor) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)\n'}
+[0.954637] (emg_sensor) StderrLine: {'line': b'  CMakeLists.txt:20 (ament_package)\n'}
+[0.954819] (emg_sensor) StderrLine: {'line': b'\n'}
+[0.955157] (emg_sensor) StderrLine: {'line': b'\n'}
+[0.955435] (emg_listener) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[0.955974] (emg_listener) StdoutLine: {'line': b'See also "/root/workspace/build/emg_listener/CMakeFiles/CMakeOutput.log".\n'}
+[0.956332] (emg_listener) StdoutLine: {'line': b'See also "/root/workspace/build/emg_listener/CMakeFiles/CMakeError.log".\n'}
+[0.956894] (emg_sensor) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[0.957223] (emg_sensor) StdoutLine: {'line': b'See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeOutput.log".\n'}
+[0.957718] (emg_sensor) StdoutLine: {'line': b'See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeError.log".\n'}
+[0.965876] (emg_listener) CommandEnded: {'returncode': 1}
+[0.967594] (emg_listener) JobEnded: {'identifier': 'emg_listener', 'rc': 1}
+[0.969360] (emg_sensor) JobEnded: {'identifier': 'emg_sensor', 'rc': 'SIGINT'}
+[0.980488] (-) EventReactorShutdown: {}

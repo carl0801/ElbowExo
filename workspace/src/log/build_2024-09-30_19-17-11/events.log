@@ -1,0 +1,110 @@
+[0.000000] (-) TimerEvent: {}
+[0.001304] (-) JobUnselected: {'identifier': 'emg_sensor'}
+[0.001631] (emg_listener) JobQueued: {'identifier': 'emg_listener', 'dependencies': OrderedDict()}
+[0.005212] (emg_listener) JobStarted: {'identifier': 'emg_listener'}
+[0.038036] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'cmake'}
+[0.043809] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '/root/workspace/src/emg_listener', '-DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_listener'], 'cwd': '/root/workspace/src/build/emg_listener', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '1ff9a88ea1f1'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/src/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[0.097793] (-) TimerEvent: {}
+[0.114845] (emg_listener) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[0.202276] (-) TimerEvent: {}
+[0.209628] (emg_listener) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[0.302748] (-) TimerEvent: {}
+[0.406796] (-) TimerEvent: {}
+[0.455204] (emg_listener) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[0.489987] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[0.493871] (emg_listener) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[0.507788] (-) TimerEvent: {}
+[0.608849] (-) TimerEvent: {}
+[0.635339] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[0.677033] (emg_listener) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[0.678451] (emg_listener) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[0.713732] (-) TimerEvent: {}
+[0.816710] (-) TimerEvent: {}
+[0.921712] (-) TimerEvent: {}
+[0.984793] (emg_listener) StdoutLine: {'line': b'-- Configuring done\n'}
+[1.022912] (-) TimerEvent: {}
+[1.045543] (emg_listener) StdoutLine: {'line': b'-- Generating done\n'}
+[1.053216] (emg_listener) StdoutLine: {'line': b'-- Build files have been written to: /root/workspace/src/build/emg_listener\n'}
+[1.062244] (emg_listener) CommandEnded: {'returncode': 0}
+[1.062956] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'build'}
+[1.064782] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/workspace/src/build/emg_listener', '--', '-j12', '-l12'], 'cwd': '/root/workspace/src/build/emg_listener', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '1ff9a88ea1f1'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/src/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[1.123955] (-) TimerEvent: {}
+[1.226504] (-) TimerEvent: {}
+[1.284952] (emg_listener) StdoutLine: {'line': b'\x1b[35m\x1b[1mScanning dependencies of target emg_listener_node\x1b[0m\n'}
+[1.326739] (-) TimerEvent: {}
+[1.427759] (-) TimerEvent: {}
+[1.517518] (emg_listener) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/emg_listener_node.dir/src/listener.cpp.o\x1b[0m\n'}
+[1.528701] (-) TimerEvent: {}
+[1.629757] (-) TimerEvent: {}
+[1.732801] (-) TimerEvent: {}
+[1.838023] (-) TimerEvent: {}
+[1.940771] (-) TimerEvent: {}
+[2.041749] (-) TimerEvent: {}
+[2.142758] (-) TimerEvent: {}
+[2.243762] (-) TimerEvent: {}
+[2.344755] (-) TimerEvent: {}
+[2.449760] (-) TimerEvent: {}
+[2.550776] (-) TimerEvent: {}
+[2.651757] (-) TimerEvent: {}
+[2.752789] (-) TimerEvent: {}
+[2.853760] (-) TimerEvent: {}
+[2.954782] (-) TimerEvent: {}
+[3.055773] (-) TimerEvent: {}
+[3.159266] (-) TimerEvent: {}
+[3.264783] (-) TimerEvent: {}
+[3.368773] (-) TimerEvent: {}
+[3.469990] (-) TimerEvent: {}
+[3.570750] (-) TimerEvent: {}
+[3.675756] (-) TimerEvent: {}
+[3.776797] (-) TimerEvent: {}
+[3.877726] (-) TimerEvent: {}
+[3.982726] (-) TimerEvent: {}
+[4.085198] (-) TimerEvent: {}
+[4.188225] (-) TimerEvent: {}
+[4.288725] (-) TimerEvent: {}
+[4.390745] (-) TimerEvent: {}
+[4.491804] (-) TimerEvent: {}
+[4.592757] (-) TimerEvent: {}
+[4.696740] (-) TimerEvent: {}
+[4.797748] (-) TimerEvent: {}
+[4.898719] (-) TimerEvent: {}
+[4.999747] (-) TimerEvent: {}
+[5.100758] (-) TimerEvent: {}
+[5.124430] (emg_listener) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable emg_listener_node\x1b[0m\n'}
+[5.201767] (-) TimerEvent: {}
+[5.302800] (-) TimerEvent: {}
+[5.412709] (-) TimerEvent: {}
+[5.513710] (-) TimerEvent: {}
+[5.614773] (-) TimerEvent: {}
+[5.663046] (emg_listener) StdoutLine: {'line': b'[100%] Built target emg_listener_node\n'}
+[5.698363] (emg_listener) CommandEnded: {'returncode': 0}
+[5.717711] (-) TimerEvent: {}
+[5.820705] (-) TimerEvent: {}
+[5.923606] (-) TimerEvent: {}
+[5.938193] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'install'}
+[5.969819] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/workspace/src/build/emg_listener'], 'cwd': '/root/workspace/src/build/emg_listener', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '1ff9a88ea1f1'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/src/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[6.008119] (emg_listener) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[6.010939] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/lib/emg_listener/emg_listener_node\n'}
+[6.023696] (-) TimerEvent: {}
+[6.028824] (emg_listener) StdoutLine: {'line': b'-- Set runtime path of "/root/workspace/src/install/emg_listener/lib/emg_listener/emg_listener_node" to ""\n'}
+[6.029924] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener\n'}
+[6.031617] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener\n'}
+[6.033522] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh\n'}
+[6.034485] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv\n'}
+[6.035485] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/environment/path.sh\n'}
+[6.036441] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/environment/path.dsv\n'}
+[6.037535] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.bash\n'}
+[6.038609] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.sh\n'}
+[6.039891] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.zsh\n'}
+[6.040916] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.dsv\n'}
+[6.042157] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/package.dsv\n'}
+[6.043913] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/packages/emg_listener\n'}
+[6.045093] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake\n'}
+[6.046072] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake\n'}
+[6.047153] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/package.xml\n'}
+[6.052762] (emg_listener) CommandEnded: {'returncode': 0}
+[6.127321] (-) TimerEvent: {}
+[6.228819] (-) TimerEvent: {}
+[6.331887] (-) TimerEvent: {}
+[6.337316] (emg_listener) JobEnded: {'identifier': 'emg_listener', 'rc': 0}
+[6.339258] (-) EventReactorShutdown: {}

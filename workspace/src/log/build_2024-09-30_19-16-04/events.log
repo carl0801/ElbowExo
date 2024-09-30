@@ -1,0 +1,125 @@
+[0.000000] (-) TimerEvent: {}
+[0.004545] (-) JobUnselected: {'identifier': 'emg_sensor'}
+[0.004859] (emg_listener) JobQueued: {'identifier': 'emg_listener', 'dependencies': OrderedDict()}
+[0.005090] (emg_listener) JobStarted: {'identifier': 'emg_listener'}
+[0.042165] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'cmake'}
+[0.043180] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '/root/workspace/src/emg_listener', '-DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_listener'], 'cwd': '/root/workspace/src/build/emg_listener', 'env': OrderedDict([('CONDA_PROMPT_MODIFIER', '(myenv)'), ('HOSTNAME', '1ff9a88ea1f1'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('CONDA_SHLVL', '1'), ('OLDPWD', '/root/workspace'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/conda/envs/myenv/bin:/opt/conda/condabin:/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('GSETTINGS_SCHEMA_DIR', '/opt/conda/envs/myenv/share/glib-2.0/schemas'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('CONDA_DEFAULT_ENV', 'myenv'), ('PWD', '/root/workspace/src/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('CONDA_PREFIX', '/opt/conda/envs/myenv'), ('GSETTINGS_SCHEMA_DIR_CONDA_BACKUP', ''), ('COLCON', '1')]), 'shell': False}
+[0.103214] (-) TimerEvent: {}
+[0.207252] (-) TimerEvent: {}
+[0.310483] (-) TimerEvent: {}
+[0.415224] (-) TimerEvent: {}
+[0.460778] (emg_listener) StdoutLine: {'line': b'-- The C compiler identification is GNU 9.4.0\n'}
+[0.516172] (-) TimerEvent: {}
+[0.624219] (-) TimerEvent: {}
+[0.729193] (-) TimerEvent: {}
+[0.744835] (emg_listener) StdoutLine: {'line': b'-- The CXX compiler identification is GNU 9.4.0\n'}
+[0.753619] (emg_listener) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc\n'}
+[0.830388] (-) TimerEvent: {}
+[0.931209] (-) TimerEvent: {}
+[1.034439] (-) TimerEvent: {}
+[1.137218] (-) TimerEvent: {}
+[1.221752] (emg_listener) StdoutLine: {'line': b'-- Check for working C compiler: /usr/bin/cc -- works\n'}
+[1.223513] (emg_listener) StdoutLine: {'line': b'-- Detecting C compiler ABI info\n'}
+[1.238191] (-) TimerEvent: {}
+[1.340220] (-) TimerEvent: {}
+[1.449238] (-) TimerEvent: {}
+[1.554231] (-) TimerEvent: {}
+[1.636206] (emg_listener) StdoutLine: {'line': b'-- Detecting C compiler ABI info - done\n'}
+[1.653807] (emg_listener) StdoutLine: {'line': b'-- Detecting C compile features\n'}
+[1.654543] (-) TimerEvent: {}
+[1.654685] (emg_listener) StdoutLine: {'line': b'-- Detecting C compile features - done\n'}
+[1.657752] (emg_listener) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++\n'}
+[1.755201] (-) TimerEvent: {}
+[1.867179] (-) TimerEvent: {}
+[1.978169] (-) TimerEvent: {}
+[2.067828] (emg_listener) StdoutLine: {'line': b'-- Check for working CXX compiler: /usr/bin/c++ -- works\n'}
+[2.069652] (emg_listener) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info\n'}
+[2.079135] (-) TimerEvent: {}
+[2.180205] (-) TimerEvent: {}
+[2.287187] (-) TimerEvent: {}
+[2.389923] (-) TimerEvent: {}
+[2.493505] (emg_listener) StdoutLine: {'line': b'-- Detecting CXX compiler ABI info - done\n'}
+[2.494126] (-) TimerEvent: {}
+[2.510947] (emg_listener) StdoutLine: {'line': b'-- Detecting CXX compile features\n'}
+[2.511724] (emg_listener) StdoutLine: {'line': b'-- Detecting CXX compile features - done\n'}
+[2.520142] (emg_listener) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[2.598149] (-) TimerEvent: {}
+[2.605383] (emg_listener) StdoutLine: {'line': b'-- Found PythonInterp: /opt/conda/envs/myenv/bin/python3 (found suitable version "3.12.5", minimum required is "3") \n'}
+[2.605723] (emg_listener) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[2.699207] (-) TimerEvent: {}
+[2.803039] (-) TimerEvent: {}
+[2.865193] (emg_listener) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[2.907236] (-) TimerEvent: {}
+[2.910290] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[2.913562] (emg_listener) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[3.011190] (-) TimerEvent: {}
+[3.115215] (-) TimerEvent: {}
+[3.218195] (-) TimerEvent: {}
+[3.285708] (emg_listener) StdoutLine: {'line': b'-- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  \n'}
+[3.316566] (emg_listener) StdoutLine: {'line': b'-- Found FastRTPS: /opt/ros/foxy/include  \n'}
+[3.319687] (-) TimerEvent: {}
+[3.394537] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[3.425127] (-) TimerEvent: {}
+[3.443431] (emg_listener) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[3.444881] (emg_listener) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[3.447492] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread.h\n'}
+[3.528193] (-) TimerEvent: {}
+[3.638200] (-) TimerEvent: {}
+[3.745182] (-) TimerEvent: {}
+[3.846182] (-) TimerEvent: {}
+[3.876147] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread.h - found\n'}
+[3.877121] (emg_listener) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD\n'}
+[3.948430] (-) TimerEvent: {}
+[4.049231] (-) TimerEvent: {}
+[4.156184] (-) TimerEvent: {}
+[4.257279] (-) TimerEvent: {}
+[4.329059] (emg_listener) StdoutLine: {'line': b'-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed\n'}
+[4.329689] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread_create in pthreads\n'}
+[4.358189] (-) TimerEvent: {}
+[4.459695] (-) TimerEvent: {}
+[4.566292] (-) TimerEvent: {}
+[4.669308] (-) TimerEvent: {}
+[4.727125] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread_create in pthreads - not found\n'}
+[4.728003] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread_create in pthread\n'}
+[4.770285] (-) TimerEvent: {}
+[4.871185] (-) TimerEvent: {}
+[4.978171] (-) TimerEvent: {}
+[5.080416] (-) TimerEvent: {}
+[5.144208] (emg_listener) StdoutLine: {'line': b'-- Looking for pthread_create in pthread - found\n'}
+[5.145564] (emg_listener) StdoutLine: {'line': b'-- Found Threads: TRUE  \n'}
+[5.181164] (-) TimerEvent: {}
+[5.282189] (-) TimerEvent: {}
+[5.383165] (-) TimerEvent: {}
+[5.436722] (emg_listener) StderrLine: {'line': b"Error parsing '/root/workspace/src/emg_listener/package.xml':\n"}
+[5.444293] (emg_listener) StderrLine: {'line': b'Traceback (most recent call last):\n'}
+[5.444479] (emg_listener) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 143, in <module>\n'}
+[5.444643] (emg_listener) StderrLine: {'line': b'    main()\n'}
+[5.444799] (emg_listener) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 52, in main\n'}
+[5.444946] (emg_listener) StderrLine: {'line': b'    raise e\n'}
+[5.445092] (emg_listener) StderrLine: {'line': b'  File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 48, in main\n'}
+[5.445241] (emg_listener) StderrLine: {'line': b'    package = parse_package_string(\n'}
+[5.445386] (emg_listener) StderrLine: {'line': b'              ^^^^^^^^^^^^^^^^^^^^^\n'}
+[5.445532] (emg_listener) StderrLine: {'line': b'  File "/opt/conda/envs/myenv/lib/python3.12/site-packages/catkin_pkg/package.py", line 786, in parse_package_string\n'}
+[5.445678] (emg_listener) StderrLine: {'line': b"    raise InvalidPackage('Error(s):%s' % (''.join(['\\n- %s' % e for e in errors])), filename)\n"}
+[5.445825] (emg_listener) StderrLine: {'line': b"catkin_pkg.package.InvalidPackage: Error(s) in package '/root/workspace/src/emg_listener/package.xml':\n"}
+[5.445977] (emg_listener) StderrLine: {'line': b'Error(s):\n'}
+[5.446133] (emg_listener) StderrLine: {'line': b"- The generic dependency on 'rclcpp' is redundant with: exec_depend\n"}
+[5.446278] (emg_listener) StderrLine: {'line': b"- The generic dependency on 'std_msgs' is redundant with: exec_depend\n"}
+[5.451794] (emg_listener) StderrLine: {'line': b'CMake Error at /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:94 (message):\n'}
+[5.452045] (emg_listener) StderrLine: {'line': b'  execute_process(/opt/conda/envs/myenv/bin/python3\n'}
+[5.452285] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py\n'}
+[5.452426] (emg_listener) StderrLine: {'line': b'  /root/workspace/src/emg_listener/package.xml\n'}
+[5.452547] (emg_listener) StderrLine: {'line': b'  /root/workspace/src/build/emg_listener/ament_cmake_core/package.cmake)\n'}
+[5.452674] (emg_listener) StderrLine: {'line': b'  returned error code 1\n'}
+[5.452833] (emg_listener) StderrLine: {'line': b'Call Stack (most recent call first):\n'}
+[5.452963] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)\n'}
+[5.453085] (emg_listener) StderrLine: {'line': b'  /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)\n'}
+[5.453249] (emg_listener) StderrLine: {'line': b'  CMakeLists.txt:21 (ament_package)\n'}
+[5.453457] (emg_listener) StderrLine: {'line': b'\n'}
+[5.453590] (emg_listener) StderrLine: {'line': b'\n'}
+[5.454777] (emg_listener) StdoutLine: {'line': b'-- Configuring incomplete, errors occurred!\n'}
+[5.455039] (emg_listener) StdoutLine: {'line': b'See also "/root/workspace/src/build/emg_listener/CMakeFiles/CMakeOutput.log".\n'}
+[5.455231] (emg_listener) StdoutLine: {'line': b'See also "/root/workspace/src/build/emg_listener/CMakeFiles/CMakeError.log".\n'}
+[5.464233] (emg_listener) CommandEnded: {'returncode': 1}
+[5.464946] (emg_listener) JobEnded: {'identifier': 'emg_listener', 'rc': 1}
+[5.467442] (-) EventReactorShutdown: {}

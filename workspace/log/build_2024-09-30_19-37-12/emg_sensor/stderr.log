@@ -1,0 +1,5 @@
+CMake Error at CMakeLists.txt:15 (install):
+  install TARGETS given target "emg_sensor_node" which does not exist.
+
+
+make: *** [Makefile:266: cmake_check_build_system] Error 1

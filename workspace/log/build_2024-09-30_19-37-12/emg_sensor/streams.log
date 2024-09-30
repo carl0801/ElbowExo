@@ -1,0 +1,18 @@
+[0.046s] Invoking command in '/root/workspace/build/emg_sensor': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12
+[0.183s] -- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+[0.272s] -- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3
+[0.498s] -- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+[0.539s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[0.540s] -- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+[0.709s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[0.756s] -- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+[0.756s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[0.899s] CMake Error at CMakeLists.txt:15 (install):
+[0.902s]   install TARGETS given target "emg_sensor_node" which does not exist.
+[0.903s] 
+[0.911s] 
+[1.080s] -- Configuring incomplete, errors occurred!
+[1.081s] See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeOutput.log".
+[1.082s] See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeError.log".
+[1.090s] make: *** [Makefile:266: cmake_check_build_system] Error 1
+[1.095s] Invoked command in '/root/workspace/build/emg_sensor' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12

@@ -1,0 +1,16 @@
+[0.741s] Invoking command in '/root/workspace/src/emg_launch': CONDA_PROMPT_MODIFIER=(myenv) PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed
+[0.991s] running egg_info
+[0.992s] writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+[0.992s] writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+[0.994s] writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+[0.996s] writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt
+[0.998s] writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt
+[1.026s] reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[1.030s] writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[1.030s] running build
+[1.030s] running build_py
+[1.032s] running install
+[1.032s] running install_lib
+[1.033s] running install_data
+[1.034s] error: can't copy 'launch/emg_launch.py': doesn't exist or not a regular file
+[1.049s] Invoked command in '/root/workspace/src/emg_launch' returned '1': CONDA_PROMPT_MODIFIER=(myenv) PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed

@@ -1,0 +1,4 @@
+Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+Invoked command in '/root/workspace/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_listener
+Invoked command in '/root/workspace/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_listener

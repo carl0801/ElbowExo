@@ -1,0 +1,26 @@
+[0.320s] Invoking command in '/root/workspace/build/emg_sensor': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/workspace/install/emg_launch:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12
+[0.595s] [35m[1mScanning dependencies of target sensor[0m
+[0.795s] [ 50%] [32mBuilding CXX object CMakeFiles/sensor.dir/src/sensor.cpp.o[0m
+[3.301s] [100%] [32m[1mLinking CXX executable sensor[0m
+[3.649s] [100%] Built target sensor
+[3.683s] Invoked command in '/root/workspace/build/emg_sensor' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/workspace/install/emg_launch:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12
+[3.927s] Invoking command in '/root/workspace/build/emg_sensor': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/workspace/install/emg_launch:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_sensor
+[3.967s] -- Install configuration: ""
+[3.969s] -- Installing: /root/workspace/install/emg_sensor/lib/emg_sensor/sensor
+[3.978s] -- Set runtime path of "/root/workspace/install/emg_sensor/lib/emg_sensor/sensor" to ""
+[3.978s] -- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/package_run_dependencies/emg_sensor
+[3.979s] -- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/parent_prefix_path/emg_sensor
+[3.979s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.sh
+[3.980s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.dsv
+[3.980s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.sh
+[3.980s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.dsv
+[3.981s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.bash
+[3.981s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.sh
+[3.981s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.zsh
+[3.981s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.dsv
+[3.982s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/package.dsv
+[3.983s] -- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/packages/emg_sensor
+[3.983s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig.cmake
+[3.983s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig-version.cmake
+[3.984s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/package.xml
+[3.990s] Invoked command in '/root/workspace/build/emg_sensor' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/root/workspace/install/emg_launch:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_sensor

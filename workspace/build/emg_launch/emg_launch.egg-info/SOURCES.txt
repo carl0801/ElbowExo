@@ -1,0 +1,16 @@
+package.xml
+setup.cfg
+setup.py
+../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+../../build/emg_launch/emg_launch.egg-info/SOURCES.txt
+../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+../../build/emg_launch/emg_launch.egg-info/requires.txt
+../../build/emg_launch/emg_launch.egg-info/top_level.txt
+../../build/emg_launch/emg_launch.egg-info/zip-safe
+emg_launch/__init__.py
+emg_launch/launch/emg_launch.py
+resource/emg_launch
+test/test_copyright.py
+test/test_flake8.py
+test/test_pep257.py

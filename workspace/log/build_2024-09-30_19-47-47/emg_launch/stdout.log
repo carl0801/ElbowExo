@@ -1,0 +1,18 @@
+running egg_info
+writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt
+writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt
+reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+running build
+running build_py
+running install
+running install_lib
+running install_data
+copying emg_launch/launch/emg_launch.py -> /root/workspace/install/emg_launch/share/emg_launch/launch
+running install_egg_info
+Copying ../../build/emg_launch/emg_launch.egg-info to /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info
+running install_scripts
+writing list of installed files to '/root/workspace/build/emg_launch/install.log'

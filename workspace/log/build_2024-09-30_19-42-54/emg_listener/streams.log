@@ -1,0 +1,22 @@
+[0.305s] Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+[0.676s] [100%] Built target listener
+[0.711s] Invoked command in '/root/workspace/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+[1.007s] Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_listener
+[1.048s] -- Install configuration: ""
+[1.057s] -- Up-to-date: /root/workspace/install/emg_listener/lib/emg_listener/listener
+[1.058s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener
+[1.058s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener
+[1.059s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh
+[1.059s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv
+[1.059s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/path.sh
+[1.061s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/path.dsv
+[1.061s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.bash
+[1.062s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.sh
+[1.062s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.zsh
+[1.063s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.dsv
+[1.064s] -- Installing: /root/workspace/install/emg_listener/share/emg_listener/package.dsv
+[1.066s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/packages/emg_listener
+[1.066s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake
+[1.067s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake
+[1.071s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/package.xml
+[1.075s] Invoked command in '/root/workspace/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_listener

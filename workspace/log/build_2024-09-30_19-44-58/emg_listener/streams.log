@@ -1,0 +1,21 @@
+[0.298s] Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+[0.651s] [100%] Built target listener
+[0.687s] Invoked command in '/root/workspace/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/build/emg_listener -- -j12 -l12
+[0.985s] Invoking command in '/root/workspace/build/emg_listener': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/build/emg_listener
+[1.033s] -- Install configuration: ""
+[1.038s] -- Up-to-date: /root/workspace/install/emg_listener/lib/emg_listener/listener
+[1.039s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener
+[1.039s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener
+[1.040s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh
+[1.040s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv
+[1.041s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/path.sh
+[1.041s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/environment/path.dsv
+[1.042s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.bash
+[1.042s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.sh
+[1.042s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.zsh
+[1.043s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/local_setup.dsv
+[1.043s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/package.dsv
+[1.044s] -- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/packages/emg_listener
+[1.044s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake
+[1.045s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake
+[1.048s] -- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/package.xml

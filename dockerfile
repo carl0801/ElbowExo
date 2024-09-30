@@ -29,12 +29,19 @@ RUN micromamba create -y -n myenv -f /tmp/environment.yml && \
 ENV PATH /opt/conda/envs/myenv/bin:$PATH
 
 # Copy the workspace folder to the container
-COPY . /workspace
+#COPY . /workspace
+
+# Set the working directorydocker run --rm -v $(pwd)/workspace:/project/workspace -w /project/workspace my-ros-cmake-app bash -c "cmake .. && make && ./hello_world"
+#WORKDIR /project
 
 # Set the working directory
-WORKDIR /workspace/workspace/build
+#COPY /workspace /root/workspace
 
-RUN cmake .. && make
+WORKDIR /root
+
+
+
+#RUN cmake .. && make
 
 
 
@@ -47,5 +54,7 @@ RUN chmod +x /entrypoint.sh
 
 ENTRYPOINT ["/entrypoint.sh"]
 
-#CMD ["bash"]
-CMD ["./hello_world"]
+
+#CMD ["./hello_world"]
+
+CMD ["bash"]

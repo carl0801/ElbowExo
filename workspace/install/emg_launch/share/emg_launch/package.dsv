@@ -1,0 +1,6 @@
+source;share/emg_launch/hook/pythonpath.ps1
+source;share/emg_launch/hook/pythonpath.dsv
+source;share/emg_launch/hook/pythonpath.sh
+source;share/emg_launch/hook/ament_prefix_path.ps1
+source;share/emg_launch/hook/ament_prefix_path.dsv
+source;share/emg_launch/hook/ament_prefix_path.sh

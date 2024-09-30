@@ -1,0 +1,21 @@
+[0.786s] Invoking command in '/root/workspace/src/emg_launch': CONDA_PROMPT_MODIFIER=(myenv) PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed
+[1.037s] running egg_info
+[1.038s] writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+[1.040s] writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+[1.042s] writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+[1.043s] writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt
+[1.044s] writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt
+[1.074s] reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[1.075s] writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[1.076s] running build
+[1.077s] running build_py
+[1.078s] running install
+[1.079s] running install_lib
+[1.079s] running install_data
+[1.080s] copying emg_launch/launch/emg_launch.py -> /root/workspace/install/emg_launch/share/emg_launch/launch
+[1.081s] running install_egg_info
+[1.082s] removing '/root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info' (and everything under it)
+[1.083s] Copying ../../build/emg_launch/emg_launch.egg-info to /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info
+[1.094s] running install_scripts
+[1.128s] writing list of installed files to '/root/workspace/build/emg_launch/install.log'
+[1.161s] Invoked command in '/root/workspace/src/emg_launch' returned '0': CONDA_PROMPT_MODIFIER=(myenv) PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed

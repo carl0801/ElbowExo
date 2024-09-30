@@ -1,0 +1,4 @@
+source;share/emg_listener/local_setup.bash
+source;share/emg_listener/local_setup.dsv
+source;share/emg_listener/local_setup.sh
+source;share/emg_listener/local_setup.zsh

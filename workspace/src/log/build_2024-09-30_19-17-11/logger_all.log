@@ -1,0 +1,145 @@
+[0.230s] DEBUG:colcon:Command line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'emg_listener']
+[0.231s] DEBUG:colcon:Parsed command line arguments: Namespace(ament_cmake_args=None, base_paths=['.'], build_base='build', catkin_cmake_args=None, catkin_skip_building_tests=False, cmake_args=None, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, cmake_target=None, cmake_target_skip_unavailable=False, continue_on_error=False, event_handlers=None, executor='parallel', ignore_user_meta=False, install_base='install', log_base=None, log_level=None, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7ffffe2bf970>>, merge_install=False, metas=['./colcon.meta'], mixin=None, mixin_files=None, mixin_verb=('build',), packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_end=None, packages_ignore=None, packages_ignore_regex=None, packages_select=['emg_listener'], packages_select_build_failed=False, packages_select_by_dep=None, packages_select_regex=None, packages_select_test_failures=False, packages_skip=None, packages_skip_build_finished=False, packages_skip_by_dep=None, packages_skip_regex=None, packages_skip_test_passed=False, packages_skip_up_to=None, packages_start=None, packages_up_to=None, packages_up_to_regex=None, parallel_workers=12, paths=None, symlink_install=False, test_result_base=None, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7ffffe2bf970>, verb_name='build', verb_parser=<colcon_mixin.mixin.mixin_argument.MixinArgumentDecorator object at 0x7ffffe2bff40>)
+[0.253s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) check parameters
+[0.254s] INFO:colcon.colcon_metadata.package_discovery.colcon_meta:Using configuration from '/root/.colcon/metadata/default/Gazebo.meta'
+[0.254s] INFO:colcon.colcon_metadata.package_discovery.colcon_meta:Using configuration from '/root/.colcon/metadata/default/fastrtps.meta'
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) check parameters
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) check parameters
+[0.254s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) check parameters
+[0.255s] Level 1:colcon.colcon_core.package_discovery:discover_packages(colcon_meta) discover
+[0.255s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) discover
+[0.255s] INFO:colcon.colcon_core.package_discovery:Crawling recursively for packages in '/root/workspace/src'
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.255s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ignore_ament_install'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_pkg']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_pkg'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['colcon_meta']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'colcon_meta'
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['ros']
+[0.256s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'ros'
+[0.270s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['cmake', 'python']
+[0.270s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'cmake'
+[0.270s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python'
+[0.270s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extensions ['python_setup_py']
+[0.270s] Level 1:colcon.colcon_core.package_identification:_identify(.) by extension 'python_setup_py'
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(build) by extension 'ignore'
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(build) ignored
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extensions ['ignore', 'ignore_ament_install']
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extension 'ignore'
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extension 'ignore_ament_install'
+[0.271s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extensions ['colcon_pkg']
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extension 'colcon_pkg'
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extensions ['colcon_meta']
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extension 'colcon_meta'
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extensions ['ros']
+[0.272s] Level 1:colcon.colcon_core.package_identification:_identify(emg_listener) by extension 'ros'
+[0.276s] DEBUG:colcon.colcon_core.package_identification:Package 'emg_listener' with type 'ros.ament_cmake' and name 'emg_listener'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extensions ['ignore', 'ignore_ament_install']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'ignore'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'ignore_ament_install'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extensions ['colcon_pkg']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'colcon_pkg'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extensions ['colcon_meta']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'colcon_meta'
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extensions ['ros']
+[0.277s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'ros'
+[0.278s] DEBUG:colcon.colcon_core.package_identification:Failed to parse potential ROS package manifest in'emg_sensor': Error(s) in package 'emg_sensor/package.xml':
+Error(s):
+- The generic dependency on 'rclcpp' is redundant with: exec_depend
+[0.279s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extensions ['cmake', 'python']
+[0.279s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'cmake'
+[0.280s] Level 1:colcon.colcon_core.package_identification:_identify(emg_sensor) by extension 'python'
+[0.280s] DEBUG:colcon.colcon_core.package_identification:Package 'emg_sensor' with type 'cmake' and name 'emg_sensor'
+[0.281s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.281s] Level 1:colcon.colcon_core.package_identification:_identify(install) by extension 'ignore'
+[0.281s] Level 1:colcon.colcon_core.package_identification:_identify(install) ignored
+[0.281s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.282s] Level 1:colcon.colcon_core.package_identification:_identify(log) by extension 'ignore'
+[0.282s] Level 1:colcon.colcon_core.package_identification:_identify(log) ignored
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(recursive) using defaults
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) discover
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(ignore) using defaults
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) discover
+[0.282s] Level 1:colcon.colcon_core.package_discovery:discover_packages(path) using defaults
+[0.296s] INFO:colcon.colcon_core.package_selection:Skipping not selected package 'emg_sensor' in 'emg_sensor'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_args' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_target' from command line to 'None'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_clean_cache' from command line to 'False'
+[0.297s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_clean_first' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'cmake_force_configure' from command line to 'False'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'ament_cmake_args' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'catkin_cmake_args' from command line to 'None'
+[0.298s] Level 5:colcon.colcon_core.verb:set package 'emg_listener' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.298s] DEBUG:colcon.colcon_core.verb:Building package 'emg_listener' with the following arguments: {'ament_cmake_args': None, 'build_base': '/root/workspace/src/build/emg_listener', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/root/workspace/src/install/emg_listener', 'merge_install': False, 'path': '/root/workspace/src/emg_listener', 'symlink_install': False, 'test_result_base': None}
+[0.298s] INFO:colcon.colcon_core.executor:Executing jobs using 'parallel' executor
+[0.303s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete
+[0.304s] INFO:colcon.colcon_ros.task.ament_cmake.build:Building ROS package in '/root/workspace/src/emg_listener' with build type 'ament_cmake'
+[0.304s] INFO:colcon.colcon_cmake.task.cmake.build:Building CMake package in '/root/workspace/src/emg_listener'
+[0.309s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.309s] INFO:colcon.colcon_core.shell:Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.310s] DEBUG:colcon.colcon_core.shell:Skip shell extension 'dsv' for command environment
+[0.352s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/workspace/src/build/emg_listener': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_listener -DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_listener
+[1.367s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/workspace/src/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_listener -DCMAKE_INSTALL_PREFIX=/root/workspace/src/install/emg_listener
+[1.369s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/workspace/src/build/emg_listener': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/src/build/emg_listener -- -j12 -l12
+[6.003s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/workspace/src/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --build /root/workspace/src/build/emg_listener -- -j12 -l12
+[6.274s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoking command in '/root/workspace/src/build/emg_listener': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/src/build/emg_listener
+[6.357s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(emg_listener)
+[6.358s] DEBUG:colcon.colcon_core.event_handler.log_command:Invoked command in '/root/workspace/src/build/emg_listener' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake --install /root/workspace/src/build/emg_listener
+[6.362s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener' for CMake module files
+[6.364s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener' for CMake config files
+[6.365s] Level 1:colcon.colcon_core.shell:create_environment_hook('emg_listener', 'cmake_prefix_path')
+[6.366s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.ps1'
+[6.368s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.dsv'
+[6.369s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.sh'
+[6.371s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib'
+[6.372s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/bin'
+[6.372s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib/pkgconfig/emg_listener.pc'
+[6.373s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib/python3.8/site-packages'
+[6.373s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/bin'
+[6.374s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.ps1'
+[6.375s] INFO:colcon.colcon_core.shell:Creating package descriptor '/root/workspace/src/install/emg_listener/share/emg_listener/package.dsv'
+[6.375s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.sh'
+[6.376s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.bash'
+[6.377s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.zsh'
+[6.378s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/root/workspace/src/install/emg_listener/share/colcon-core/packages/emg_listener)
+[6.627s] Level 1:colcon.colcon_core.environment:create_environment_scripts_only(emg_listener)
+[6.629s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener' for CMake module files
+[6.631s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener' for CMake config files
+[6.632s] Level 1:colcon.colcon_core.shell:create_environment_hook('emg_listener', 'cmake_prefix_path')
+[6.633s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.ps1'
+[6.634s] INFO:colcon.colcon_core.shell:Creating environment descriptor '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.dsv'
+[6.634s] INFO:colcon.colcon_core.shell:Creating environment hook '/root/workspace/src/install/emg_listener/share/emg_listener/hook/cmake_prefix_path.sh'
+[6.635s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib'
+[6.635s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/bin'
+[6.635s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib/pkgconfig/emg_listener.pc'
+[6.636s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/lib/python3.8/site-packages'
+[6.636s] Level 1:colcon.colcon_core.environment:checking '/root/workspace/src/install/emg_listener/bin'
+[6.637s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.ps1'
+[6.638s] INFO:colcon.colcon_core.shell:Creating package descriptor '/root/workspace/src/install/emg_listener/share/emg_listener/package.dsv'
+[6.639s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.sh'
+[6.639s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.bash'
+[6.640s] INFO:colcon.colcon_core.shell:Creating package script '/root/workspace/src/install/emg_listener/share/emg_listener/package.zsh'
+[6.640s] Level 1:colcon.colcon_core.environment:create_file_with_runtime_dependencies(/root/workspace/src/install/emg_listener/share/colcon-core/packages/emg_listener)
+[6.641s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:closing loop
+[6.641s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:loop closed
+[6.642s] DEBUG:colcon.colcon_parallel_executor.executor.parallel:run_until_complete finished with '0'
+[6.642s] DEBUG:colcon.colcon_core.event_reactor:joining thread
+[6.651s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[6.651s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[6.651s] INFO:colcon.colcon_core.plugin_system:Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[6.651s] INFO:colcon.colcon_notification.desktop_notification:Sending desktop notification using 'notify2'
+[6.652s] DEBUG:colcon.colcon_notification.desktop_notification.notify2:Failed to initialize notify2: org.freedesktop.DBus.Error.NotSupported: Unable to autolaunch a dbus-daemon without a $DISPLAY for X11
+[6.653s] DEBUG:colcon.colcon_core.event_reactor:joined thread
+[6.654s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/workspace/src/install/local_setup.ps1'
+[6.655s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/workspace/src/install/_local_setup_util_ps1.py'
+[6.657s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/workspace/src/install/setup.ps1'
+[6.658s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/workspace/src/install/local_setup.sh'
+[6.659s] INFO:colcon.colcon_core.shell:Creating prefix util module '/root/workspace/src/install/_local_setup_util_sh.py'
+[6.660s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/workspace/src/install/setup.sh'
+[6.661s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/workspace/src/install/local_setup.bash'
+[6.662s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/workspace/src/install/setup.bash'
+[6.663s] INFO:colcon.colcon_core.shell:Creating prefix script '/root/workspace/src/install/local_setup.zsh'
+[6.663s] INFO:colcon.colcon_core.shell:Creating prefix chain script '/root/workspace/src/install/setup.zsh'

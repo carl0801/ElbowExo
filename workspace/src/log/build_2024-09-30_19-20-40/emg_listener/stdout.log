@@ -1,0 +1,18 @@
+[100%] Built target emg_listener_node
+-- Install configuration: ""
+-- Up-to-date: /root/workspace/src/install/emg_listener/lib/emg_listener/emg_listener_node
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/environment/path.sh
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/environment/path.dsv
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.bash
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.sh
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.zsh
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/local_setup.dsv
+-- Installing: /root/workspace/src/install/emg_listener/share/emg_listener/package.dsv
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/ament_index/resource_index/packages/emg_listener
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake
+-- Up-to-date: /root/workspace/src/install/emg_listener/share/emg_listener/package.xml

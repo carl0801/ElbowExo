@@ -1,0 +1,55 @@
+[0.040s] Invoking command in '/root/workspace/build/emg_sensor': CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_sensor -DCMAKE_INSTALL_PREFIX=/root/workspace/install/emg_sensor
+[0.432s] -- The C compiler identification is GNU 9.4.0
+[0.716s] -- The CXX compiler identification is GNU 9.4.0
+[0.727s] -- Check for working C compiler: /usr/bin/cc
+[1.231s] -- Check for working C compiler: /usr/bin/cc -- works
+[1.232s] -- Detecting C compiler ABI info
+[1.675s] -- Detecting C compiler ABI info - done
+[1.694s] -- Detecting C compile features
+[1.695s] -- Detecting C compile features - done
+[1.699s] -- Check for working CXX compiler: /usr/bin/c++
+[2.165s] -- Check for working CXX compiler: /usr/bin/c++ -- works
+[2.166s] -- Detecting CXX compiler ABI info
+[2.640s] -- Detecting CXX compiler ABI info - done
+[2.659s] -- Detecting CXX compile features
+[2.660s] -- Detecting CXX compile features - done
+[2.672s] -- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+[2.757s] -- Found PythonInterp: /opt/conda/envs/myenv/bin/python3 (found suitable version "3.12.5", minimum required is "3") 
+[2.758s] -- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3
+[3.019s] -- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+[3.073s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[3.082s] -- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+[3.480s] -- Found OpenSSL: /usr/lib/x86_64-linux-gnu/libcrypto.so (found version "1.1.1f")  
+[3.514s] -- Found FastRTPS: /opt/ros/foxy/include  
+[3.604s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[3.664s] -- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+[3.665s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[3.670s] -- Looking for pthread.h
+[4.157s] -- Looking for pthread.h - found
+[4.159s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+[4.617s] -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+[4.618s] -- Looking for pthread_create in pthreads
+[5.043s] -- Looking for pthread_create in pthreads - not found
+[5.043s] -- Looking for pthread_create in pthread
+[5.490s] -- Looking for pthread_create in pthread - found
+[5.491s] -- Found Threads: TRUE  
+[5.752s] Traceback (most recent call last):
+[5.752s]   File "/opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py", line 21, in <module>
+[5.753s]     from catkin_pkg.package import parse_package_string
+[5.753s] ModuleNotFoundError: No module named 'catkin_pkg'
+[5.757s] CMake Error at /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:94 (message):
+[5.757s]   execute_process(/opt/conda/envs/myenv/bin/python3
+[5.757s]   /opt/ros/foxy/share/ament_cmake_core/cmake/core/package_xml_2_cmake.py
+[5.758s]   /root/workspace/src/emg_sensor/package.xml
+[5.758s]   /root/workspace/build/emg_sensor/ament_cmake_core/package.cmake) returned
+[5.758s]   error code 1
+[5.758s] Call Stack (most recent call first):
+[5.758s]   /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package_xml.cmake:49 (_ament_package_xml)
+[5.759s]   /opt/ros/foxy/share/ament_cmake_core/cmake/core/ament_package.cmake:63 (ament_package_xml)
+[5.759s]   CMakeLists.txt:20 (ament_package)
+[5.759s] 
+[5.759s] 
+[5.760s] -- Configuring incomplete, errors occurred!
+[5.760s] See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeOutput.log".
+[5.761s] See also "/root/workspace/build/emg_sensor/CMakeFiles/CMakeError.log".
+[5.772s] Invoked command in '/root/workspace/build/emg_sensor' returned '1': CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_sensor -DCMAKE_INSTALL_PREFIX=/root/workspace/install/emg_sensor

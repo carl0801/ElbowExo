@@ -1,0 +1,28 @@
+running egg_info
+creating ../../build/emg_launch/emg_launch.egg-info
+writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt
+writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt
+writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /root/workspace/build/emg_launch/build
+creating /root/workspace/build/emg_launch/build/lib
+creating /root/workspace/build/emg_launch/build/lib/emg_launch
+copying emg_launch/__init__.py -> /root/workspace/build/emg_launch/build/lib/emg_launch
+running install
+running install_lib
+creating /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch
+copying /root/workspace/build/emg_launch/build/lib/emg_launch/__init__.py -> /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch
+byte-compiling /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch/__init__.py to __init__.cpython-38.pyc
+running install_data
+creating /root/workspace/install/emg_launch/share/ament_index
+creating /root/workspace/install/emg_launch/share/ament_index/resource_index
+creating /root/workspace/install/emg_launch/share/ament_index/resource_index/packages
+copying resource/emg_launch -> /root/workspace/install/emg_launch/share/ament_index/resource_index/packages
+copying package.xml -> /root/workspace/install/emg_launch/share/emg_launch
+creating /root/workspace/install/emg_launch/share/emg_launch/launch

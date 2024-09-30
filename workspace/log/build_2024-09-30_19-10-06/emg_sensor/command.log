@@ -1,0 +1,1 @@
+Invoking command in '/root/workspace/build/emg_sensor': CONDA_PROMPT_MODIFIER=(myenv) /usr/bin/cmake /root/workspace/src/emg_sensor -DCMAKE_INSTALL_PREFIX=/root/workspace/install/emg_sensor
