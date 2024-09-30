@@ -16,7 +16,7 @@ print(shimmer.get_available_sensors())
 shimmer.start_bt_streaming()
 
 # Initial buffer size (can be adjusted)
-INITIAL_CAPACITY = 10000
+INITIAL_CAPACITY = 1000
 
 # Pre-allocate numpy array to store the data
 data = np.empty((INITIAL_CAPACITY, 3))  # Assuming 6 columns (timestamp, RTCstart, RTCcurrent, sensor1, sensor2, time_diff)
@@ -33,7 +33,7 @@ try:
             for packet in packets:
                 # Ensure the numpy array has enough space, dynamically resize if necessary
                 if current_index >= data.shape[0]:
-                    data = resize_array(data, data.shape[0] + 10000)
+                    data = resize_array(data, data.shape[0] + 2000)
 
                 # Calculate the time stamp between RTCcurrent and RTCstart
                 timestamp = packet[2] - packet[1]
@@ -47,6 +47,9 @@ try:
                 if current_index % 1000 == 0:
                     print(packet)
                     print(f"Timestamp: {timestamp}, Sensor1: {sensor1}, Sensor2: {sensor2}")
+                elif current_index == 2001:
+                    #interrupt the loop
+                    raise KeyboardInterrupt
 
 except KeyboardInterrupt:
     print("KeyboardInterrupt")
@@ -54,4 +57,4 @@ except KeyboardInterrupt:
     shimmer.disconnect(reset_obj_to_init=True)
 
     # Save only the filled portion of the numpy array to a .npz file
-    np.savez('shimmer_data.npz', data=data[:current_index])
+    np.savez('shimmer_data6.npz', data=data[:current_index])

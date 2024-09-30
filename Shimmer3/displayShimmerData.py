@@ -3,7 +3,7 @@ import numpy as np
 
 
 # Load the data from the .npz file
-data = np.load('shimmer_data.npz')['data']
+data = np.load('shimmer_data6.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]
@@ -50,10 +50,16 @@ window_size = 100
 sensor1_data = moving_average(sensor1_data, window_size)
 sensor2_data = moving_average(sensor2_data, window_size)
 
+""" # calculate the derivative of the data
+sensor1_data = np.gradient(sensor1_data)
+sensor2_data = np.gradient(sensor2_data)
+ """
+
 
 plt.figure()
 plt.plot(timestamps, sensor1_data, label='Sensor 1')
 plt.plot(timestamps, sensor2_data, label='Sensor 2')
+
 
 # Set y-axis range
 plt.ylim(0, 100)
