@@ -12,7 +12,7 @@ PORT = "COM5"
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
-shimmer.set_sampling_rate(100)
+shimmer.set_sampling_rate(200)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 #shimmer.#print_object_properties()
 #print(shimmer.get_available_sensors())
@@ -72,7 +72,7 @@ data_thread.start()
 # Set up a timer to update the plot
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
-timer.start(10)  # Update every 50 ms
+timer.start(5)  # Update every 50 ms
 
 if __name__ == '__main__':
     QtWidgets.QApplication.instance().exec_()
