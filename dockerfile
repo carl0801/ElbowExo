@@ -28,9 +28,20 @@ RUN micromamba create -y -n myenv -f /tmp/environment.yml && \
 # Set the micromamba environment as the default
 ENV PATH /opt/conda/envs/myenv/bin:$PATH
 
+# Copy the workspace folder to the container
+COPY . /workspace
+
+# Set the working directory
+WORKDIR /workspace/workspace/build
+
+RUN cmake .. && make
+
+
+
 # Set entrypoint
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
 
-CMD ["bash"]
+#CMD ["bash"]
+CMD ["./hello_world"]
