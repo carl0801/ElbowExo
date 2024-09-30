@@ -1,3 +1,0 @@
-/project/workspace/build/CMakeFiles/rebuild_cache.dir
-/project/workspace/build/CMakeFiles/edit_cache.dir
-/project/workspace/build/CMakeFiles/hello_world.dir

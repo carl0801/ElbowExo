@@ -1,9 +1,10 @@
 
-docker build -t my_ros_foxy_image .
+This to build the docker:
+docker build --platform linux/amd64 -t ros_foxy_workspace .
 
-docker run -it --rm my_ros_foxy_image
 
-
+This to run the docker:
+docker run --platform linux/amd64 -it --rm -v $(pwd)/workspace:/root/workspace -w /root/workspace ros_foxy_workspace 
 
 
 docker run --platform linux/amd64 --rm -v $(pwd)/workspace:/project/workspace -w /project/workspace/build my_ros_foxy_image bash -c "cmake .. && make && ./hello_world"
@@ -18,7 +19,7 @@ docker run --platform linux/amd64 -it --rm -v $(pwd)/workspace:/project/workspac
 
 docker run -it --rm -v $(pwd)/workspace:/root/workspace ros_foxy_workspace -c "cd workspace && source install/setup.bash && ros2 launch emg_launch emg_launch.py && exec bash"
 
-docker run -it --rm -v $(pwd)/workspace:/root/workspace -w /root/workspace ros_foxy_workspace 
+
 
 
 
