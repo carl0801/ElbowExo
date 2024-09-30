@@ -1,0 +1,4 @@
+
+docker build -t my_ros_foxy_image .
+
+docker run -it --rm my_ros_foxy_image
