@@ -1,5 +1,5 @@
-# Start with ROS Jazzy and ubuntu Noble
-FROM ros:jazzy-ros-core-noble
+# Start with ROS Foxy and Ubuntu Focal
+FROM osrf/ros:foxy-desktop
 
 # Install some basic utilities
 RUN apt-get update && apt-get install -y \
@@ -9,10 +9,14 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Install micromamba
-RUN curl -L https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C /usr/local/bin/ --strip-components=1 bin/micromamba
+RUN curl -L https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj -C /usr/local/bin/ --strip-components=1 bin/micromamba && \
+    chmod +x /usr/local/bin/micromamba
 
 # Create directories for micromamba environment and cache
 RUN mkdir -p /opt/conda/envs && mkdir -p /root/.conda/pkgs
+
+# Set the MAMBA_ROOT_PREFIX environment variable
+ENV MAMBA_ROOT_PREFIX=/opt/conda
 
 # Copy the environment.yml file to the container
 COPY environment.yml /tmp/environment.yml
@@ -24,7 +28,7 @@ RUN micromamba create -y -n myenv -f /tmp/environment.yml && \
 # Set the micromamba environment as the default
 ENV PATH /opt/conda/envs/myenv/bin:$PATH
 
-# Set entrypoint 
+# Set entrypoint
 COPY ./entrypoint.sh /
 RUN chmod +x /entrypoint.sh
 ENTRYPOINT ["/entrypoint.sh"]
