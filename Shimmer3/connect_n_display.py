@@ -13,9 +13,10 @@ MAX_DATA_POINTS = 5120  # Keep the last 10 seconds (assuming 512 Hz sampling rat
 # Initialize shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
-shimmer.set_sampling_rate(512.0)
-shimmer.set_enabled_sensors(util.SENSOR_LOW_NOISE_ACCELEROMETER)
+shimmer.set_sampling_rate(512)
+shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 shimmer.print_object_properties()
+
 
 shimmer.start_bt_streaming()
 

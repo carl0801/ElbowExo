@@ -3,7 +3,7 @@ import util
 import numpy as np
 
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM6"
+PORT = "COM5"
 
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
