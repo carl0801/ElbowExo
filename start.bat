@@ -31,7 +31,7 @@ if %ERRORLEVEL% neq 0 (
 
 REM Run the Docker container interactively with the mounted folder
 echo Running Docker container...
-docker run -it --name %CONTAINER_NAME% -v %cd%\%HOST_FOLDER%:%CONTAINER_FOLDER% %IMAGE_NAME%
+docker run -it --rm --name %CONTAINER_NAME% -v %cd%\%HOST_FOLDER%:%CONTAINER_FOLDER% %IMAGE_NAME%
 
 REM Check if the container is running
 if %ERRORLEVEL% neq 0 (
