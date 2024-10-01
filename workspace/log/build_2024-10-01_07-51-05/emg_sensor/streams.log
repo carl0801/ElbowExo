@@ -1,0 +1,37 @@
+[4.192s] Invoking command in '/root/workspace/build/emg_sensor': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12
+[7.497s] -- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+[7.509s] -- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3
+[8.315s] -- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+[8.370s] -- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+[8.374s] -- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+[8.776s] -- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+[8.831s] -- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+[8.841s] -- Using RMW implementation 'rmw_fastrtps_cpp' as default
+[10.019s] -- Configuring done
+[10.781s] -- Generating done
+[10.954s] -- Build files have been written to: /root/workspace/build/emg_sensor
+[11.135s] [35m[1mScanning dependencies of target sensor[0m
+[14.332s] [ 50%] [32mBuilding CXX object CMakeFiles/sensor.dir/src/sensor.cpp.o[0m
+[19.294s] [100%] [32m[1mLinking CXX executable sensor[0m
+[22.701s] [100%] Built target sensor
+[22.740s] Invoked command in '/root/workspace/build/emg_sensor' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --build /root/workspace/build/emg_sensor -- -j12 -l12
+[22.825s] Invoking command in '/root/workspace/build/emg_sensor': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --install /root/workspace/build/emg_sensor
+[22.840s] -- Install configuration: ""
+[22.920s] -- Installing: /root/workspace/install/emg_sensor/lib/emg_sensor/sensor
+[23.170s] -- Set runtime path of "/root/workspace/install/emg_sensor/lib/emg_sensor/sensor" to ""
+[23.215s] -- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/package_run_dependencies/emg_sensor
+[23.256s] -- Installing: /root/workspace/install/emg_sensor/share/ament_index/resource_index/parent_prefix_path/emg_sensor
+[23.462s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.sh
+[23.599s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.dsv
+[23.714s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.sh
+[23.836s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.dsv
+[23.955s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.bash
+[24.069s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.sh
+[24.188s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.zsh
+[24.329s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.dsv
+[24.480s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/package.dsv
+[24.690s] -- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/packages/emg_sensor
+[24.755s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig.cmake
+[24.949s] -- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig-version.cmake
+[25.163s] -- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/package.xml
+[25.201s] Invoked command in '/root/workspace/build/emg_sensor' returned '0': CMAKE_PREFIX_PATH=/opt/ros/foxy /usr/bin/cmake --install /root/workspace/build/emg_sensor

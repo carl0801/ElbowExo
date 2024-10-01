@@ -1,0 +1,33 @@
+-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3
+-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/workspace/build/emg_sensor
+[35m[1mScanning dependencies of target sensor[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/sensor.dir/src/sensor.cpp.o[0m
+[100%] [32m[1mLinking CXX executable sensor[0m
+[100%] Built target sensor
+-- Install configuration: ""
+-- Installing: /root/workspace/install/emg_sensor/lib/emg_sensor/sensor
+-- Set runtime path of "/root/workspace/install/emg_sensor/lib/emg_sensor/sensor" to ""
+-- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/package_run_dependencies/emg_sensor
+-- Installing: /root/workspace/install/emg_sensor/share/ament_index/resource_index/parent_prefix_path/emg_sensor
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.sh
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.dsv
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.sh
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.dsv
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.bash
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.sh
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.zsh
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.dsv
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/package.dsv
+-- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/packages/emg_sensor
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig.cmake
+-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig-version.cmake
+-- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/package.xml
