@@ -7,6 +7,6 @@ dependencies:
   - pandas
   - scikit-learn
   - matplotlib
-#  - pip
+  - pip
 #  - pip:
 #      - some_python_package_from_pypi
