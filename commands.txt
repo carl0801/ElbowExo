@@ -7,6 +7,13 @@ This to run the docker:
 docker run --platform linux/amd64 -it --rm -v $(pwd)/workspace:/root/workspace -w /root/workspace ros_foxy_workspace 
 
 
+
+
+
+maybe 
+docker run --rm -it --privileged --platform linux/amd64 --device=/dev/tty.Bluetooth-Incoming-Port ros_foxy_workspace bash -c "bluetoothd && bash"
+
+
 docker run --platform linux/amd64 --rm -v $(pwd)/workspace:/project/workspace -w /project/workspace/build my_ros_foxy_image bash -c "cmake .. && make && ./hello_world"
 
 docker run --platform linux/amd64 -it --rm -v $(pwd)/workspace:/project/workspace -w /project/workspace/build my_ros_foxy_image bash

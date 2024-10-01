@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     bluetooth \
     curl \
     wget \
-    git \
+    git \    docker run --rm -it --privileged --device=/dev/tty.Bluetooth-Incoming-Port ros_foxy_workspace bash -c "service bluetooth start; bash"
     && rm -rf /var/lib/apt/lists/*
 
 # Install micromamba
@@ -36,7 +36,7 @@ ENV PATH /opt/conda/envs/myenv/bin:$PATH
 #WORKDIR /project
 
 # Set the working directory
-#COPY /workspace /root/workspace
+COPY /workspace /root/workspace
 
 WORKDIR /root
 
