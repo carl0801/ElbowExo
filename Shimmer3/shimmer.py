@@ -267,8 +267,10 @@ class Shimmer3:
         """
         ack = struct.pack("B", util.ACK_COMMAND_PROCESSED)
         ddata = ""
-        while ddata != ack:
+        attempt = 200
+        while attempt == 0 or ddata != ack:
             ddata = self._serial_port.read(1)
+            attempt -= 1
         return True
 
     # CONNECTION methods
