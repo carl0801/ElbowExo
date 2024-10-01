@@ -1,0 +1,20 @@
+[12.557s] Invoking command in '/root/workspace/src/emg_launch': PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed
+[14.174s] running egg_info
+[14.191s] writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO
+[14.223s] writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt
+[14.244s] writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt
+[14.260s] writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt
+[14.278s] writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt
+[14.494s] reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[14.680s] writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'
+[14.686s] running build
+[14.688s] running build_py
+[14.725s] running install
+[14.734s] running install_lib
+[14.896s] running install_data
+[15.046s] running install_egg_info
+[15.066s] removing '/root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info' (and everything under it)
+[15.267s] Copying ../../build/emg_launch/emg_launch.egg-info to /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info
+[16.164s] running install_scripts
+[16.307s] writing list of installed files to '/root/workspace/build/emg_launch/install.log'
+[16.342s] Invoked command in '/root/workspace/src/emg_launch' returned '0': PYTHONPATH=/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base ../../build/emg_launch build --build-base /root/workspace/build/emg_launch/build install --record /root/workspace/build/emg_launch/install.log --install-scripts $base/lib/emg_launch --single-version-externally-managed

@@ -1,0 +1,578 @@
+[0.000000] (-) TimerEvent: {}
+[0.000899] (emg_launch) JobQueued: {'identifier': 'emg_launch', 'dependencies': OrderedDict()}
+[0.001265] (emg_listener) JobQueued: {'identifier': 'emg_listener', 'dependencies': OrderedDict()}
+[0.001457] (emg_sensor) JobQueued: {'identifier': 'emg_sensor', 'dependencies': OrderedDict()}
+[0.001641] (emg_launch) JobStarted: {'identifier': 'emg_launch'}
+[0.098458] (-) TimerEvent: {}
+[0.228061] (-) TimerEvent: {}
+[0.346159] (-) TimerEvent: {}
+[0.467249] (-) TimerEvent: {}
+[0.596615] (-) TimerEvent: {}
+[0.734650] (-) TimerEvent: {}
+[0.892099] (-) TimerEvent: {}
+[1.095566] (-) TimerEvent: {}
+[1.345339] (-) TimerEvent: {}
+[1.553384] (-) TimerEvent: {}
+[1.661291] (-) TimerEvent: {}
+[1.817209] (-) TimerEvent: {}
+[1.963467] (-) TimerEvent: {}
+[2.004738] (emg_listener) JobStarted: {'identifier': 'emg_listener'}
+[2.063659] (-) TimerEvent: {}
+[2.172474] (-) TimerEvent: {}
+[2.329620] (-) TimerEvent: {}
+[2.432287] (-) TimerEvent: {}
+[2.577777] (-) TimerEvent: {}
+[2.603545] (emg_sensor) JobStarted: {'identifier': 'emg_sensor'}
+[2.678116] (-) TimerEvent: {}
+[2.816115] (-) TimerEvent: {}
+[2.924239] (-) TimerEvent: {}
+[3.082347] (-) TimerEvent: {}
+[3.199475] (-) TimerEvent: {}
+[3.315328] (-) TimerEvent: {}
+[3.447554] (-) TimerEvent: {}
+[3.603496] (-) TimerEvent: {}
+[3.799799] (-) TimerEvent: {}
+[3.901177] (-) TimerEvent: {}
+[4.002253] (-) TimerEvent: {}
+[4.179618] (-) TimerEvent: {}
+[4.345242] (-) TimerEvent: {}
+[4.496301] (-) TimerEvent: {}
+[4.648001] (-) TimerEvent: {}
+[4.749083] (-) TimerEvent: {}
+[4.874061] (-) TimerEvent: {}
+[4.921582] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'cmake'}
+[4.974367] (-) TimerEvent: {}
+[5.126365] (-) TimerEvent: {}
+[5.237087] (-) TimerEvent: {}
+[5.383784] (-) TimerEvent: {}
+[5.417025] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'build'}
+[5.484218] (-) TimerEvent: {}
+[5.527416] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/workspace/build/emg_listener', '--', '-j12', '-l12'], 'cwd': '/root/workspace/build/emg_listener', 'env': OrderedDict([('HOSTNAME', 'bdb33ac076ec'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('PWD', '/root/workspace/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[5.747021] (-) TimerEvent: {}
+[5.747452] (emg_sensor) JobProgress: {'identifier': 'emg_sensor', 'progress': 'cmake'}
+[5.847395] (-) TimerEvent: {}
+[6.017383] (-) TimerEvent: {}
+[6.136665] (-) TimerEvent: {}
+[6.208872] (emg_sensor) JobProgress: {'identifier': 'emg_sensor', 'progress': 'build'}
+[6.236906] (-) TimerEvent: {}
+[6.343112] (-) TimerEvent: {}
+[6.364092] (emg_sensor) Command: {'cmd': ['/usr/bin/cmake', '--build', '/root/workspace/build/emg_sensor', '--', '-j12', '-l12'], 'cwd': '/root/workspace/build/emg_sensor', 'env': OrderedDict([('HOSTNAME', 'bdb33ac076ec'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('PWD', '/root/workspace/build/emg_sensor'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[6.856890] (-) TimerEvent: {}
+[6.960329] (-) TimerEvent: {}
+[7.069582] (-) TimerEvent: {}
+[7.182708] (-) TimerEvent: {}
+[7.345100] (-) TimerEvent: {}
+[7.463199] (-) TimerEvent: {}
+[7.576653] (-) TimerEvent: {}
+[7.697710] (-) TimerEvent: {}
+[7.814274] (-) TimerEvent: {}
+[7.946621] (-) TimerEvent: {}
+[8.064885] (-) TimerEvent: {}
+[8.174299] (-) TimerEvent: {}
+[8.297750] (-) TimerEvent: {}
+[8.416249] (-) TimerEvent: {}
+[8.547575] (-) TimerEvent: {}
+[8.572969] (emg_listener) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[8.680611] (-) TimerEvent: {}
+[8.686019] (emg_listener) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[8.781048] (-) TimerEvent: {}
+[8.893837] (-) TimerEvent: {}
+[9.019852] (-) TimerEvent: {}
+[9.147412] (-) TimerEvent: {}
+[9.255104] (-) TimerEvent: {}
+[9.381709] (-) TimerEvent: {}
+[9.497098] (-) TimerEvent: {}
+[9.621362] (-) TimerEvent: {}
+[9.795463] (-) TimerEvent: {}
+[9.914481] (-) TimerEvent: {}
+[10.016553] (-) TimerEvent: {}
+[10.096698] (emg_sensor) StdoutLine: {'line': b'-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)\n'}
+[10.111329] (emg_sensor) StdoutLine: {'line': b'-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3\n'}
+[10.116698] (-) TimerEvent: {}
+[10.228250] (-) TimerEvent: {}
+[10.329808] (-) TimerEvent: {}
+[10.534225] (-) TimerEvent: {}
+[10.640735] (-) TimerEvent: {}
+[10.662533] (emg_listener) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[10.740864] (-) TimerEvent: {}
+[10.794969] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[10.808542] (emg_listener) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[10.841032] (-) TimerEvent: {}
+[10.917422] (emg_sensor) StdoutLine: {'line': b'-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)\n'}
+[10.941167] (-) TimerEvent: {}
+[10.974120] (emg_sensor) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c\n'}
+[10.977576] (emg_sensor) StdoutLine: {'line': b'-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)\n'}
+[11.041344] (-) TimerEvent: {}
+[11.141940] (-) TimerEvent: {}
+[11.242547] (-) TimerEvent: {}
+[11.306560] (emg_listener) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[11.342742] (-) TimerEvent: {}
+[11.379910] (emg_sensor) StdoutLine: {'line': b'-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp\n'}
+[11.389507] (emg_listener) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[11.400710] (emg_listener) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[11.434627] (emg_sensor) StdoutLine: {'line': b'-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)\n'}
+[11.442893] (-) TimerEvent: {}
+[11.443685] (emg_sensor) StdoutLine: {'line': b"-- Using RMW implementation 'rmw_fastrtps_cpp' as default\n"}
+[11.543046] (-) TimerEvent: {}
+[11.611547] (emg_listener) StdoutLine: {'line': b'-- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/share/ament_lint_auto/cmake)\n'}
+[11.643288] (-) TimerEvent: {}
+[11.744602] (-) TimerEvent: {}
+[11.846111] (-) TimerEvent: {}
+[11.947170] (-) TimerEvent: {}
+[12.048224] (-) TimerEvent: {}
+[12.150129] (-) TimerEvent: {}
+[12.251440] (-) TimerEvent: {}
+[12.335115] (emg_listener) StdoutLine: {'line': b"-- Added test 'copyright' to check source files copyright and LICENSE\n"}
+[12.351601] (-) TimerEvent: {}
+[12.452243] (-) TimerEvent: {}
+[12.510776] (emg_launch) Command: {'cmd': ['/usr/bin/python3', 'setup.py', 'egg_info', '--egg-base', '../../build/emg_launch', 'build', '--build-base', '/root/workspace/build/emg_launch/build', 'install', '--record', '/root/workspace/build/emg_launch/install.log', '--install-scripts', '$base/lib/emg_launch', '--single-version-externally-managed'], 'cwd': '/root/workspace/src/emg_launch', 'env': {'HOSTNAME': 'bdb33ac076ec', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib', 'HOME': '/root', 'ROS_PYTHON_VERSION': '3', 'ROS_DISTRO': 'foxy', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'MAMBA_ROOT_PREFIX': '/opt/conda', 'LANG': 'C.UTF-8', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'AMENT_PREFIX_PATH': '/opt/ros/foxy', 'PWD': '/root/workspace/build/emg_launch', 'LC_ALL': 'C.UTF-8', 'PYTHONPATH': '/root/workspace/build/emg_launch/prefix_override:/root/workspace/install/emg_launch/lib/python3.8/site-packages:/opt/ros/foxy/lib/python3.8/site-packages', 'COLCON': '1'}, 'shell': False}
+[12.560519] (-) TimerEvent: {}
+[12.573834] (emg_listener) StdoutLine: {'line': b"-- Added test 'cppcheck' to perform static code analysis on C / C++ code\n"}
+[12.575490] (emg_listener) StdoutLine: {'line': b'-- Configured cppcheck include dirs: \n'}
+[12.576809] (emg_listener) StdoutLine: {'line': b'-- Configured cppcheck exclude dirs and/or files: \n'}
+[12.620978] (emg_sensor) StdoutLine: {'line': b'-- Configuring done\n'}
+[12.660766] (-) TimerEvent: {}
+[12.763524] (-) TimerEvent: {}
+[12.865184] (-) TimerEvent: {}
+[12.876721] (emg_listener) StdoutLine: {'line': b"-- Added test 'cpplint' to check C / C++ code against the Google style\n"}
+[12.879603] (emg_listener) StdoutLine: {'line': b'-- Configured cpplint exclude dirs and/or files: \n'}
+[12.965404] (-) TimerEvent: {}
+[13.016472] (emg_listener) StdoutLine: {'line': b"-- Added test 'lint_cmake' to check CMake code style\n"}
+[13.065598] (-) TimerEvent: {}
+[13.167876] (-) TimerEvent: {}
+[13.268704] (-) TimerEvent: {}
+[13.365718] (emg_listener) StdoutLine: {'line': b"-- Added test 'uncrustify' to check C / C++ code style\n"}
+[13.368093] (emg_listener) StdoutLine: {'line': b'-- Configured uncrustify additional arguments: \n'}
+[13.369941] (-) TimerEvent: {}
+[13.385060] (emg_sensor) StdoutLine: {'line': b'-- Generating done\n'}
+[13.394186] (emg_listener) StdoutLine: {'line': b"-- Added test 'xmllint' to check XML markup files\n"}
+[13.470087] (-) TimerEvent: {}
+[13.557549] (emg_sensor) StdoutLine: {'line': b'-- Build files have been written to: /root/workspace/build/emg_sensor\n'}
+[13.570254] (-) TimerEvent: {}
+[13.671507] (-) TimerEvent: {}
+[13.688264] (emg_listener) StdoutLine: {'line': b'-- Configuring done\n'}
+[13.737917] (emg_sensor) StdoutLine: {'line': b'\x1b[35m\x1b[1mScanning dependencies of target sensor\x1b[0m\n'}
+[13.771785] (-) TimerEvent: {}
+[13.874077] (-) TimerEvent: {}
+[13.975872] (-) TimerEvent: {}
+[14.077937] (-) TimerEvent: {}
+[14.172287] (emg_launch) StdoutLine: {'line': b'running egg_info\n'}
+[14.178077] (-) TimerEvent: {}
+[14.189424] (emg_launch) StdoutLine: {'line': b'writing ../../build/emg_launch/emg_launch.egg-info/PKG-INFO\n'}
+[14.218387] (emg_launch) StdoutLine: {'line': b'writing dependency_links to ../../build/emg_launch/emg_launch.egg-info/dependency_links.txt\n'}
+[14.243047] (emg_launch) StdoutLine: {'line': b'writing entry points to ../../build/emg_launch/emg_launch.egg-info/entry_points.txt\n'}
+[14.257564] (emg_launch) StdoutLine: {'line': b'writing requirements to ../../build/emg_launch/emg_launch.egg-info/requires.txt\n'}
+[14.270768] (emg_launch) StdoutLine: {'line': b'writing top-level names to ../../build/emg_launch/emg_launch.egg-info/top_level.txt\n'}
+[14.281065] (-) TimerEvent: {}
+[14.381781] (-) TimerEvent: {}
+[14.482491] (-) TimerEvent: {}
+[14.493592] (emg_launch) StdoutLine: {'line': b"reading manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'\n"}
+[14.562112] (emg_listener) StdoutLine: {'line': b'-- Generating done\n'}
+[14.582649] (-) TimerEvent: {}
+[14.680449] (emg_launch) StdoutLine: {'line': b"writing manifest file '../../build/emg_launch/emg_launch.egg-info/SOURCES.txt'\n"}
+[14.682801] (-) TimerEvent: {}
+[14.686048] (emg_launch) StdoutLine: {'line': b'running build\n'}
+[14.688022] (emg_launch) StdoutLine: {'line': b'running build_py\n'}
+[14.724961] (emg_launch) StdoutLine: {'line': b'running install\n'}
+[14.734250] (emg_launch) StdoutLine: {'line': b'running install_lib\n'}
+[14.768310] (emg_listener) StdoutLine: {'line': b'-- Build files have been written to: /root/workspace/build/emg_listener\n'}
+[14.783000] (-) TimerEvent: {}
+[14.884543] (-) TimerEvent: {}
+[14.895489] (emg_launch) StdoutLine: {'line': b'running install_data\n'}
+[14.969875] (emg_listener) StdoutLine: {'line': b'\x1b[35m\x1b[1mScanning dependencies of target listener\x1b[0m\n'}
+[14.984780] (-) TimerEvent: {}
+[15.045170] (emg_launch) StdoutLine: {'line': b'running install_egg_info\n'}
+[15.066930] (emg_launch) StdoutLine: {'line': b"removing '/root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info' (and everything under it)\n"}
+[15.085033] (-) TimerEvent: {}
+[15.186511] (-) TimerEvent: {}
+[15.267563] (emg_launch) StdoutLine: {'line': b'Copying ../../build/emg_launch/emg_launch.egg-info to /root/workspace/install/emg_launch/lib/python3.8/site-packages/emg_launch-0.0.0-py3.8.egg-info\n'}
+[15.286853] (-) TimerEvent: {}
+[15.388579] (-) TimerEvent: {}
+[15.490128] (-) TimerEvent: {}
+[15.592112] (-) TimerEvent: {}
+[15.693396] (-) TimerEvent: {}
+[15.795273] (-) TimerEvent: {}
+[15.897334] (-) TimerEvent: {}
+[15.999108] (-) TimerEvent: {}
+[16.100686] (-) TimerEvent: {}
+[16.164990] (emg_launch) StdoutLine: {'line': b'running install_scripts\n'}
+[16.201013] (-) TimerEvent: {}
+[16.302754] (-) TimerEvent: {}
+[16.307482] (emg_launch) StdoutLine: {'line': b"writing list of installed files to '/root/workspace/build/emg_launch/install.log'\n"}
+[16.340899] (emg_launch) CommandEnded: {'returncode': 0}
+[16.402922] (-) TimerEvent: {}
+[16.505075] (-) TimerEvent: {}
+[16.606647] (-) TimerEvent: {}
+[16.707718] (-) TimerEvent: {}
+[16.811174] (-) TimerEvent: {}
+[16.913398] (-) TimerEvent: {}
+[16.935163] (emg_sensor) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/sensor.dir/src/sensor.cpp.o\x1b[0m\n'}
+[17.013644] (-) TimerEvent: {}
+[17.114650] (-) TimerEvent: {}
+[17.215795] (-) TimerEvent: {}
+[17.236972] (emg_launch) JobEnded: {'identifier': 'emg_launch', 'rc': 0}
+[17.315990] (-) TimerEvent: {}
+[17.416758] (-) TimerEvent: {}
+[17.518073] (-) TimerEvent: {}
+[17.619174] (-) TimerEvent: {}
+[17.720423] (-) TimerEvent: {}
+[17.787739] (emg_listener) StdoutLine: {'line': b'[ 50%] \x1b[32mBuilding CXX object CMakeFiles/listener.dir/src/listener.cpp.o\x1b[0m\n'}
+[17.820602] (-) TimerEvent: {}
+[17.921874] (-) TimerEvent: {}
+[18.023384] (-) TimerEvent: {}
+[18.124862] (-) TimerEvent: {}
+[18.225769] (-) TimerEvent: {}
+[18.326848] (-) TimerEvent: {}
+[18.433114] (-) TimerEvent: {}
+[18.534050] (-) TimerEvent: {}
+[18.635156] (-) TimerEvent: {}
+[18.736342] (-) TimerEvent: {}
+[18.837295] (-) TimerEvent: {}
+[18.938703] (-) TimerEvent: {}
+[19.039609] (-) TimerEvent: {}
+[19.140539] (-) TimerEvent: {}
+[19.241476] (-) TimerEvent: {}
+[19.342556] (-) TimerEvent: {}
+[19.443645] (-) TimerEvent: {}
+[19.544762] (-) TimerEvent: {}
+[19.645848] (-) TimerEvent: {}
+[19.748402] (-) TimerEvent: {}
+[19.849389] (-) TimerEvent: {}
+[19.950339] (-) TimerEvent: {}
+[20.051232] (-) TimerEvent: {}
+[20.152091] (-) TimerEvent: {}
+[20.253046] (-) TimerEvent: {}
+[20.353917] (-) TimerEvent: {}
+[20.454983] (-) TimerEvent: {}
+[20.556039] (-) TimerEvent: {}
+[20.657140] (-) TimerEvent: {}
+[20.758480] (-) TimerEvent: {}
+[20.859501] (-) TimerEvent: {}
+[20.960357] (-) TimerEvent: {}
+[21.061236] (-) TimerEvent: {}
+[21.162175] (-) TimerEvent: {}
+[21.263034] (-) TimerEvent: {}
+[21.363909] (-) TimerEvent: {}
+[21.464623] (-) TimerEvent: {}
+[21.565354] (-) TimerEvent: {}
+[21.666275] (-) TimerEvent: {}
+[21.766939] (-) TimerEvent: {}
+[21.867673] (-) TimerEvent: {}
+[21.895591] (emg_sensor) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable sensor\x1b[0m\n'}
+[21.967839] (-) TimerEvent: {}
+[22.068688] (-) TimerEvent: {}
+[22.169687] (-) TimerEvent: {}
+[22.270609] (-) TimerEvent: {}
+[22.371441] (-) TimerEvent: {}
+[22.472569] (-) TimerEvent: {}
+[22.573581] (-) TimerEvent: {}
+[22.674770] (-) TimerEvent: {}
+[22.775848] (-) TimerEvent: {}
+[22.876574] (-) TimerEvent: {}
+[22.977681] (-) TimerEvent: {}
+[23.078458] (-) TimerEvent: {}
+[23.179448] (-) TimerEvent: {}
+[23.280311] (-) TimerEvent: {}
+[23.382549] (-) TimerEvent: {}
+[23.483539] (-) TimerEvent: {}
+[23.584404] (-) TimerEvent: {}
+[23.685408] (-) TimerEvent: {}
+[23.786676] (-) TimerEvent: {}
+[23.887540] (-) TimerEvent: {}
+[23.988327] (-) TimerEvent: {}
+[24.089365] (-) TimerEvent: {}
+[24.190413] (-) TimerEvent: {}
+[24.291631] (-) TimerEvent: {}
+[24.392750] (-) TimerEvent: {}
+[24.494090] (-) TimerEvent: {}
+[24.594711] (-) TimerEvent: {}
+[24.695645] (-) TimerEvent: {}
+[24.796682] (-) TimerEvent: {}
+[24.898066] (-) TimerEvent: {}
+[24.999005] (-) TimerEvent: {}
+[25.099649] (-) TimerEvent: {}
+[25.200330] (-) TimerEvent: {}
+[25.275219] (emg_listener) StdoutLine: {'line': b'[100%] \x1b[32m\x1b[1mLinking CXX executable listener\x1b[0m\n'}
+[25.300516] (-) TimerEvent: {}
+[25.305009] (emg_sensor) StdoutLine: {'line': b'[100%] Built target sensor\n'}
+[25.344450] (emg_sensor) CommandEnded: {'returncode': 0}
+[25.400785] (-) TimerEvent: {}
+[25.407863] (emg_sensor) JobProgress: {'identifier': 'emg_sensor', 'progress': 'install'}
+[25.427397] (emg_sensor) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/workspace/build/emg_sensor'], 'cwd': '/root/workspace/build/emg_sensor', 'env': OrderedDict([('HOSTNAME', 'bdb33ac076ec'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('PWD', '/root/workspace/build/emg_sensor'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[25.443930] (emg_sensor) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[25.500934] (-) TimerEvent: {}
+[25.523840] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/lib/emg_sensor/sensor\n'}
+[25.601152] (-) TimerEvent: {}
+[25.702318] (-) TimerEvent: {}
+[25.773084] (emg_sensor) StdoutLine: {'line': b'-- Set runtime path of "/root/workspace/install/emg_sensor/lib/emg_sensor/sensor" to ""\n'}
+[25.802495] (-) TimerEvent: {}
+[25.818050] (emg_sensor) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/package_run_dependencies/emg_sensor\n'}
+[25.859917] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/ament_index/resource_index/parent_prefix_path/emg_sensor\n'}
+[25.902636] (-) TimerEvent: {}
+[26.003270] (-) TimerEvent: {}
+[26.062576] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.sh\n'}
+[26.103519] (-) TimerEvent: {}
+[26.202154] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/ament_prefix_path.dsv\n'}
+[26.204650] (-) TimerEvent: {}
+[26.305429] (-) TimerEvent: {}
+[26.318091] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.sh\n'}
+[26.405602] (-) TimerEvent: {}
+[26.440279] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/environment/path.dsv\n'}
+[26.505802] (-) TimerEvent: {}
+[26.558901] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.bash\n'}
+[26.606051] (-) TimerEvent: {}
+[26.672950] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.sh\n'}
+[26.706331] (-) TimerEvent: {}
+[26.791115] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.zsh\n'}
+[26.806499] (-) TimerEvent: {}
+[26.907643] (-) TimerEvent: {}
+[26.931628] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/local_setup.dsv\n'}
+[27.007923] (-) TimerEvent: {}
+[27.082116] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/package.dsv\n'}
+[27.108107] (-) TimerEvent: {}
+[27.209608] (-) TimerEvent: {}
+[27.293207] (emg_sensor) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_sensor/share/ament_index/resource_index/packages/emg_sensor\n'}
+[27.309849] (-) TimerEvent: {}
+[27.357918] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig.cmake\n'}
+[27.410231] (-) TimerEvent: {}
+[27.511587] (-) TimerEvent: {}
+[27.552632] (emg_sensor) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_sensor/share/emg_sensor/cmake/emg_sensorConfig-version.cmake\n'}
+[27.611722] (-) TimerEvent: {}
+[27.714388] (-) TimerEvent: {}
+[27.766332] (emg_sensor) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_sensor/share/emg_sensor/package.xml\n'}
+[27.798157] (emg_sensor) CommandEnded: {'returncode': 0}
+[27.814650] (-) TimerEvent: {}
+[27.922525] (-) TimerEvent: {}
+[28.023556] (-) TimerEvent: {}
+[28.125333] (-) TimerEvent: {}
+[28.226667] (-) TimerEvent: {}
+[28.328077] (-) TimerEvent: {}
+[28.429702] (-) TimerEvent: {}
+[28.530618] (-) TimerEvent: {}
+[28.637914] (-) TimerEvent: {}
+[28.739572] (-) TimerEvent: {}
+[28.840869] (-) TimerEvent: {}
+[28.942341] (-) TimerEvent: {}
+[29.043374] (-) TimerEvent: {}
+[29.144060] (-) TimerEvent: {}
+[29.244956] (-) TimerEvent: {}
+[29.352731] (-) TimerEvent: {}
+[29.468574] (-) TimerEvent: {}
+[29.569445] (-) TimerEvent: {}
+[29.670348] (-) TimerEvent: {}
+[29.771977] (-) TimerEvent: {}
+[29.873642] (-) TimerEvent: {}
+[29.952993] (emg_sensor) JobEnded: {'identifier': 'emg_sensor', 'rc': 0}
+[30.189040] (-) TimerEvent: {}
+[30.371350] (-) TimerEvent: {}
+[30.473056] (-) TimerEvent: {}
+[30.584658] (-) TimerEvent: {}
+[30.691352] (-) TimerEvent: {}
+[30.834056] (-) TimerEvent: {}
+[30.981760] (-) TimerEvent: {}
+[31.153041] (-) TimerEvent: {}
+[31.304838] (-) TimerEvent: {}
+[31.405852] (-) TimerEvent: {}
+[31.547970] (-) TimerEvent: {}
+[31.697319] (-) TimerEvent: {}
+[31.814539] (-) TimerEvent: {}
+[31.933558] (-) TimerEvent: {}
+[32.096945] (-) TimerEvent: {}
+[32.208050] (-) TimerEvent: {}
+[32.364108] (-) TimerEvent: {}
+[32.474935] (-) TimerEvent: {}
+[32.598373] (-) TimerEvent: {}
+[32.715175] (-) TimerEvent: {}
+[32.844810] (-) TimerEvent: {}
+[32.965785] (-) TimerEvent: {}
+[33.074984] (-) TimerEvent: {}
+[33.198232] (-) TimerEvent: {}
+[33.304340] (-) TimerEvent: {}
+[33.405812] (-) TimerEvent: {}
+[33.507125] (-) TimerEvent: {}
+[33.608550] (-) TimerEvent: {}
+[33.722668] (-) TimerEvent: {}
+[33.864319] (-) TimerEvent: {}
+[33.992922] (-) TimerEvent: {}
+[34.097820] (-) TimerEvent: {}
+[34.215604] (-) TimerEvent: {}
+[34.346151] (-) TimerEvent: {}
+[34.447777] (-) TimerEvent: {}
+[34.548334] (-) TimerEvent: {}
+[34.649159] (-) TimerEvent: {}
+[34.750546] (-) TimerEvent: {}
+[34.899385] (-) TimerEvent: {}
+[35.032091] (-) TimerEvent: {}
+[35.133048] (-) TimerEvent: {}
+[35.241841] (-) TimerEvent: {}
+[35.389744] (-) TimerEvent: {}
+[35.496819] (-) TimerEvent: {}
+[35.601289] (-) TimerEvent: {}
+[35.829628] (-) TimerEvent: {}
+[35.945511] (-) TimerEvent: {}
+[36.053718] (-) TimerEvent: {}
+[36.156933] (-) TimerEvent: {}
+[36.310852] (-) TimerEvent: {}
+[36.435596] (-) TimerEvent: {}
+[36.536304] (-) TimerEvent: {}
+[36.678307] (-) TimerEvent: {}
+[36.828970] (-) TimerEvent: {}
+[36.974801] (-) TimerEvent: {}
+[37.097815] (-) TimerEvent: {}
+[37.214779] (-) TimerEvent: {}
+[37.348310] (-) TimerEvent: {}
+[37.454743] (-) TimerEvent: {}
+[37.562313] (-) TimerEvent: {}
+[37.665164] (-) TimerEvent: {}
+[37.777644] (-) TimerEvent: {}
+[37.900520] (-) TimerEvent: {}
+[38.025253] (-) TimerEvent: {}
+[38.127383] (-) TimerEvent: {}
+[38.228072] (-) TimerEvent: {}
+[38.328982] (-) TimerEvent: {}
+[38.434940] (-) TimerEvent: {}
+[38.535960] (-) TimerEvent: {}
+[38.637116] (-) TimerEvent: {}
+[38.738204] (-) TimerEvent: {}
+[38.839424] (-) TimerEvent: {}
+[38.940087] (-) TimerEvent: {}
+[39.138748] (-) TimerEvent: {}
+[39.239852] (-) TimerEvent: {}
+[39.382510] (-) TimerEvent: {}
+[39.483263] (-) TimerEvent: {}
+[39.584974] (-) TimerEvent: {}
+[39.688798] (-) TimerEvent: {}
+[39.793262] (-) TimerEvent: {}
+[39.894367] (-) TimerEvent: {}
+[39.995493] (-) TimerEvent: {}
+[40.096901] (-) TimerEvent: {}
+[40.198466] (-) TimerEvent: {}
+[40.299966] (-) TimerEvent: {}
+[40.400604] (-) TimerEvent: {}
+[40.513086] (-) TimerEvent: {}
+[40.633600] (-) TimerEvent: {}
+[40.749149] (-) TimerEvent: {}
+[40.850444] (-) TimerEvent: {}
+[40.951271] (-) TimerEvent: {}
+[41.054763] (-) TimerEvent: {}
+[41.178832] (-) TimerEvent: {}
+[41.218640] (emg_listener) StdoutLine: {'line': b'[100%] Built target listener\n'}
+[41.279089] (-) TimerEvent: {}
+[41.383137] (-) TimerEvent: {}
+[41.498835] (-) TimerEvent: {}
+[41.555336] (emg_listener) CommandEnded: {'returncode': 0}
+[41.599025] (-) TimerEvent: {}
+[41.717322] (-) TimerEvent: {}
+[41.818681] (-) TimerEvent: {}
+[41.846549] (emg_listener) JobProgress: {'identifier': 'emg_listener', 'progress': 'install'}
+[41.918892] (-) TimerEvent: {}
+[41.955370] (emg_listener) Command: {'cmd': ['/usr/bin/cmake', '--install', '/root/workspace/build/emg_listener'], 'cwd': '/root/workspace/build/emg_listener', 'env': OrderedDict([('HOSTNAME', 'bdb33ac076ec'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/opt/ros/foxy/opt/yaml_cpp_vendor/lib:/opt/ros/foxy/opt/rviz_ogre_vendor/lib:/opt/ros/foxy/lib/x86_64-linux-gnu:/opt/ros/foxy/lib'), ('HOME', '/root'), ('ROS_PYTHON_VERSION', '3'), ('ROS_DISTRO', 'foxy'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('TERM', 'xterm'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/foxy/bin:/opt/conda/envs/myenv/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'), ('MAMBA_ROOT_PREFIX', '/opt/conda'), ('LANG', 'C.UTF-8'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('AMENT_PREFIX_PATH', '/opt/ros/foxy'), ('PWD', '/root/workspace/build/emg_listener'), ('LC_ALL', 'C.UTF-8'), ('PYTHONPATH', '/opt/ros/foxy/lib/python3.8/site-packages'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/opt/ros/foxy')]), 'shell': False}
+[42.019137] (-) TimerEvent: {}
+[42.021391] (emg_listener) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[42.119331] (-) TimerEvent: {}
+[42.220346] (-) TimerEvent: {}
+[42.323685] (-) TimerEvent: {}
+[42.435422] (-) TimerEvent: {}
+[42.546746] (-) TimerEvent: {}
+[42.557849] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/lib/emg_listener/listener\n'}
+[42.646873] (-) TimerEvent: {}
+[42.750129] (-) TimerEvent: {}
+[42.855955] (-) TimerEvent: {}
+[42.976888] (-) TimerEvent: {}
+[43.078997] (-) TimerEvent: {}
+[43.195062] (-) TimerEvent: {}
+[43.295770] (-) TimerEvent: {}
+[43.397311] (-) TimerEvent: {}
+[43.515825] (-) TimerEvent: {}
+[43.629847] (-) TimerEvent: {}
+[43.730606] (-) TimerEvent: {}
+[43.832450] (-) TimerEvent: {}
+[43.852254] (emg_listener) StdoutLine: {'line': b'-- Set runtime path of "/root/workspace/install/emg_listener/lib/emg_listener/listener" to ""\n'}
+[43.932835] (-) TimerEvent: {}
+[43.978412] (emg_listener) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener\n'}
+[44.033142] (-) TimerEvent: {}
+[44.101886] (emg_listener) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener\n'}
+[44.133406] (-) TimerEvent: {}
+[44.230448] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh\n'}
+[44.234183] (-) TimerEvent: {}
+[44.353033] (-) TimerEvent: {}
+[44.466205] (-) TimerEvent: {}
+[44.595417] (-) TimerEvent: {}
+[44.643155] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv\n'}
+[44.695550] (-) TimerEvent: {}
+[44.815779] (-) TimerEvent: {}
+[44.929026] (-) TimerEvent: {}
+[45.045427] (-) TimerEvent: {}
+[45.093318] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/path.sh\n'}
+[45.145612] (-) TimerEvent: {}
+[45.263166] (-) TimerEvent: {}
+[45.383700] (-) TimerEvent: {}
+[45.495829] (-) TimerEvent: {}
+[45.543506] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/path.dsv\n'}
+[45.596021] (-) TimerEvent: {}
+[45.700145] (-) TimerEvent: {}
+[45.801096] (-) TimerEvent: {}
+[45.915169] (-) TimerEvent: {}
+[46.029638] (-) TimerEvent: {}
+[46.095464] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.bash\n'}
+[46.130364] (-) TimerEvent: {}
+[46.233387] (-) TimerEvent: {}
+[46.349746] (-) TimerEvent: {}
+[46.461502] (-) TimerEvent: {}
+[46.591365] (-) TimerEvent: {}
+[46.611276] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.sh\n'}
+[46.691703] (-) TimerEvent: {}
+[46.815011] (-) TimerEvent: {}
+[46.923391] (-) TimerEvent: {}
+[47.025724] (-) TimerEvent: {}
+[47.142595] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.zsh\n'}
+[47.144611] (-) TimerEvent: {}
+[47.245594] (-) TimerEvent: {}
+[47.358451] (-) TimerEvent: {}
+[47.459747] (-) TimerEvent: {}
+[47.573638] (-) TimerEvent: {}
+[47.689035] (-) TimerEvent: {}
+[47.726808] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.dsv\n'}
+[47.789258] (-) TimerEvent: {}
+[47.949871] (-) TimerEvent: {}
+[48.009279] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/package.dsv\n'}
+[48.050095] (-) TimerEvent: {}
+[48.168372] (-) TimerEvent: {}
+[48.299946] (-) TimerEvent: {}
+[48.405707] (-) TimerEvent: {}
+[48.566766] (-) TimerEvent: {}
+[48.643612] (emg_listener) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/packages/emg_listener\n'}
+[48.666952] (-) TimerEvent: {}
+[48.785580] (-) TimerEvent: {}
+[48.913341] (-) TimerEvent: {}
+[48.958017] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake\n'}
+[49.013704] (-) TimerEvent: {}
+[49.116587] (-) TimerEvent: {}
+[49.218535] (-) TimerEvent: {}
+[49.305723] (emg_listener) StdoutLine: {'line': b'-- Installing: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake\n'}
+[49.318808] (-) TimerEvent: {}
+[49.419948] (-) TimerEvent: {}
+[49.494394] (emg_listener) StdoutLine: {'line': b'-- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/package.xml\n'}
+[49.520231] (-) TimerEvent: {}
+[49.528297] (emg_listener) CommandEnded: {'returncode': 0}
+[49.620394] (-) TimerEvent: {}
+[49.722905] (-) TimerEvent: {}
+[49.824249] (-) TimerEvent: {}
+[49.925286] (-) TimerEvent: {}
+[50.037915] (-) TimerEvent: {}
+[50.139105] (-) TimerEvent: {}
+[50.261718] (-) TimerEvent: {}
+[50.363816] (-) TimerEvent: {}
+[50.465800] (-) TimerEvent: {}
+[50.572250] (-) TimerEvent: {}
+[50.673250] (-) TimerEvent: {}
+[50.773877] (-) TimerEvent: {}
+[50.875305] (-) TimerEvent: {}
+[50.977661] (-) TimerEvent: {}
+[51.078744] (-) TimerEvent: {}
+[51.180720] (-) TimerEvent: {}
+[51.281882] (-) TimerEvent: {}
+[51.382734] (-) TimerEvent: {}
+[51.457596] (emg_listener) JobEnded: {'identifier': 'emg_listener', 'rc': 0}
+[51.537231] (-) TimerEvent: {}
+[51.538309] (-) EventReactorShutdown: {}

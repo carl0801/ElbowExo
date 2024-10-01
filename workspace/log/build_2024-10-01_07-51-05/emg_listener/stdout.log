@@ -1,0 +1,44 @@
+-- Found ament_cmake: 0.9.12 (/opt/ros/foxy/share/ament_cmake/cmake)
+-- Using PYTHON_EXECUTABLE: /opt/conda/envs/myenv/bin/python3
+-- Found rclcpp: 2.4.3 (/opt/ros/foxy/share/rclcpp/cmake)
+-- Using all available rosidl_typesupport_c: rosidl_typesupport_fastrtps_c;rosidl_typesupport_introspection_c
+-- Found rosidl_adapter: 1.3.1 (/opt/ros/foxy/share/rosidl_adapter/cmake)
+-- Using all available rosidl_typesupport_cpp: rosidl_typesupport_fastrtps_cpp;rosidl_typesupport_introspection_cpp
+-- Found rmw_implementation_cmake: 1.0.4 (/opt/ros/foxy/share/rmw_implementation_cmake/cmake)
+-- Using RMW implementation 'rmw_fastrtps_cpp' as default
+-- Found ament_lint_auto: 0.9.8 (/opt/ros/foxy/share/ament_lint_auto/cmake)
+-- Added test 'copyright' to check source files copyright and LICENSE
+-- Added test 'cppcheck' to perform static code analysis on C / C++ code
+-- Configured cppcheck include dirs: 
+-- Configured cppcheck exclude dirs and/or files: 
+-- Added test 'cpplint' to check C / C++ code against the Google style
+-- Configured cpplint exclude dirs and/or files: 
+-- Added test 'lint_cmake' to check CMake code style
+-- Added test 'uncrustify' to check C / C++ code style
+-- Configured uncrustify additional arguments: 
+-- Added test 'xmllint' to check XML markup files
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/workspace/build/emg_listener
+[35m[1mScanning dependencies of target listener[0m
+[ 50%] [32mBuilding CXX object CMakeFiles/listener.dir/src/listener.cpp.o[0m
+[100%] [32m[1mLinking CXX executable listener[0m
+[100%] Built target listener
+-- Install configuration: ""
+-- Installing: /root/workspace/install/emg_listener/lib/emg_listener/listener
+-- Set runtime path of "/root/workspace/install/emg_listener/lib/emg_listener/listener" to ""
+-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/package_run_dependencies/emg_listener
+-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/parent_prefix_path/emg_listener
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.sh
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/ament_prefix_path.dsv
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/path.sh
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/environment/path.dsv
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.bash
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.sh
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.zsh
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/local_setup.dsv
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/package.dsv
+-- Up-to-date: /root/workspace/install/emg_listener/share/ament_index/resource_index/packages/emg_listener
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig.cmake
+-- Installing: /root/workspace/install/emg_listener/share/emg_listener/cmake/emg_listenerConfig-version.cmake
+-- Up-to-date: /root/workspace/install/emg_listener/share/emg_listener/package.xml
