@@ -9,7 +9,7 @@ eval "$(micromamba shell hook --shell=bash)"
 
 # Build things here
 cd /workspace/rustTest
-cargo build --release
+#cargo build --release
 
 # Go into the workspace
 cd /workspace
