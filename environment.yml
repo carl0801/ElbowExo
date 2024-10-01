@@ -7,5 +7,6 @@ dependencies:
   - pandas
   - scikit-learn
   - matplotlib
-  #- pip:
-  #    - roboticstoolbox-python   as an example of a pip package
+  - pip
+#  - pip:
+#      - some_python_package_from_pypi
