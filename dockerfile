@@ -3,6 +3,7 @@ FROM osrf/ros:foxy-desktop
 
 # Install some basic utilities
 RUN apt-get update && apt-get install -y \
+    bluetooth \
     curl \
     wget \
     git \
