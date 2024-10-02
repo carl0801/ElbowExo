@@ -255,6 +255,7 @@ class Shimmer3:
         # packet losses
         self._previous_calibrated_timestamp = None
 
+
     # PRIVATE methods
 
     def _wait_for_ack(self):
@@ -267,12 +268,12 @@ class Shimmer3:
         """
         ack = struct.pack("B", util.ACK_COMMAND_PROCESSED)
         ddata = ""
-        attempt = 200
-        while ddata != ack:
-            if attempt == 0:
-                break    
+        
+        for i in range(2):
             ddata = self._serial_port.read(1)
-            attempt -= 1
+            if ddata == ack:
+                break
+
         return True
 
     # CONNECTION methods
@@ -318,6 +319,8 @@ class Shimmer3:
                 self._serial_port = serial.Serial(com_port)
                 # Flush serial port inputs (good standard)
                 self._serial_port.reset_input_buffer()
+                # Set timeout to 1 second
+                self._serial_port.timeout = 5 
 
                 # Updating object properties
                 self._current_state = util.BT_CONNECTED
