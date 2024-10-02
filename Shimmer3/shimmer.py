@@ -319,8 +319,8 @@ class Shimmer3:
                 self._serial_port = serial.Serial(com_port)
                 # Flush serial port inputs (good standard)
                 self._serial_port.reset_input_buffer()
-                # Set timeout to 1 second
-                self._serial_port.timeout = 5 
+                # Set timeout to 0.2 second
+                self._serial_port.timeout = 0.2 
 
                 # Updating object properties
                 self._current_state = util.BT_CONNECTED
