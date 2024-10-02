@@ -14,7 +14,8 @@ sampletime = 40
 shimmer_device = shimmer.Shimmer3(TYPE, debug=False)
 shimmer_device.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
 shimmer_device.set_sampling_rate(512)
-shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
+shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_24BIT, util.SENSOR_ExG2_24BIT)
+shimmer_device.set_exg_gain(util.ExG_GAIN_12)
 #shimmer_device.print_object_properties()
 #print(shimmer_device.get_available_sensors())
 
