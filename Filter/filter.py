@@ -47,7 +47,7 @@ def plot_frequency_response(filter, fs=512, lowcut=20.0, highcut=250.0, notch_fr
     plt.show()
 
 # Use a filter on a signal using block processing
-def filter_data(data, filter=generate_filter(), windowsize=100):
+def filter_data(data, filter=generate_filter(), windowsize=64):
     transient_response_length = int(len(filter) * 1.5)
     # Check if the data is smaller than the windowsize + transient response length
     if len(data) < windowsize + transient_response_length:
@@ -71,13 +71,13 @@ def process_data(data):
     return data
 
 # Run filter and process data
-def run(data, filter, windowsize=100):
+def run(data, filter, windowsize=64):
     filtered_data = filter_data(data, filter, windowsize)
     processed_data = process_data(filtered_data)
     return processed_data
 
 # 
-def array_run(data, filter, windowsize=100):
+def array_run(data, filter, windowsize=64):
     data_processed = []
     transient_response_length = int(len(filter) * 1.5)
     for i in range(len(data)):
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     import time
     # Example usage: Generate a sample EMG signal
     # Load the data from the .npz file
-    data = np.load('shimmer_data5.npz')['data']
+    data = np.load('shimmer_data6.npz')['data']
 
     # Extract the timestamps and the GSR data
     timestamps = data[:, 0]
