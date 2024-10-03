@@ -120,7 +120,7 @@ def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
 
 def main():
     keyhandle = init()
-    speed = 1100
+    speed = 2500
     velocity_control(keyhandle, speed, NodeID, pErrorCode)
     time.sleep(2)
     currentVel = GetCurrentVelocity(keyhandle)
