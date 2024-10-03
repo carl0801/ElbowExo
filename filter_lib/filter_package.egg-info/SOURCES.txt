@@ -1,0 +1,8 @@
+setup.py
+filter_package/__init__.py
+filter_package/filter_lib.py
+filter_package.egg-info/PKG-INFO
+filter_package.egg-info/SOURCES.txt
+filter_package.egg-info/dependency_links.txt
+filter_package.egg-info/not-zip-safe
+filter_package.egg-info/top_level.txt
