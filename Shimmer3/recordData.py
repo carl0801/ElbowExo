@@ -14,8 +14,8 @@ sampletime = 40
 shimmer_device = shimmer.Shimmer3(TYPE, debug=False)
 shimmer_device.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
 shimmer_device.set_sampling_rate(512)
-shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_24BIT, util.SENSOR_ExG2_24BIT)
-shimmer_device.set_exg_gain(util.ExG_GAIN_12)
+shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
+shimmer_device.exg_send_emg_settings(util.ExG_GAIN_12)
 #shimmer_device.print_object_properties()
 #print(shimmer_device.get_available_sensors())
 
@@ -34,6 +34,14 @@ def resize_array(arr, new_size):
     new_arr[:arr.shape[0], :] = arr
     return new_arr
 
+# Calibrate the data here
+def calibrate_data(data):
+    adc_sensitivity = 2420 / (2 ** 15 - 1)
+    offset = 0
+    calibrated = ((data - offset) * adc_sensitivity) / util.ExG_GAINS_FROM_BYTE_TO_VALUE[shimmer_device.exg_gain]
+    return calibrated
+
+
 while run:
     n_of_packets, packets = shimmer_device.read_data_packet_extended()
     if n_of_packets > 0:
@@ -44,9 +52,11 @@ while run:
 
             # Calculate the time stamp between RTCcurrent and RTCstart
             timestamp = packet[2] - packet[1]
-            sensor1 = packet[3]
-            sensor2 = packet[4]
 
+            sensor1 = calibrate_data(packet[3])
+            sensor2 = calibrate_data(packet[4])
+
+            # Print information to the console
             if timestamp % 10 == 0:
                 if moving_state == 0:
                     print(f"\n \nHOLD STILL!")
@@ -61,6 +71,7 @@ while run:
                     print(f"Sensor1: {sensor1}, Sensor2: {sensor2} \n")
                     moving_state = 1
             
+            # Print the time left to the console
             print(f"\rTime left: {sampletime - timestamp}", end='', flush=True)
 
             # Store the data (timestamp, sensor1, sensor2)
@@ -69,8 +80,9 @@ while run:
 
             if timestamp >= sampletime:
                 run = False
-                
 
+
+# Stop the data collection
 print("\nData collection complete")
 shimmer_device.stop_bt_streaming()
 shimmer_device.disconnect(reset_obj_to_init=True)
