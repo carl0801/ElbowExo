@@ -9,7 +9,7 @@ run = True
 moving_state = 0
 
 # Number of samples to collect before stopping the data collection (1 = 1000 measurements)
-sampletime = 15
+sampletime = 25
 
 # Initialize Shimmer
 shimmer_device = shimmer.Shimmer3(TYPE, debug=False)
@@ -77,5 +77,5 @@ shimmer_device.stop_bt_streaming()
 shimmer_device.disconnect(reset_obj_to_init=True)
 
 # Save only the filled portion of the numpy array to a .npz file
-np.savez('shimmer_data7.npz', data=data[:current_index])
-print("Data saved to shimmer_data7.npz")
+np.savez('HurtigHorisontal.npz', data=data[:current_index])
+print("Data saved")
