@@ -6,6 +6,7 @@ import pyqtgraph as pg
 from pyqtgraph.Qt import QtWidgets, QtCore
 import threading
 import filter
+import myMain
 
 TYPE = util.SHIMMER_ExG_0
 PORT = "COM5"
@@ -13,10 +14,13 @@ PORT = "COM5"
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
-shimmer.set_sampling_rate(200)
+shimmer.set_sampling_rate(650)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 
 shimmer.start_bt_streaming()
+
+keyhandle = myMain.init()
+
 
 Filter = filter.generate_filter(fs=650)
 
@@ -32,6 +36,25 @@ win.setWindowTitle('Live Sensor Data')
 
 pg.setConfigOptions(antialias=True)
 
+def classify(sensor1, sensor2):
+    global keyhandle
+    threshold = 4
+    # rolling variance
+    window_size = 100
+    variance1 = np.var(sensor1[-window_size:])
+    variance2 = np.var(sensor2[-window_size:])
+    diff = variance1 - variance2
+    if diff > threshold:
+        myMain.velocity_control(myMain.keyhandle, 100)
+        return 'up'
+    elif diff < -threshold:
+        myMain.velocity_control(myMain.keyhandle, -100)
+        return 'down'
+    else:
+        myMain.velocity_control(myMain.keyhandle, 0)
+        return 'rest'
+    
+
 # Create two plots
 p1 = win.addPlot(title="Sensor 1")
 curve1 = p1.plot(pen='y')
@@ -46,6 +69,7 @@ def update():
     if len(sensor2_data) > 0:
         sensor2_data_filtered = filter.array_run(sensor2_data, Filter)
         curve2.setData(sensor2_data_filtered)
+    print(classify(sensor1_data_filtered, sensor2_data_filtered))
 
 def data_collection():
     global sensor1_data, sensor2_data
@@ -76,7 +100,7 @@ data_thread.start()
 # Set up a timer to update the plot
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
-timer.start(50)  # Update every 50 ms
+timer.start(5)  # Update every 50 ms
 
 if __name__ == '__main__':
     QtWidgets.QApplication.instance().exec_()

@@ -102,7 +102,7 @@ def GetCurrentVelocity(keyhandle):
     else:
         return None
 
-def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
+def velocity_control(keyhandle, setVelocity, NodeID = 31, pErrorCode=c_uint()):
         # Activate Velocity Mode
     ret = epos.VCS_ActivateVelocityMode(keyhandle, NodeID, byref(pErrorCode))
     if ret != 1:
@@ -116,6 +116,14 @@ def velocity_control(keyhandle, setVelocity, NodeID, pErrorCode):
         return
 
     print(f'Moving with velocity: {setVelocity} rpm')
+
+def stop_motor(keyhandle, NodeID = 31, pErrorCode=c_uint()):
+    ret = epos.VCS_SetDisableState(keyhandle, NodeID, byref(pErrorCode))
+    if ret != 1:
+        print(f'Failed to stop motor. Error code: {pErrorCode.value}')
+        return
+
+    print('Motor stopped')
 
 
 def main():

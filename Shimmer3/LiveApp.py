@@ -41,10 +41,6 @@ def update():
     curve1.setData(sensor1_data)
     curve2.setData(sensor2_data)
    
-        
-
-
-
 
 def data_collection():
     try:

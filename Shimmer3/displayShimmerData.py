@@ -3,7 +3,7 @@ import numpy as np
 import filter
 
 # Load the data from the .npz file
-data = np.load('RawMeasurements\HurtigHorisontal.npz')['data']
+data = np.load('RawMeasurements\BevægelseVertikaltExFlex.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]
@@ -69,10 +69,6 @@ sensor2_data = calibrate(sensor2_data)
 test = filter.generate_filter()
 sensor1_data = filter.array_run(sensor1_data, test)
 sensor2_data = filter.array_run(sensor2_data, test)
-
-
-
-
 
 
 plt.figure()
