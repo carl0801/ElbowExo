@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import filter
+import Filter.filter as filter
 
 # Load the data from the .npz file
-data = np.load('BevægelseVertikaltExFlex1.npz')['data']
+data = np.load('BevægelseHorisontalt.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]
@@ -77,12 +77,12 @@ sensor2_data = filter.array_run(sensor2_data, test)
 
 plt.figure()
 plt.plot(timestamps, sensor1_data, label='Sensor 1')
-#plt.plot(timestamps, sensor2_data, label='Sensor 2')
+plt.plot(timestamps, sensor2_data, label='Sensor 2')
 
 # Change background color based on 'up' and 'down' values
 for i in range(len(timestamps)):
     if up[i] == 1:
-        plt.axvspan(timestamps[i], timestamps[i+1] if i+1 < len(timestamps) else timestamps[i], color='green', alpha=0.3)
+        plt.axvspan(timestamps[i], timestamps[i+1] if i+1 < len(timestamps) else timestamps[i], color='lightgreen', alpha=0.3)
     elif down[i] == 1:
         plt.axvspan(timestamps[i], timestamps[i+1] if i+1 < len(timestamps) else timestamps[i], color='pink', alpha=0.3)
 
