@@ -1,9 +1,9 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import Filter.filter as filter
+import filter
 
 # Load the data from the .npz file
-data = np.load('BevægelseHorisontalt.npz')['data']
+data = np.load('RawMeasurements\HurtigHorisontal.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]

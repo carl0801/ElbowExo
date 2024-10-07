@@ -78,15 +78,22 @@ def run(data, filter, windowsize=64):
 
 # 
 def array_run(data, filter, windowsize=64):
+    # Ensure filter is an array or list
+    if not isinstance(filter, (list, np.ndarray)):
+        raise TypeError("Filter must be a list or numpy array")
+
     data_processed = []
     transient_response_length = int(len(filter) * 1.5)
+    
     for i in range(len(data)):
         if i < windowsize + transient_response_length:
             data_processed.append(0)
             continue
+        
         filtered_data = filter_data(data[:i], filter, windowsize)
         processed_data = process_data(filtered_data)
         data_processed.append(processed_data)
+    
     data_processed = np.array(data_processed)
     return data_processed
 
