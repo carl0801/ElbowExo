@@ -77,5 +77,5 @@ shimmer_device.stop_bt_streaming()
 shimmer_device.disconnect(reset_obj_to_init=True)
 
 # Save only the filled portion of the numpy array to a .npz file
-np.savez('HurtigHorisontal.npz', data=data[:current_index])
+np.savez('Htest.npz', data=data[:current_index])
 print("Data saved")
