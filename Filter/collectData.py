@@ -5,14 +5,14 @@ import numpy as np
 import pyqtgraph as pg
 from pyqtgraph.Qt import QtWidgets, QtCore
 import threading
-import filter
+
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM5"
+PORT = "COM6"
 
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
-shimmer.set_sampling_rate(200)
+shimmer.set_sampling_rate(500)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 #shimmer.#print_object_properties()
 #print(shimmer.get_available_sensors())
@@ -22,25 +22,8 @@ shimmer.start_bt_streaming()
 # Initialize lists to store received data
 sensor1_data = []
 sensor2_data = []
+timeStamp =    
 
-# Set up the PyQtGraph plot
-app = QtWidgets.QApplication([])
-win = pg.GraphicsLayoutWidget(show=True, title="Live Sensor Data")
-win.resize(1000, 600)
-win.setWindowTitle('Live Sensor Data')
-
-pg.setConfigOptions(antialias=True)
-
-# Create two plots
-p1 = win.addPlot(title="Sensor 1")
-curve1 = p1.plot(pen='y')
-p2 = win.addPlot(title="Sensor 2")
-curve2 = p2.plot(pen='r')
-
-def update():
-    curve1.setData(sensor1_data)
-    curve2.setData(sensor2_data)
-   
 
 def data_collection():
     try:
@@ -73,7 +56,7 @@ data_thread.start()
 # Set up a timer to update the plot
 timer = QtCore.QTimer()
 timer.timeout.connect(update)
-timer.start(5)  # Update every 50 ms
+timer.start(2)  # Update every 50 ms
 
 if __name__ == '__main__':
-    QtWidgets.QApplication.instance().exec_()
+    QtWidgets.QApplication.instance().exec()
