@@ -4,7 +4,7 @@ import numpy as np
 import keyboard
 
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM5"
+PORT = "COM4"
 run = True
 moving_state = 0
 
@@ -15,7 +15,7 @@ sampletime = 25
 shimmer_device = shimmer.Shimmer3(TYPE, debug=False)
 shimmer_device.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
 shimmer_device.set_sampling_rate(650)
-shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
+shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT, util.SENSOR_BATTERY)
 shimmer_device.exg_send_emg_settings(util.ExG_GAIN_12)
 #shimmer_device.print_object_properties()
 #print(shimmer_device.get_available_sensors())
@@ -53,14 +53,13 @@ while run:
 
             # Calculate the time stamp between RTCcurrent and RTCstart
             timestamp = packet[2] - packet[1]
-
-            sensor1 = packet[3]
-            sensor2 = packet[4]
+            #print(packet)
+            sensor1 = packet[5]
+            sensor2 = packet[6]
             battery = battry_calibrate(packet[3])
 
             if keyboard.is_pressed('w'):
                 active_movement_up = 1
-                print(f"\n \nMOVE ARM UP!")
                 print(f"Sensor1: {sensor1}, Sensor2: {sensor2}, Battery: {battery:.2f}% \n")
 
             else:
@@ -68,7 +67,6 @@ while run:
             
             if keyboard.is_pressed('s'):
                 active_movement_down = 1
-                print(f"\n \nMOVE ARM DOWN!")
                 print(f"Sensor1: {sensor1}, Sensor2: {sensor2}, Battery: {battery:.2f}% \n")
 
             else:
