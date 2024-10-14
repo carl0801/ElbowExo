@@ -5,6 +5,7 @@ import threading
 import serial
 import pickle
 import time
+stop = False
 
 def run_command(command):
     try:
@@ -18,7 +19,7 @@ def run_command(command):
 shimmer_device = shimmer.Shimmer3(util.SHIMMER_ExG_0, debug=False)
 def connectShimmer():
     # Make rfcomm port
-    mac_address = '00:06:66:C5:6D:15'
+    mac_address = '00:06:66:FB:4C:BE'
     rfport_thread = threading.Thread(target=run_command, args=(f'sudo rfcomm connect /dev/rfcomm0 {mac_address}',))
     rfport_thread.start()
     time.sleep(5)
@@ -40,19 +41,19 @@ shimmer_data = []
 def readShimmer():
     connectShimmer()
     while True:
-        try:
-            n_of_packets, packets = shimmer_device.read_data_packet_extended()
-            if n_of_packets > 0:
-                for packet in packets:
-                    # Calculate the time stamp between RTCcurrent and RTCstart
-                    timestamp = packet[2] - packet[1]
-                    sensor1 = packet[3]
-                    sensor2 = packet[4]
+        n_of_packets, packets = shimmer_device.read_data_packet_extended()
+        if n_of_packets > 0:
+            for packet in packets:
+                # Calculate the time stamp between RTCcurrent and RTCstart
+                timestamp = packet[2] - packet[1]
+                sensor1 = packet[3]
+                sensor2 = packet[4]
 
-                    # Store data
-                    shimmer_data.append([timestamp, sensor1, sensor2])
-                    #print(f"{timestamp}:\t {sensor1} : {sensor2}                     ", end="\r")
-        except KeyboardInterrupt:
+                # Store data
+                shimmer_data.append([timestamp, sensor1, sensor2])
+                #print(f"{timestamp}:\t {sensor1} : {sensor2}                     ", end="\r")
+        if stop == True:
+            save_data(shimmer_data, "shimmer")
             shimmer_device.stop_bt_streaming()
             shimmer_device.disconnect(reset_obj_to_init=True)
             print("Stopped Shimmer")
@@ -64,42 +65,37 @@ BAUD_RATE = 115200       # Change to your baud rate
 loadcell_data = []
 def readLoadcell():
     run_command('sudo chmod 666 /dev/ttyACM0')
+    time.sleep(5)
     # Initialize serial connection
     with serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1) as ser:
         loadcell_data = []
         ser.reset_input_buffer()  # Clear the input buffer
         
         print("Starting to read from serial port...")
-        try:
-            while True:
-                line = ser.readline().decode('utf-8').strip()  # Read a line from serial
-                if line:  # Ensure the line is not empty
-                    try:
-                        # Split the line into timestamp and reading
-                        timestamp_str, reading_str = line.split(':')
-                        # Convert to signed ints
-                        timestamp = int(timestamp_str)
-                        reading = int(reading_str)
-                        loadcell_data.append((timestamp, reading))  # Save time and reading
-                        #print(f"Timestamp: {timestamp}, Reading: {reading}                    ", end="\r")
-                    except ValueError:
-                        print(f"Invalid format or integer: {line}")
-                        if line == "Tareing....":
-                            loadcell_data = []
-        except KeyboardInterrupt:
-            ser.close()
-            print("Stopped Serial readings.")
+        while True:
+            line = ser.readline().decode('utf-8').strip()  # Read a line from serial
+            if line:  # Ensure the line is not empty
+                try:
+                    # Split the line into timestamp and reading
+                    timestamp_str, reading_str = line.split(':')
+                    # Convert to signed ints
+                    timestamp = int(timestamp_str)
+                    reading = int(reading_str)
+                    loadcell_data.append((timestamp, reading))  # Save time and reading
+                    #print(f"Timestamp: {timestamp}, Reading: {reading}                    ", end="\r")
+                except ValueError:
+                    print(f"Invalid format or integer: {line}")
+                    if line == "Tareing....":
+                        loadcell_data = []
+            if stop == True:
+                save_data(loadcell_data, "loadcell")
+                ser.close()
+                print("Stopped Serial readings.")
 
-def get_variable_name(var):
-    for name, value in locals().items():
-        if value is var:
-            return name
-    return None
-
-def save_data(array):
-    file_name = f"{get_variable_name(array)}-{time.time()}.pkl"
-    with open('my_data.pkl', 'wb') as f:
-        pickle.dump(data, f)
+def save_data(array, name):
+    file_name = f"data/{time.time()}-{name}.pkl"
+    with open(file_name, 'wb') as f:
+        pickle.dump(array, f)
     print("Data saved.")
 
 if __name__ == "__main__":
@@ -112,10 +108,9 @@ if __name__ == "__main__":
     thread2.start()
 
     # Keep the main thread alive
-    try:
-        while True:
-            time.sleep(0.1)  # Keep the main thread alive
-    except KeyboardInterrupt:
-        print("\nMain thread: Exiting...")
-        thread1.join()  # Ensure threads finish
-        thread2.join()  # Ensure threads finish
+    # Wait for input
+    input("Press Enter to exit...")
+    stop = True
+    print("\nMain thread: Exiting...")
+    thread1.join()  # Ensure threads finish
+    thread2.join()  # Ensure threads finish
