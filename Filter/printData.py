@@ -23,7 +23,7 @@ loadcellData = np.array(loadcellData, dtype=float)
 # Shimmer time is in seconds, and loadcell is in miliseconds, but the clock they oprate after is not the same
 # They start at different times, but the readings end at the same time, so that is how they should be calibrate
 
-loadcellData = loadcellData / 1000
+loadcellData[:, 0] = loadcellData[:, 0] / 1000
 
 # Get the time of the last data point
 last_time_shimmer = shimmerData[-1][0]
@@ -42,6 +42,11 @@ print(len(loadcellData))
 # Print last 10 entries
 print(shimmerData[-10:])
 print(loadcellData[-10:])
+
+# Make sure shimmer data is a signed int and there is no overflow
+shimmerData[:, 1] = np.int16(shimmerData[:, 1])
+shimmerData[:, 2] = np.int16(shimmerData[:, 2])
+
 
 # Plot the data in subplots
 plt.figure()

@@ -103,6 +103,9 @@ if __name__ == "__main__":
     thread1 = threading.Thread(target=readShimmer)
     thread2 = threading.Thread(target=readLoadcell)
 
+    # Require sudo permissions
+    run_command('sudo chmod 666 /dev/ttyACM0')
+
     # Start threads
     thread1.start()
     thread2.start()
