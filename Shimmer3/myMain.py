@@ -7,7 +7,7 @@ import time
 # Library must match according your cpu, eg. PI3 has arm v7
 # EPOS Comand Library can be found here, when EPOS Studio has been installed:
 # C:\Program Files (x86)\maxon motor ag\EPOS IDX\EPOS4\04 Programming\Linux Library
-path = 'EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
+path = 'EPOS-Windows-DLL-En\\EposCmd64.dll'
 cdll.LoadLibrary(path)
 epos=CDLL(path)
 
@@ -118,7 +118,10 @@ def velocity_control(keyhandle, setVelocity, NodeID = 31, pErrorCode=c_uint()):
     print(f'Moving with velocity: {setVelocity} rpm')
 
 def stop_motor(keyhandle, NodeID = 31, pErrorCode=c_uint()):
+    velocity_control(keyhandle, 0)
     ret = epos.VCS_SetDisableState(keyhandle, NodeID, byref(pErrorCode))
+    epos.VCS_CloseDevice(keyhandle, byref(pErrorCode))
+    
     if ret != 1:
         print(f'Failed to stop motor. Error code: {pErrorCode.value}')
         return

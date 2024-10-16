@@ -90,6 +90,37 @@ def array_run(data, filter, windowsize=64):
     data_processed = np.array(data_processed)
     return data_processed
 
+def filt_phase_shift(filter, fs=512):
+    # Calculate the phase shift of the filter
+    w, h = freqz(filter, worN=1024)
+    phase = np.unwrap(np.angle(h))
+    phase_shift = -phase * fs / (2 * np.pi)
+    return phase_shift
+
+def array_run2(data, filter, windowsize=64, fs=512):
+    data_processed = []
+    transient_response_length = int(len(filter) * 1.5)
+    
+    # Calculate the phase shift
+    phase_shift = filt_phase_shift(filter, fs)
+    
+    for i in range(len(data)):
+        if i < windowsize + transient_response_length:
+            data_processed.append(0)
+            continue
+        
+        filtered_data = filter_data(data[:i], filter, windowsize)
+        
+        # Compensate for the phase shift
+        compensated_data = np.roll(filtered_data, int(phase_shift[0]))
+        
+        processed_data = process_data(compensated_data)
+        data_processed.append(processed_data)
+    
+    data_processed = np.array(data_processed)
+    return data_processed
+
+
 
 if __name__ == '__main__':
     import time

@@ -7,7 +7,7 @@ from pyqtgraph.Qt import QtWidgets, QtCore
 import threading
 import filter
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM5"
+PORT = "COM7"
 
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
@@ -41,7 +41,6 @@ def update():
     curve1.setData(sensor1_data)
     curve2.setData(sensor2_data)
    
-
 def data_collection():
     try:
         while True:
