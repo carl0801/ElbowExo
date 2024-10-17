@@ -1,13 +1,15 @@
 from ctypes import *
 import subprocess   
 import time
+import os
 
 # Folder created for example: /home/pi/src/python/
 # Copy maxon motor Linux Library arm v7 into this folder
 # Library must match according your cpu, eg. PI3 has arm v7
 # EPOS Comand Library can be found here, when EPOS Studio has been installed:
 # C:\Program Files (x86)\maxon motor ag\EPOS IDX\EPOS4\04 Programming\Linux Library
-path = 'EPOS-Windows-DLL-En\\Microsoft Visual C++\\Example VC++\\EposCmd64.dll'
+path = 'epos/libEposCmd.so'
+cdll.LoadLibrary('epos/libftd2xx.so')
 cdll.LoadLibrary(path)
 epos=CDLL(path)
 
