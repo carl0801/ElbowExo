@@ -132,6 +132,7 @@ def stop_motor(keyhandle, NodeID = 31, pErrorCode=c_uint()):
 def main():
     keyhandle = init()
     speed = 2500
+    print("keyhandle", keyhandle)
     velocity_control(keyhandle, speed, NodeID, pErrorCode)
     time.sleep(2)
     currentVel = GetCurrentVelocity(keyhandle)
