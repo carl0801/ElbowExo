@@ -3,14 +3,14 @@ import matplotlib.pyplot as plt
 import glob
 import os
 import numpy as np
-import emgControl as emg
+import filter
 import loadData
 
 shimmerData, loadcellData = loadData.load(n=5)
 
 # Filter the data
-coefficients = emg.generate_filter()
-filtered_signal = emg.run(shimmerData[:, 1], shimmerData[:, 2], coefficients)
+coefficients = filter.generate_filter()
+filtered_signal = filter.run(shimmerData[:, 1], shimmerData[:, 2], coefficients)
 
 # Plot the data with differnt y-axes in same plot
 fig, ax1 = plt.subplots()
