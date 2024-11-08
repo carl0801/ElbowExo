@@ -1,163 +1,118 @@
 import numpy as np
-from scipy.signal import firwin, lfilter, freqz
-import matplotlib.pyplot as plt
+from scipy.signal import butter, sosfiltfilt
 
-# Generate filter coefficients
-def generate_filter(fs=512, lowcut=20.0, highcut=250.0, notch_freq=50.0, numtaps=101):
-    # Filter parameters
-    #fs = 512  # Sampling frequency (1 kHz)
-    #lowcut = 20.0  # Lower cutoff frequency for band-pass
-    #highcut = 250.0  # Upper cutoff frequency for band-pass
-    #notch_freq = 50.0  # Notch frequency
-    #numtaps = 101  # Number of filter coefficients (taps)
+def butter_bandpass(lowcut, highcut, fs, order=6):
+    sos = butter(order, [lowcut, highcut], btype='bandpass', fs=fs, output='sos')
+    return sos
 
-    # Design the FIR band-pass filter
-    nyq = 0.5 * fs
-    low = lowcut / nyq
-    high = highcut / nyq
+def notch_filter(freq, fs, order=5):
+    sos  = butter(order, [freq-2.0, freq+2.0], btype='bandstop', fs=fs, output='sos')
+    return sos
 
-    # Create the band-pass filter coefficients
-    b_bp = firwin(numtaps, [low, high], pass_zero=False)
+def generate_filter(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
+    # butterworth bandpass filter
+    sos_b = butter_bandpass(lowcut, highcut, fs)
+    # notch filter
+    sos_n = notch_filter(notch_freq, fs)
+    return [sos_b, sos_n]
 
-    # Design a notch filter for 50 Hz
-    notch_width = 1.0  # Width of the notch around 50 Hz
-    notch_low = (notch_freq - notch_width) / nyq
-    notch_high = (notch_freq + notch_width) / nyq
+def filter_emg_data(data, coeff=generate_filter()):
+    # Bandpass filter between 20 Hz and 250 Hz
+    filtered_data = sosfiltfilt(coeff[0], data)
+    # Notch filter around 50 Hz
+    filtered_data = sosfiltfilt(coeff[1], filtered_data)
+    # Abs
+    filtered_data = np.abs(filtered_data)
+    return filtered_data
 
-    # Create the notch filter coefficients
-    b_notch = firwin(numtaps, [notch_low, notch_high], pass_zero=True)
+def combine_sensors(sensor1, sensor2, multiplier=3.0):
+    return sensor1 - multiplier * sensor2
 
-    # Combine the filters in series (using convolution)
-    return np.convolve(b_bp, b_notch)
+def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5.0, multiplier=3.0, window_size=300):
+    """
+    This function takes in the sensor data, filters it, combines it, 
+    thresholds it, and then takes the moving average. If single_window is 
+    not equal to 0, it will return the mean of the last "single_window" 
+    values of the filtered data. Otherwise it will return the entire
+    filtered data. 
 
-# Plot the frequency response of the filter
-def plot_frequency_response(filter, fs=512, lowcut=20.0, highcut=250.0, notch_freq=50.0):
-    # Frequency response
-    w, h = freqz(filter, worN=1024)
-    plt.figure(figsize=(8, 4))
-    plt.plot(0.5 * fs * w / np.pi, np.abs(h), 'b')
-    plt.title('Combined FIR Band-Pass and Notch Filter Frequency Response')
-    plt.xlabel('Frequency [Hz]')
-    plt.ylabel('Gain')
-    plt.grid()
-    plt.axvline(lowcut, color='green', linestyle='--')
-    plt.axvline(highcut, color='green', linestyle='--')
-    plt.axvline(notch_freq, color='red', linestyle='--')
-    plt.xlim(0, 500)
-    plt.show()
+    Parameters
+    ----------
+    sensor1 : array
+        The data from sensor 1
+    sensor2 : array
+        The data from sensor 2
+    filter : list
+        The coefficients for the filter
+    single_window : int
+        The number of data points to average
+    threshold : float
+        The minimum absolute value of the data
+    multiplier : float
+        The multiplier for the second sensor
+    window_size : int
+        The size of the window for the moving average
 
-# Use a filter on a signal using block processing
-def filter_data(data, filter=generate_filter(), windowsize=64):
-    transient_response_length = int(len(filter) * 1.5)
-    # Check if the data is smaller than the windowsize + transient response length
-    if len(data) < windowsize + transient_response_length:
-        print('Window size is too large to avoid transients')
-        filtered_data = lfilter(filter, 1.0, data)
-        return filtered_data
-    else:
-        filtered_data = lfilter(filter, 1.0, data[-windowsize-transient_response_length:])
-        # Return the newset filtered data in windowsize
-        return filtered_data[-windowsize:]
+    Returns
+    -------
+    filtered_data : array
+        The filtered data
+    """
+    filtered_sensor1 = filter_emg_data(sensor1, filter)
+    filtered_sensor2 = filter_emg_data(sensor2, filter)
+    # combine the sensors
+    combined_sensor = combine_sensors(filtered_sensor1, filtered_sensor2, multiplier)
+    # threshold
+    combined_sensor = np.where(np.abs(combined_sensor) > threshold, combined_sensor, 0)
+    # moving average
+    combined_sensor = np.convolve(combined_sensor, np.ones(window_size)/window_size, mode='same')
+    if single_window != 0:
+        value = np.mean(combined_sensor[single_window:])
+        return value
 
-# Take abs and mean of the data
-def process_data(data):
-    # Find offset
-    offset = np.mean(data)
-    data = data - offset
-    # Abs the data
-    data = np.abs(data)
-    # Avarage the data
-    data = np.mean(data)
-    return data
-
-# Run filter and process data
-def run(data, filter, windowsize=64):
-    filtered_data = filter_data(data, filter, windowsize)
-    processed_data = process_data(filtered_data)
-    return processed_data
-
-# 
-def array_run(data, filter, windowsize=64):
-    data_processed = []
-    transient_response_length = int(len(filter) * 1.5)
-    for i in range(len(data)):
-        if i < windowsize + transient_response_length:
-            data_processed.append(0)
-            continue
-        filtered_data = filter_data(data[:i], filter, windowsize)
-        processed_data = process_data(filtered_data)
-        data_processed.append(processed_data)
-    data_processed = np.array(data_processed)
-    return data_processed
-
-def filt_phase_shift(filter, fs=512):
-    # Calculate the phase shift of the filter
-    w, h = freqz(filter, worN=1024)
-    phase = np.unwrap(np.angle(h))
-    phase_shift = -phase * fs / (2 * np.pi)
-    return phase_shift
-
-def array_run2(data, filter, windowsize=64, fs=512):
-    data_processed = []
-    transient_response_length = int(len(filter) * 1.5)
+    return combined_sensor
     
-    # Calculate the phase shift
-    phase_shift = filt_phase_shift(filter, fs)
     
-    for i in range(len(data)):
-        if i < windowsize + transient_response_length:
-            data_processed.append(0)
-            continue
-        
-        filtered_data = filter_data(data[:i], filter, windowsize)
-        
-        # Compensate for the phase shift
-        compensated_data = np.roll(filtered_data, int(phase_shift[0]))
-        
-        processed_data = process_data(compensated_data)
-        data_processed.append(processed_data)
     
-    data_processed = np.array(data_processed)
-    return data_processed
-
-
 
 if __name__ == '__main__':
     import time
-    # Example usage: Generate a sample EMG signal
+    import loadData
+    import matplotlib.pyplot as plt
+
     # Load the data from the .npz file
-    data = np.load('shimmer_data6.npz')['data']
+    data, loadcell = loadData.load(n=0)
 
     # Extract the timestamps and the GSR data
     timestamps = data[:, 0]
+    t = timestamps
     sensor1_data = data[:, 1]
     sensor2_data = data[:, 2]
-    t = timestamps
+    fs = 650
 
     # Generate the filter coefficients
-    filter = generate_filter()
+    filter = generate_filter(fs=fs)
 
-    # Apply the combined FIR filter
+    # Apply the filter
     start = time.time()
-    filtered_signal1 = array_run(sensor1_data, filter)
-    filtered_signal2 = array_run(sensor2_data, filter)
+    signal = run(sensor1_data, sensor2_data, filter)
     end = time.time()
-    print('Time taken to filter the signal: %.2f s' % (end - start))
     samples = len(sensor1_data)
+    print('Time taken to filter the signal: %.2f s' % (end - start))
     print('Time per sample: %.2f ms' % ((end - start) / samples * 1000))
     print('Samples per second: %.2f' % (1 / ((end - start) / samples)))
 
-    # Plotting the results
-    plt.figure(figsize=(12, 6))
-    plt.subplot(2, 1, 1)
-    plt.plot(t, sensor1_data, label='EMG Signal 1')
-    plt.plot(t, sensor2_data, label='EMG Signal 2')
-    plt.title('Original EMG Signal with Noise')
-    plt.subplot(2, 1, 2)
-    plt.plot(t[-len(filtered_signal1):], filtered_signal1, label='Filtered Signal 1')
-    plt.plot(t[-len(filtered_signal2):], filtered_signal2, label='Filtered Signal 2')
-    plt.title('Combined FIR Filtered Signal')
-    plt.xlabel('Time [s]')
-    plt.tight_layout()
-    plt.legend()
+    # Plotting the signal and loadcell on different y-axes twinx
+    fig, ax1 = plt.subplots()
+    ax1.set_xlabel('Time [s]')
+    ax1.set_ylabel('EMG Signal')
+    ax1.plot(t, signal, color='tab:red', label='EMG')
+    ax1.tick_params(axis='y', labelcolor='tab:red')
+    ax2 = ax1.twinx()
+    ax2.set_ylabel('Loadcell Value')
+    ax2.plot(loadcell[:, 0], loadcell[:, 1], color='tab:blue', label='Loadcell')
+    ax2.tick_params(axis='y', labelcolor='tab:blue')
+    fig.tight_layout()
     plt.show()
+    
+    

@@ -3,7 +3,7 @@ import numpy as np
 import filter
 
 # Load the data from the .npz file
-data = np.load('FlexEx.npz')['data']
+data = np.load('RawMeasurements\BevægelseVertikaltFlexEx.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]
@@ -17,12 +17,12 @@ fs = 650
 cutoff = 5
 
 test = filter.generate_filter(fs=650)
-sensor1_data = filter.array_run(sensor1_data, test)
-sensor2_data = filter.array_run(sensor2_data, test) 
+sensor_data = filter.run(sensor1_data,sensor2_data, test)
+ 
 
 plt.figure()
-plt.plot(timestamps, sensor1_data, label='Sensor 1')
-plt.plot(timestamps, sensor2_data, label='Sensor 2')
+plt.plot(timestamps, sensor_data, label='Sensor 1')
+#plt.plot(timestamps, sensor2_data, label='Sensor 2')
 
 """ # Change background color based on 'up' and 'down' values
 for i in range(len(timestamps)):

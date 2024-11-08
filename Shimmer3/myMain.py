@@ -115,7 +115,7 @@ def velocity_control(keyhandle, setVelocity, NodeID = 31, pErrorCode=c_uint()):
         print(f'Failed to set velocity must. Error code: {pErrorCode.value}')
         return
 
-    print(f'Moving with velocity: {setVelocity} rpm')
+    #print(f'Moving with velocity: {setVelocity} rpm')
 
 def stop_motor(keyhandle, NodeID = 31, pErrorCode=c_uint()):
     velocity_control(keyhandle, 0)
@@ -131,12 +131,22 @@ def stop_motor(keyhandle, NodeID = 31, pErrorCode=c_uint()):
 
 def main():
     keyhandle = init()
-    speed = 2500
+    speed = -400
     print("keyhandle", keyhandle)
     velocity_control(keyhandle, speed, NodeID, pErrorCode)
-    time.sleep(2)
-    currentVel = GetCurrentVelocity(keyhandle)
-    print(f'Current velocity: {currentVel}')
+    """ while True:
+        for i in range(20):
+            added=i*100
+            velocity_control(keyhandle, speed+added, NodeID, pErrorCode)
+            time.sleep(1)
+        for i in range(20):
+            added=i*100
+            velocity_control(keyhandle, speed+1900-added, NodeID, pErrorCode)
+            time.sleep(1) """
+
+    
+    #currentVel = GetCurrentVelocity(keyhandle)
+    #print(f'Current velocity: {currentVel}')
     a = input("press Enter to stop motor: " )
     if a is not None:
         # Stop Motor, disable EPOS4
