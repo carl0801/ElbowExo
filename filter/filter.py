@@ -1,7 +1,29 @@
 import numpy as np
 from scipy.signal import butter, sosfiltfilt
 
-def butter_bandpass(lowcut, highcut, fs, order=6):
+def calibrate(data):
+    # ADC-sensitivity = 2420 / (2 ** 15 -1)
+    """
+    Calibrate the input data to mV unit.
+
+    The function adjusts the input data by applying a scaling factor determined
+    by the ADC sensitivity and further divides the result by the gain factor.
+
+    Parameters
+    ----------
+    data : array-like
+        The raw data to be calibrated.
+
+    Returns
+    -------
+    array-like
+        The calibrated data.
+    """
+    data = 2420 / (2 ** 16 -1) * data
+    data = data / 12
+    return data
+
+def butter_bandpass(lowcut, highcut, fs, order=4):
     sos = butter(order, [lowcut, highcut], btype='bandpass', fs=fs, output='sos')
     return sos
 
@@ -9,68 +31,100 @@ def notch_filter(freq, fs, order=5):
     sos  = butter(order, [freq-2.0, freq+2.0], btype='bandstop', fs=fs, output='sos')
     return sos
 
-def generate_filter(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
+def combine_signals(signals, multiplier=3.0):
+    """
+    Combine the two signals into a single signal.
+
+    Parameters
+    ----------
+    signals : array_like
+        The two signals to be combined. The first signal is the raw signal and
+        the second signal is the noise signal.
+    multiplier : float, optional
+        The multiplier for the second signal. Defaults to 3.0.
+
+    Returns
+    -------
+    signal : array_like
+        The combined signal.
+    """
+    signals = np.abs(signals)
+    signal = signals[0] - signals[1] * multiplier
+    return signal
+
+def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
+    """
+    Generate second-order sections for filtering EMG data.
+
+    Parameters
+    ----------
+    fs : int
+        Sampling frequency (Hz).
+    lowcut : float
+        Lower cutoff frequency of the bandpass filter (Hz).
+    highcut : float
+        Upper cutoff frequency of the bandpass filter (Hz).
+    notch_freq : float
+        Frequency at which the notch filter is applied (Hz).
+
+    Returns
+    -------
+    sos : array-like
+        Second-order sections for filtering EMG data.
+    """
     # butterworth bandpass filter
     sos_b = butter_bandpass(lowcut, highcut, fs)
     # notch filter
     sos_n = notch_filter(notch_freq, fs)
-    return [sos_b, sos_n]
+    # Stack the sos matrices
+    sos = np.vstack((sos_b, sos_n))
+    return sos
 
-def filter_emg_data(data, coeff=generate_filter()):
-    # Bandpass filter between 20 Hz and 250 Hz
-    filtered_data = sosfiltfilt(coeff[0], data)
-    # Notch filter around 50 Hz
-    filtered_data = sosfiltfilt(coeff[1], filtered_data)
-    # Abs
-    filtered_data = np.abs(filtered_data)
-    return filtered_data
-
-def combine_sensors(sensor1, sensor2, multiplier=3.0):
-    return sensor1 - multiplier * sensor2
-
-def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5.0, multiplier=3.0, window_size=300):
+def run(sensor1, sensor2, sos=generate_sos(), window=0, threshold=5.0, multiplier=3.0, convolve_window_size=65*5):    
     """
-    This function takes in the sensor data, filters it, combines it, 
-    thresholds it, and then takes the moving average. If single_window is 
-    not equal to 0, it will return the mean of the last "single_window" 
-    values of the filtered data. Otherwise it will return the entire
-    filtered data. 
+    Filter the EMG signals from two sensors, combine them, apply a threshold and then
+    take the moving average.
 
     Parameters
     ----------
-    sensor1 : array
+    sensor1 : array_like
         The data from sensor 1
-    sensor2 : array
+    sensor2 : array_like
         The data from sensor 2
-    filter : list
-        The coefficients for the filter
-    single_window : int
+    sos : array_like
+        The second-order sections for filtering EMG data
+    window : int
         The number of data points to average
     threshold : float
         The minimum absolute value of the data
     multiplier : float
         The multiplier for the second sensor
-    window_size : int
+    convolve_window_size : int
         The size of the window for the moving average
 
     Returns
     -------
-    filtered_data : array
-        The filtered data
+    signal : array_like
+        The filtered and combined signal
     """
-    filtered_sensor1 = filter_emg_data(sensor1, filter)
-    filtered_sensor2 = filter_emg_data(sensor2, filter)
-    # combine the sensors
-    combined_sensor = combine_sensors(filtered_sensor1, filtered_sensor2, multiplier)
-    # threshold
-    combined_sensor = np.where(np.abs(combined_sensor) > threshold, combined_sensor, 0)
-    # moving average
-    combined_sensor = np.convolve(combined_sensor, np.ones(window_size)/window_size, mode='same')
-    if single_window != 0:
-        value = np.mean(combined_sensor[single_window:])
+    # Calibrate
+    sensor1 = calibrate(sensor1)
+    sensor2 = calibrate(sensor2)
+    signals = np.hstack((sensor1, sensor2))
+    # Filter
+    signals = sosfiltfilt(sos, signals)
+    # Combine the sensors
+    signal = combine_signals(signals, multiplier)
+    # Threshold
+    signal = np.where(np.abs(signal) > threshold, signal, 0)
+    # Moving average
+    signal = np.convolve(signal, np.ones(convolve_window_size)/convolve_window_size, mode='same')
+    # Return the mean of the last window values
+    if window != 0:
+        value = np.mean(signal[window:])
         return value
 
-    return combined_sensor
+    return signal
     
     
     
@@ -81,7 +135,7 @@ if __name__ == '__main__':
     import matplotlib.pyplot as plt
 
     # Load the data from the .npz file
-    data, loadcell = loadData.load(n=0)
+    data, loadcell = loadData.load(n=5)
 
     # Extract the timestamps and the GSR data
     timestamps = data[:, 0]
@@ -91,11 +145,11 @@ if __name__ == '__main__':
     fs = 650
 
     # Generate the filter coefficients
-    filter = generate_filter(fs=fs)
+    sos = generate_sos(fs=fs)
 
     # Apply the filter
     start = time.time()
-    signal = run(sensor1_data, sensor2_data, filter)
+    signal = run(sensor1_data, sensor2_data, sos)
     end = time.time()
     samples = len(sensor1_data)
     print('Time taken to filter the signal: %.2f s' % (end - start))

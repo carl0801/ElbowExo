@@ -3,53 +3,13 @@ import matplotlib.pyplot as plt
 import glob
 import os
 import numpy as np
+import loadData
 
-# Find files with the highest number
-files = glob.glob('data/[0-9.]*-shimmer.pkl') + glob.glob('data/[0-9.]*-loadcell.pkl')
-files.sort(key=lambda x: list(map(float, os.path.splitext(os.path.basename(x))[0].split('-')[0].split('.'))), reverse=True)
-data1 = pickle.load(open(files[0], 'rb'))
-data2 = pickle.load(open(files[1], 'rb'))
-if len(data1[0]) > len(data2[0]):
-    shimmerData = data1
-    loadcellData = data2
-else:
-    shimmerData = data2
-    loadcellData = data1
-shimmerData = np.array(shimmerData)
-loadcellData = np.array(loadcellData, dtype=float)
-
-# Shimmer data is stored in an array where each entry contain (time, sensor1, sensor2)
-# Loadcell data is stored in an array where each entry contain (time, sensor)
-# Shimmer time is in seconds, and loadcell is in miliseconds, but the clock they oprate after is not the same
-# They start at different times, but the readings end at the same time, so that is how they should be calibrate
-
-loadcellData[:, 0] = loadcellData[:, 0] / 1000
-
-# Get the time of the last data point
-last_time_shimmer = shimmerData[-1][0]
-last_time_loadcell = loadcellData[-1][0]
-
-# The time difference is the difference between the last time of the two systems
-time_diff = last_time_loadcell - last_time_shimmer
-
-# Calibrate the time of the loadcell
-loadcellData[:, 0] = loadcellData[:, 0] - time_diff
-
-# Print length
-print(len(shimmerData))
-print(len(loadcellData))
-
-# Print last 10 entries
-print(shimmerData[-10:])
-print(loadcellData[-10:])
-
-# Make sure shimmer data is a signed int and there is no overflow
-shimmerData[:, 1] = np.int16(shimmerData[:, 1])
-shimmerData[:, 2] = np.int16(shimmerData[:, 2])
+shimmerData, loadcellData = loadData.load(n=4)
 
 
 # Plot the data in subplots
-plt.figure()
+""" plt.figure()
 plt.subplot(2, 1, 1)
 plt.plot(shimmerData[:, 0], shimmerData[:, 1])
 plt.plot(shimmerData[:, 0], shimmerData[:, 2])
@@ -61,4 +21,47 @@ plt.plot(loadcellData[:, 0], loadcellData[:, 1])
 plt.title('Loadcell Data')
 plt.xlabel('Time [s]')
 plt.ylabel('Sensor Value')
-plt.show()
+plt.show() """
+
+# Calibrate shimemr data
+def cal(data):
+    data = 2420 / (2 ** 16 -1) * data
+    data = data / 12
+    offset = np.mean(data)
+    #data = data - offset
+    #print(f"ADC-sensitivity: {2420 / (2 ** 15 -1)}")
+    return data
+
+# Make 2 subplots of the 2 sensors from shimmer
+plt.figure(figsize=(14, 5))
+plt.style.use('seaborn-v0_8-paper')
+plt.subplot(2, 1, 1)
+plt.plot(shimmerData[:, 0], cal(shimmerData[:, 1]))
+plt.title('Biceps Data') 
+plt.xlabel('Time [s]')
+plt.ylabel('Value [mV]')
+#plt.xlim(70, 80)
+#plt.ylim(-1.1, -0.75)
+plt.subplot(2, 1, 2)
+plt.plot(shimmerData[:, 0], cal(shimmerData[:, 2]), color='tab:orange')
+plt.title('Triceps Data')
+plt.xlabel('Time [s]')
+plt.ylabel('Value [mV]')
+#plt.xlim(70, 80)
+#plt.ylim(5.1, 5.4)
+plt.tight_layout()
+plt.savefig('shimmerSignal.png')
+
+
+# Make mel spectogram
+""" from librosa.display import specshow
+import librosa
+X = librosa.stft(cal(shimmerData[:, 1]))
+Xdb = librosa.amplitude_to_db(abs(X))
+plt.figure(figsize=(14, 5))
+specshow(Xdb, sr=650, x_axis='time', y_axis='hz')
+plt.colorbar(format='%+2.0f dB')
+plt.title('Mel Spectogram')
+plt.tight_layout()
+plt.style.use('seaborn-v0_8-paper')
+plt.savefig('melSpectogram.png')  """
