@@ -24,7 +24,13 @@ def connect_to_wifi(ssid, password):
     profile.cipher = const.CIPHER_TYPE_CCMP
     profile.key = password
 
-    iface.remove_all_network_profiles()  # Remove all existing profiles
+    # Check if the profile already exists
+    existing_profiles = iface.network_profiles()
+    for existing_profile in existing_profiles:
+        if existing_profile.ssid == ssid:
+            iface.remove_network_profile(existing_profile)
+            break
+
     tmp_profile = iface.add_network_profile(profile)  # Add the new profile
 
     iface.connect(tmp_profile)  # Connect to the network
