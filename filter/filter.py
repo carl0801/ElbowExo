@@ -31,25 +31,32 @@ def notch_filter(freq, fs, order=5):
     sos  = butter(order, [freq-2.0, freq+2.0], btype='bandstop', fs=fs, output='sos')
     return sos
 
-def combine_signals(signals, multiplier=3.0):
+def combine_signals(signals, multiplier_biceps=1.0, multiplier_triceps=3.0):
     """
-    Combine the two signals into a single signal.
+    Combine EMG signals from biceps and triceps sensors.
+
+    This function takes in the EMG signals from two sensors, applies a 
+    multiplier to each, and combines them by subtracting the weighted 
+    triceps signal from the weighted biceps signal.
 
     Parameters
     ----------
-    signals : array_like
-        The two signals to be combined. The first signal is the raw signal and
-        the second signal is the noise signal.
-    multiplier : float, optional
-        The multiplier for the second signal. Defaults to 3.0.
+    signals : array-like
+        An array containing the EMG signals, where signals[0] corresponds 
+        to the biceps and signals[1] corresponds to the triceps.
+    multiplier_biceps : float, optional
+        The multiplier applied to the biceps signal. Default is 1.0.
+    multiplier_triceps : float, optional
+        The multiplier applied to the triceps signal. Default is 3.0.
 
     Returns
     -------
-    signal : array_like
-        The combined signal.
+    signal : array-like
+        The combined signal after applying the multipliers and subtracting
+        the triceps signal from the biceps signal.
     """
     signals = np.abs(signals)
-    signal = signals[0] - signals[1] * multiplier
+    signal = signals[0] * multiplier_biceps - signals[1] * multiplier_triceps
     return signal
 
 def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
@@ -114,7 +121,7 @@ def run(sensor1, sensor2, sos=generate_sos(), window=0, threshold=5.0, multiplie
     # Filter
     signals = sosfiltfilt(sos, signals)
     # Combine the sensors
-    signal = combine_signals(signals, multiplier)
+    signal = combine_signals(signals, multiplier_biceps, multiplier_triceps)
     # Threshold
     signal = np.where(np.abs(signal) > threshold, signal, 0)
     # Moving average
@@ -126,7 +133,65 @@ def run(sensor1, sensor2, sos=generate_sos(), window=0, threshold=5.0, multiplie
 
     return signal
     
-    
+
+class Filter:
+    """
+    A class for filtering EMG signals.
+
+    Parameters
+    ----------
+    fs : int
+        Sampling frequency (Hz).
+    lowcut : float
+        Lower cutoff frequency of the bandpass filter (Hz).
+    highcut : float
+        Upper cutoff frequency of the bandpass filter (Hz).
+    notch_freq : float
+        Frequency at which the notch filter is applied (Hz).
+    window : int
+        The number of data points to average
+    threshold : float
+        The minimum absolute value of the data
+    multiplier_biceps : float
+        The multiplier for the biceps sensor
+    multiplier_triceps : float
+        The multiplier for the triceps sensor
+    convolve_window_size : int
+        The size of the window for the moving average
+
+    """
+
+    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=0, threshold=5.0, multiplier_biceps=1.0, multiplier_triceps=3.0, convolve_window_size=65*5):
+        self.fs = fs
+        self.lowcut = lowcut
+        self.highcut = highcut
+        self.notch_freq = notch_freq
+        self.window = window
+        self.threshold = threshold
+        self.multiplier_biceps = multiplier_biceps
+        self.multiplier_triceps = multiplier_triceps
+        self.convolve_window_size = convolve_window_size
+        self.sos = generate_sos(fs=self.fs, lowcut=self.lowcut, highcut=self.highcut, notch_freq=self.notch_freq)
+
+    def run(self, sensor1_data, sensor2_data):
+        # Calibrate
+        sensor1_data = calibrate(sensor1_data)
+        sensor2_data = calibrate(sensor2_data)
+        signals = np.hstack((sensor1_data, sensor2_data))
+        # Filter
+        signals = sosfiltfilt(self.sos, signals)
+        # Combine the sensors
+        signal = combine_signals(signals, self.multiplier_biceps, self.multiplier_triceps)
+        # Threshold
+        signal = np.where(np.abs(signal) > self.threshold, signal, 0)
+        # Moving average
+        signal = np.convolve(signal, np.ones(self.convolve_window_size)/self.convolve_window_size, mode='same')
+        # Return the mean of the last window values
+        if self.window != 0:
+            value = np.mean(signal[self.window:])
+            return value
+
+        return signal
     
 
 if __name__ == '__main__':
