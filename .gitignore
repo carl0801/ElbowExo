@@ -3,5 +3,8 @@
 *.egg-info
 pixi.*
 
+# vscode 
 .vscode
+
+# Cache
 __pycache__/
