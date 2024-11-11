@@ -18,7 +18,7 @@ const int TX_PIN = 1;
 const int RX_PIN = 3;
 const int stallGuardPin = 5;
 const int SERIAL_BAUD_RATE = 115200;
-const uint8_t RUN_CURRENT_PERCENT = 100;
+const uint8_t RUN_CURRENT_PERCENT = 50  ;
 
 TMC2209 stepper_driver;
 int velocity = 400;
@@ -73,10 +73,16 @@ void checkForIncomingMessages(void * parameter) {
   }
 }
 
+bool stallGuardTriggered=false;
+
 void mainLoop(void * parameter) {
   for (;;) {
-    if (digitalRead(stallGuardPin) == HIGH) {
+    if (stallGuardTriggered) {
       stepper_driver.moveAtVelocity(0);
+      if (millis() - stallGuardTimer > 1000 && stallGuardTimer != 0) {
+        stallGuardTriggered = false;
+        //stepper_driver.moveAtVelocity(velocity);
+      }
     }
     else {
       stepper_driver.moveAtVelocity(velocity);
@@ -84,12 +90,25 @@ void mainLoop(void * parameter) {
     vTaskDelay(10 / portTICK_PERIOD_MS); // Motor control delay
   }
 }
+float stallGuardTimer = 0;
+void interruptHandler() {
+  stallGuardTriggered = true;
+  stallGuardTimer = millis();
+  
+  
+  // Clear the interrupt
+  detachInterrupt(digitalPinToInterrupt(stallGuardPin));
+  attachInterrupt(digitalPinToInterrupt(stallGuardPin), interruptHandler, RISING);
+
+
+}
 
 void setup() {
   setupWiFi();
   
   stepper_driver.setup(serial_stream, SERIAL_BAUD_RATE, TMC2209::SERIAL_ADDRESS_0, RX_PIN, TX_PIN);
-  pinMode(stallGuardPin, INPUT);
+  attachInterrupt(digitalPinToInterrupt(stallGuardPin), interruptHandler, RISING);
+  stepper_driver.setStallGuardThreshold(2);
   stepper_driver.setMicrostepsPerStep(8);
   stepper_driver.setRunCurrent(RUN_CURRENT_PERCENT);
   stepper_driver.enableCoolStep();
