@@ -27,7 +27,7 @@ plt.show() """
 def cal(data):
     data = 2420 / (2 ** 16 -1) * data
     data = data / 12
-    offset = np.mean(data)
+    #offset = np.mean(data)
     #data = data - offset
     #print(f"ADC-sensitivity: {2420 / (2 ** 15 -1)}")
     return data
@@ -50,8 +50,8 @@ plt.ylabel('Value [mV]')
 #plt.xlim(70, 80)
 #plt.ylim(5.1, 5.4)
 plt.tight_layout()
-plt.savefig('shimmerSignal.png')
-
+#plt.savefig('shimmerSignal.png')
+plt.show()
 
 # Make mel spectogram
 """ from librosa.display import specshow

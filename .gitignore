@@ -4,3 +4,4 @@
 pixi.*
 
 .vscode
+__pycache__/
