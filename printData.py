@@ -5,7 +5,8 @@ import os
 import numpy as np
 import loadData
 
-shimmerData, loadcellData = loadData.load(n=4)
+shimmerBiceps = loadData.loadShimmer(n=3)
+shimmerTriceps = loadData.loadShimmer(n=2)
 
 
 # Plot the data in subplots
@@ -36,22 +37,22 @@ def cal(data):
 plt.figure(figsize=(14, 5))
 plt.style.use('seaborn-v0_8-paper')
 plt.subplot(2, 1, 1)
-plt.plot(shimmerData[:, 0], cal(shimmerData[:, 1]))
-plt.title('Biceps Data') 
+plt.plot(shimmerBiceps[:, 0], cal(shimmerBiceps[:, 1]))
+plt.title('Measureing Biceps Data') 
 plt.xlabel('Time [s]')
 plt.ylabel('Value [mV]')
-#plt.xlim(70, 80)
+plt.xlim(12, 21)
 #plt.ylim(-1.1, -0.75)
 plt.subplot(2, 1, 2)
-plt.plot(shimmerData[:, 0], cal(shimmerData[:, 2]), color='tab:orange')
-plt.title('Triceps Data')
+plt.plot(shimmerTriceps[:, 0], cal(shimmerTriceps[:, 2]), color='tab:orange')
+plt.title('Measureing Triceps Data')
 plt.xlabel('Time [s]')
 plt.ylabel('Value [mV]')
-#plt.xlim(70, 80)
+plt.xlim(14, 23)
 #plt.ylim(5.1, 5.4)
 plt.tight_layout()
-#plt.savefig('shimmerSignal.png')
-plt.show()
+plt.savefig('shimmerSignal.png')
+#plt.show()
 
 # Make mel spectogram
 """ from librosa.display import specshow
