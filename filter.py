@@ -134,7 +134,7 @@ def run(sensor1, sensor2, sos=generate_sos(), window=0, threshold=5.0, multiplie
     return signal
     
 
-class Filter:
+class Signal:
     """
     A class for filtering EMG signals.
 
@@ -161,7 +161,7 @@ class Filter:
 
     """
 
-    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=0, threshold=5.0, multiplier_biceps=1.0, multiplier_triceps=3.0, convolve_window_size=65*5):
+    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=0, threshold=0.1, multiplier_biceps=1.0, multiplier_triceps=1.0, convolve_window_size=65*5):
         self.fs = fs
         self.lowcut = lowcut
         self.highcut = highcut
@@ -173,11 +173,11 @@ class Filter:
         self.convolve_window_size = convolve_window_size
         self.sos = generate_sos(fs=self.fs, lowcut=self.lowcut, highcut=self.highcut, notch_freq=self.notch_freq)
 
-    def run(self, sensor1_data, sensor2_data):
+    def filter(self, sensor1_data, sensor2_data):
         # Calibrate
         sensor1_data = calibrate(sensor1_data)
         sensor2_data = calibrate(sensor2_data)
-        signals = np.hstack((sensor1_data, sensor2_data))
+        signals = np.vstack((sensor1_data, sensor2_data))
         # Filter
         signals = sosfiltfilt(self.sos, signals)
         # Combine the sensors
@@ -186,12 +186,13 @@ class Filter:
         signal = np.where(np.abs(signal) > self.threshold, signal, 0)
         # Moving average
         signal = np.convolve(signal, np.ones(self.convolve_window_size)/self.convolve_window_size, mode='same')
+
         # Return the mean of the last window values
         if self.window != 0:
             value = np.mean(signal[self.window:])
             return value
-
-        return signal
+            
+        return signals
     
 
 if __name__ == '__main__':

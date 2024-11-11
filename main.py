@@ -4,10 +4,15 @@ import shimmer
 import util
 import numpy as np
 import threading
-#import myMain
 import time
 import serial 
-from pywifi import PyWiFi, const, Profile
+import subprocess
+
+is_connected = True # Bypass conencting to esp hotspot
+platform = "linux" # linux of windows
+
+if is_connected:
+    from pywifi import PyWiFi, const, Profile
 
 # Automatically connect PC to the ESP32 Wi-Fi
 def connect_to_wifi(ssid, password):
@@ -46,13 +51,30 @@ def connect_to_wifi(ssid, password):
 # Connect to the ESP32 Wi-Fi
 ssid = 'ESP32_Hotspot'
 password = '12345678'
-is_connected = True
 if not is_connected:
     if not connect_to_wifi(ssid, password):
         raise Exception('Failed to connect to Wi-Fi')
 
+if platform == "linux":
+    def run_command(command):
+        try:
+            print(command)
+            result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            print(result.stdout.decode())
+        except subprocess.CalledProcessError as e:
+            print(f"Error: {e.stderr.decode()}")
+    # Make rfcomm port
+    mac_address = '00:06:66:FB:4C:BE'
+    rfport_thread = threading.Thread(target=run_command, args=(f'sudo rfcomm connect /dev/rfcomm0 {mac_address}',))
+    rfport_thread.start()
+    time.sleep(5)
+    run_command('sudo chmod 666 /dev/rfcomm0')
+    PORT = "/dev/rfcomm0"
+
+elif platform == "windows":
+    PORT = "COM7"
+
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM7"
 
 sensor_idx = 1
 
@@ -63,16 +85,12 @@ shimmer.set_sampling_rate(650)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 shimmer.start_bt_streaming()
 
-Filter = filter.Filter(window=200)
+Filter = filter.Filter(window=65, debug=True)
 
 # Preallocate fixed-size buffer with 1000 samples
-buffer_size = 1000
+buffer_size = 650*8
 sensor1_data = np.zeros(buffer_size)
 sensor2_data = np.zeros(buffer_size)
-
-# Preallocate filtered data arrays
-sensor1_data_filtered = np.zeros(buffer_size)
-sensor2_data_filtered = np.zeros(buffer_size)
 
 # Lock to handle threading
 data_lock = threading.Lock()
@@ -90,20 +108,17 @@ def sendvelocity(velocity):
     sock.sendall(velocity.encode('utf-8'))
     
 def update():
-    global sensor1_data_filtered, sensor2_data_filtered, Filter
     with data_lock:
-        sensor_mean = Filter.run(sensor1_data_filtered, sensor2_data_filtered)
-        if abs(sensor_mean) > 1:
-            limited_speed = 100*sensor_mean
-            # restrict speed to 2500 rpm
-            if limited_speed > 2000:
-                limited_speed = 2000
-            elif limited_speed < -2000:
-                limited_speed = -2000
-            sendvelocity(limited_speed)
-            print(limited_speed)
-        else:
-            sendvelocity(0)
+        sensor_mean = Filter.run(sensor1_data, sensor2_data)
+        limited_speed = 700*sensor_mean
+        # restrict speed to 2500 rpm
+        if limited_speed > 2000:
+            limited_speed = 2000
+        elif limited_speed < -2000:
+            limited_speed = -2000
+        sendvelocity(limited_speed)
+        print(limited_speed)
+        time.sleep(0.05)
 
 def data_collection():
     global sensor1_data, sensor2_data, sensor_idx

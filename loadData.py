@@ -41,3 +41,17 @@ def load(n=0):
     shimmerData[:, 2] = np.int16(shimmerData[:, 2])
 
     return shimmerData, loadcellData
+
+def loadShimmer(n=0):
+    # Find files with the highest number
+    files = glob.glob('data/[0-9.]*-shimmer.pkl')
+    files.sort(key=lambda x: list(map(float, os.path.splitext(os.path.basename(x))[0].split('-')[0].split('.'))), reverse=True)
+    # The nth latest reading
+    shimmerData = pickle.load(open(files[n], 'rb'))
+    shimmerData = np.array(shimmerData)
+
+    # Make sure shimmer data is a signed int and there is no overflow
+    shimmerData[:, 1] = np.int16(shimmerData[:, 1])
+    shimmerData[:, 2] = np.int16(shimmerData[:, 2])
+
+    return shimmerData
