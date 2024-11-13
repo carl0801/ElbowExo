@@ -189,7 +189,7 @@ class Signal:
 
         # Return the mean of the last window values
         if self.window != 0:
-            value = np.mean(signal[self.window:])
+            value = np.mean(signal[-self.window:])
             return value
             
         return signals

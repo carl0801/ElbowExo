@@ -1,96 +1,71 @@
-import socket
-import filter
-import shimmer
 import util
 import numpy as np
 import threading
 import time
 import serial 
 import subprocess
+import os
 
-is_connected = True # Bypass conencting to esp hotspot
-platform = "linux" # linux of windows
+import emg_signal
+import loadData as shimmerLib
+import loadData as socket
 
-if is_connected:
-    from pywifi import PyWiFi, const, Profile
 
-# Automatically connect PC to the ESP32 Wi-Fi
-def connect_to_wifi(ssid, password):
-    wifi = PyWiFi()
-    iface = wifi.interfaces()[0]  # Get the first wireless interface
+platform = "windows" # linux or windows
 
-    iface.disconnect()
-    time.sleep(1)  # Wait for a second to ensure disconnection
-
-    profile = Profile()
-    profile.ssid = ssid
-    profile.auth = const.AUTH_ALG_OPEN
-    profile.akm.append(const.AKM_TYPE_WPA2PSK)
-    profile.cipher = const.CIPHER_TYPE_CCMP
-    profile.key = password
-
-    # Check if the profile already exists
-    existing_profiles = iface.network_profiles()
-    for existing_profile in existing_profiles:
-        if existing_profile.ssid == ssid:
-            iface.remove_network_profile(existing_profile)
-            break
-
-    tmp_profile = iface.add_network_profile(profile)  # Add the new profile
-
-    iface.connect(tmp_profile)  # Connect to the network
-    time.sleep(10)  # Wait for 10 seconds to ensure connection
-
-    if iface.status() == const.IFACE_CONNECTED:
-        print(f'Connected to {ssid}')
-        return True
-    else:
-        print(f'Could not connect to {ssid}')
-        return False
-
-# Connect to the ESP32 Wi-Fi
-ssid = 'ESP32_Hotspot'
-password = '12345678'
-if not is_connected:
-    if not connect_to_wifi(ssid, password):
-        raise Exception('Failed to connect to Wi-Fi')
-
+# Connect to Shimmer
 if platform == "linux":
     def run_command(command):
         try:
-            print(command)
+            print(f"Running: {command}")
             result = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print(result.stdout.decode())
         except subprocess.CalledProcessError as e:
             print(f"Error: {e.stderr.decode()}")
+
+    # Function to wait for /dev/rfcomm0 to appear
+    def wait_for_rfcomm(port, timeout=15):
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            if os.path.exists(port):
+                print(f"{port} is now available.")
+                return True
+            time.sleep(0.5)  # Poll every 0.5 seconds
+        print(f"Timeout: {port} did not appear within {timeout} seconds.")
+        return False
+
     # Make rfcomm port
     mac_address = '00:06:66:FB:4C:BE'
     rfport_thread = threading.Thread(target=run_command, args=(f'sudo rfcomm connect /dev/rfcomm0 {mac_address}',))
     rfport_thread.start()
-    time.sleep(5)
-    run_command('sudo chmod 666 /dev/rfcomm0')
+
+    # Wait until /dev/rfcomm0 exists, then change permissions
+    if wait_for_rfcomm("/dev/rfcomm0"):
+        run_command('sudo chmod 666 /dev/rfcomm0')
+    else:
+        print("Failed to find /dev/rfcomm0")
+        
     PORT = "/dev/rfcomm0"
 
 elif platform == "windows":
     PORT = "COM7"
 
-TYPE = util.SHIMMER_ExG_0
-
-sensor_idx = 1
-
 # Initialize Shimmer
-shimmer = shimmer.Shimmer3(TYPE, debug=True)
+TYPE = util.SHIMMER_ExG_0
+shimmer = shimmerLib.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
 shimmer.set_sampling_rate(650)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 shimmer.start_bt_streaming()
 
-Filter = filter.Filter(window=65, debug=True)
+shimmerSignal = emg_signal.Signal()
 
 # Preallocate fixed-size buffer with 1000 samples
 buffer_size = 650*8
 sensor1_data = np.zeros(buffer_size)
 sensor2_data = np.zeros(buffer_size)
+sensor_idx = 0
+start_time = time.time()
 
 # Lock to handle threading
 data_lock = threading.Lock()
@@ -106,19 +81,25 @@ sock.connect((HOST, PORT))
 def sendvelocity(velocity):
     velocity = str(velocity) + '\n'
     sock.sendall(velocity.encode('utf-8'))
+
+# Function to get the data as a contiguous, ordered array for filtering
+def get_sequential_data(buffer, start_index):
+    return np.concatenate((buffer[start_index:], buffer[:start_index]))
     
 def update():
     with data_lock:
-        sensor_mean = Filter.run(sensor1_data, sensor2_data)
-        limited_speed = 700*sensor_mean
+        sensor1_sequential = get_sequential_data(sensor1_data, sensor_idx)
+        sensor2_sequential = get_sequential_data(sensor2_data, sensor_idx)
+        shimmerSignal.set_signal(sensor1_sequential, sensor2_sequential)
+        control_value = shimmerSignal.get_control_value()
+        limited_speed = 7000*control_value
         # restrict speed to 2500 rpm
         if limited_speed > 2000:
             limited_speed = 2000
         elif limited_speed < -2000:
             limited_speed = -2000
         sendvelocity(limited_speed)
-        print(limited_speed)
-        time.sleep(0.05)
+
 
 def data_collection():
     global sensor1_data, sensor2_data, sensor_idx
@@ -127,22 +108,43 @@ def data_collection():
             n_of_packets, packets = shimmer.read_data_packet_extended()
             if n_of_packets > 0:
                 with data_lock:
-                    for packet in packets:
-                        sensor1 = packet[3]
-                        sensor2 = packet[4]
-                        
-                        # Insert data into circular buffer
-                        sensor1_data[sensor_idx % buffer_size] = sensor1
-                        sensor2_data[sensor_idx % buffer_size] = sensor2
-                        sensor_idx += 1
+                    # Extract sensor1 and sensor2 data for all packets at once
+                    sensor1_values = np.array([packet[3] for packet in packets])
+                    sensor2_values = np.array([packet[4] for packet in packets])
+                    num_new = len(sensor1_values)
+
+                    # Insert new data in circular fashion
+                    for i in range(num_new):
+                        sensor1_data[(sensor_idx + i) % buffer_size] = sensor1_values[i]
+                        sensor2_data[(sensor_idx + i) % buffer_size] = sensor2_values[i]
+
+                    # Update index to the next write position in the circular buffer
+                    sensor_idx = (sensor_idx + num_new) % buffer_size
+
     except KeyboardInterrupt:
         shimmer.stop_bt_streaming()
         shimmer.disconnect(reset_obj_to_init=True)
 
 def timer_update():
+    update_freq = 10 # Hz
+    total_updates = update_freq
+    timer_update_start = time.time()
+    sleep_time = 1/update_freq
+    # Wait 1 second for data to be collected
+    time.sleep(1)
     while True:
         update()
-        time.sleep(0.1)  # Update every 20 ms for more frequent processing
+        total_updates += 1
+        time.sleep(sleep_time)
+        current_freq = total_updates / (time.time() - timer_update_start)
+        # Update sleep time based on current frequency
+        if current_freq > update_freq:
+            sleep_time += 0.01
+        elif current_freq < update_freq:
+            sleep_time -= 0.01
+        if sleep_time < 0.01:
+            sleep_time = 0.0
+        
 
 # Run the data collection in a separate thread
 data_thread = threading.Thread(target=data_collection)
