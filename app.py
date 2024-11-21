@@ -6,7 +6,7 @@ import datetime
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QGraphicsColorizeEffect
 from PyQt5.QtGui import QTextCursor
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve
+from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QPoint
 from PyQt5 import uic
 
 # Import the SerialCommunication and EMG_Shimmer classes from the libraries module
@@ -36,7 +36,6 @@ class MainWindow(QMainWindow):
 
         # Animations
         self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
-        self.shimmer_status_animation.start()
         
         # Initialize the buttons and connect them to the corresponding functions
         for button in self.findChildren(QPushButton):
@@ -90,6 +89,37 @@ class MainWindow(QMainWindow):
 
         animation.start()
         
+        return animation
+
+    def create_shake_animation(self, button, amplitude=10, duration=200):
+        """
+        Creates a horizontal shake animation for a button, making it move left and right.
+
+        :param button: The QPushButton to animate.
+        :param amplitude: The distance (in pixels) the button moves left and right.
+        :param duration: The duration (in milliseconds) for one full shake cycle.
+        :return: The QPropertyAnimation instance.
+        """
+        # Create a property animation on the 'pos' property of the button
+        animation = QPropertyAnimation(button, b"pos")
+        animation.setDuration(duration)
+
+        # Get the button's original position
+        original_pos = QPoint(button.x(), button.y())
+        print(original_pos.x(), original_pos.y())
+        # Set keyframes for the shake animation
+        animation.setKeyValueAt(0.0, original_pos)  # Start at the original position
+        animation.setKeyValueAt(0.25, original_pos + QPoint(-amplitude, 0))  # Move left
+        animation.setKeyValueAt(0.5, original_pos)  # Return to the center
+        animation.setKeyValueAt(0.75, original_pos + QPoint(amplitude, 0))  # Move right
+        animation.setKeyValueAt(1.0, original_pos)  # Return to the center
+
+        # Apply easing curve for smooth movement
+        animation.setEasingCurve(QEasingCurve.InOutQuad)
+
+        # Loop indefinitely
+        animation.setLoopCount(2)
+
         return animation
 
     def send_velocity_from_shimmer(self):
@@ -156,6 +186,7 @@ class MainWindow(QMainWindow):
         self.timer.start(50)  # Poll every 100 ms
 
     def toggle_connection(self):
+        self.connect_serial_button_animation = self.create_shake_animation(self.connect_serial_button)
         if self.connection_status:
             self.serial_comm.disconnect()
             self.connection_status = False
@@ -172,7 +203,8 @@ class MainWindow(QMainWindow):
                 #print("Connected to the serial port.")
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Connected to the serial port.")
             else:
-                QMessageBox.warning(self, "Connection Error", "Failed to connect to the serial port.")
+                self.connect_serial_button_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - ESP32 not found.")
 
     def toggle_motor_enable(self):
         if self.connection_status:

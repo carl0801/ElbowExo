@@ -48,7 +48,7 @@ class SerialCommunication:
         try:
             self.port_name = self.find_device(vendor_id=self.vendor_id, product_id=self.product_id)
             if not self.port_name:
-                print("ESP32 not found.")
+                #print("ESP32 not found.")
                 return False
             self.port = serial.Serial(self.port_name, baudrate=115200, timeout=1)
             return True
