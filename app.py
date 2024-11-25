@@ -95,7 +95,6 @@ class MainWindow(QMainWindow):
 
     def image_loader(self):
         pixmap = QPixmap(self.images[self.image_index])
-        pixmap = pixmap.copy(0, 0, pixmap.width() - int(pixmap.width() / 4), pixmap.height())
         pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
         # Make the white background color transparent
         pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
