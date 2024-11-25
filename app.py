@@ -472,7 +472,8 @@ class MainWindow(QMainWindow):
         # Move the cursor to the end of the text
         self.console_text.moveCursor(QTextCursor.End)
 
-app = QApplication(sys.argv)
-window = MainWindow()
-window.show()
-sys.exit(app.exec_())
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = MainWindow()
+    window.show()
+    sys.exit(app.exec_())
