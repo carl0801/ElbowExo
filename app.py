@@ -39,9 +39,14 @@ class MainWindow(QMainWindow):
         self.init_timer()
 
         # Start video frame update
-        self.timer = QTimer(self)
-        self.timer.timeout.connect(self.update_frame)
-        self.timer.start(50)  # Update every 50 ms
+        self.animation_timer = QTimer(self)
+        self.animation_timer.timeout.connect(self.update_frame)
+        self.animation_timer.start(50)  # Update every 50 ms
+
+        # Resize event timer
+        self.resize_timer = QTimer(self)
+        self.resize_timer.timeout.connect(self.resize_window)
+        self.resize_timer.start(10) # Update every 10 ms
 
         # Animations
         self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
@@ -50,7 +55,7 @@ class MainWindow(QMainWindow):
         for button in self.findChildren(QPushButton):
             button.clicked.connect(lambda _, name=button.objectName(): self.on_button_click(name.replace('_button', '')))
          
-    def resizeEvent(self, event):
+    def resize_window(self):
         
         for column in self.collums:
             self.findChild(QWidget, f'{column}').setFixedWidth(int(self.width()/3.1))
@@ -63,10 +68,20 @@ class MainWindow(QMainWindow):
         self.console_groupbox.setFixedHeight(int(self.height()/2.2))
         self.animation_groupbox.setFixedHeight(int(self.height()/2.2))
 
-        super().resizeEvent(event)
+    def image_loader(self):
+        pixmap = QPixmap(self.images[self.image_index])
+        pixmap = pixmap.copy(0, 0, pixmap.width() - int(pixmap.width() / 4), pixmap.height())
+        pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+        # Make the white background color transparent
+        pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
+
+        self.animation_widget.setPixmap(pixmap)
+
+        return
 
     def update_frame(self):
 
+        self.image_loader()
         # Check if the image index is within the bounds of the list
         if self.image_target >= len(self.images):
             self.image_target = len(self.images) - 1
@@ -75,25 +90,11 @@ class MainWindow(QMainWindow):
 
 
         if self.image_index < self.image_target:
-            pixmap = QPixmap(self.images[self.image_index])
-            pixmap = pixmap.copy(0, 0, pixmap.width() - 100, pixmap.height())
-            pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-
-            # Make the white background color transparent
-            pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
-
-            self.animation_widget.setPixmap(pixmap)
+            self.image_loader()
             self.image_index += 1
 
         elif self.image_index > self.image_target:
-            pixmap = QPixmap(self.images[self.image_index])
-            pixmap = pixmap.copy(0, 0, pixmap.width() - 100, pixmap.height())
-            pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
-
-            # Make the white background color transparent
-            pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
-
-            self.animation_widget.setPixmap(pixmap)
+            self.image_loader()
             self.image_index -= 1
 
     def create_color_animation(self, widget, color):
@@ -345,29 +346,40 @@ class MainWindow(QMainWindow):
                 self.initialize_shimmer_button.setStyleSheet(design.GREEN_BUTTON)
 
         elif button == 'start_streaming':
-            time_3 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_3} - Button 3 was clicked')
-            res = self.EmgUnit.start_shimmer()
-            if res:
-                self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming started')
-                self.shimmer_status_animation.stop()
-                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.GREEN)
-                self.start_block_graph_update()
+            self.start_streaming_animation = self.create_shake_animation(self.start_streaming_button)
+            if self.EmgUnit.initialized:
+                time_3 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_3} - Button 3 was clicked')
+                res = self.EmgUnit.start_shimmer()
+                if res:
+                    self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming started')
+                    self.shimmer_status_animation.stop()
+                    self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.GREEN)
+                    self.start_block_graph_update()
 
+                else:
+                    self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming failed')
+                    self.shimmer_status_animation.stop()
+                    self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
             else:
-                self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming failed')
-                self.shimmer_status_animation.stop()
-                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+                self.start_streaming_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
+
                 
         elif button == 'stop_streaming':
-            time_4 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_4} - Button 4 was clicked')
-            self.EmgUnit.stop_shimmer()
-            self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming stopped')
-            self.shimmer_status_animation.stop()
-            self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.YELLOW)
-            if self.update_timer.isActive():
-                self.stop_block_graph_update()
+            self.stop_streaming_animation = self.create_shake_animation(self.stop_streaming_button)
+            if self.EmgUnit.initialized:
+                time_4 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_4} - Button 4 was clicked')
+                self.EmgUnit.stop_shimmer()
+                self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming stopped')
+                self.shimmer_status_animation.stop()
+                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.YELLOW)
+                if self.update_timer.isActive():
+                    self.stop_block_graph_update()
+            else:
+                self.stop_streaming_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
         
         elif button == 'send_velocity':
             self.send_velocity_animation = self.create_shake_animation(self.send_velocity_button)
@@ -414,6 +426,7 @@ class MainWindow(QMainWindow):
             self.toggle_connection()
         
         elif button == 'bind_output':
+            self.image_target += 10
             self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
             if self.connection_status:
                 if self.EmgUnit.initialized:
