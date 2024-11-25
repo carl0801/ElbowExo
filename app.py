@@ -22,7 +22,7 @@ class MainWindow(QMainWindow):
         self.collums = ['menu_widget', 'console_widget', 'statusBar_widget']
         self.titles = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title', 'animation_title']
         self.image_index = 0
-        self.image_target = 1
+        self.image_target = 0
         self.images = sorted(glob.glob("app_dependency/frames/*.png"))
         self.serial_comm = SerialCommunication()
         self.EmgUnit = EMG_Shimmer()
