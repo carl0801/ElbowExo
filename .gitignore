@@ -1,4 +1,3 @@
 TakeImagesFromUnity.py
-app_dependency/__pycache__/**
-libraries/__pycache__/** 
+__pycache__/
 
