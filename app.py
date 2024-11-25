@@ -302,23 +302,18 @@ class MainWindow(QMainWindow):
         self.update_timer.stop()
 
     def bind_output_start(self):
-        self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
-        if self.EmgUnit.initialized:
-            if self.bind_output:
-                self.bind_output = False
-                self.stop_send_velocity_from_shimmer()
-                self.bind_output_button.setText("Bind Output")
-                self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Unbound the output from the shimmer.")
-            else:
-                self.bind_output = True
-                self.start_send_velocity_from_shimmer()
-                self.bind_output_button.setText("Unbind Output")
-                self.bind_output_button.setStyleSheet(design.RED_BUTTON)
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.")
+        if self.bind_output:
+            self.bind_output = False
+            self.stop_send_velocity_from_shimmer()
+            self.bind_output_button.setText("Bind Output")
+            self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
+            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Unbound the output from the shimmer.")
         else:
-            self.bind_output_animation.start()
-            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.") 
+            self.bind_output = True
+            self.start_send_velocity_from_shimmer()
+            self.bind_output_button.setText("Unbind Output")
+            self.bind_output_button.setStyleSheet(design.RED_BUTTON)
+            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.")
 
     def on_button_click(self, button):
         if button == 'initialize_shimmer':
@@ -375,28 +370,43 @@ class MainWindow(QMainWindow):
                 self.stop_block_graph_update()
         
         elif button == 'send_velocity':
-            time_5 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_5} - Button 5 was clicked')
+            self.send_velocity_animation = self.create_shake_animation(self.send_velocity_button)
             if self.connection_status:
-                try:
-                    velocity = int(self.findChild(QLineEdit, 'velocity_input').text())
-                    self.sent_velocity = velocity
-                    self.serial_comm.send(f"{velocity},1,0\n")
-                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {velocity}")
-                except ValueError:
-                    QMessageBox.warning(self, "Input Error", "Please enter a valid velocity.")
+                time_5 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_5} - Button 5 was clicked')
+                if self.connection_status:
+                    try:
+                        velocity = int(self.findChild(QLineEdit, 'velocity_input').text())
+                        self.sent_velocity = velocity
+                        self.serial_comm.send(f"{velocity},1,0\n")
+                        self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {velocity}")
+                    except ValueError:
+                        QMessageBox.warning(self, "Input Error", "Please enter a valid velocity.")
 
-            # Clear the input field
-            self.findChild(QLineEdit, 'velocity_input').clear()
+                # Clear the input field
+                self.findChild(QLineEdit, 'velocity_input').clear()
+            else:
+                self.send_velocity_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
         
         elif button == 'enable_motor':
-            time_6 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_6} - Button 6 was clicked')
-            self.toggle_motor_enable()
+            self.enable_motor_animation = self.create_shake_animation(self.enable_motor_button)
+            if self.connection_status:
+                time_6 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_6} - Button 6 was clicked')
+                self.toggle_motor_enable()
+            else:
+                self.enable_motor_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
         
         elif button == 'stall_motor':
-            time_7 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_7} - Button 7 was clicked')
+            self.stall_motor_animation = self.create_shake_animation(self.stall_motor_button)
+            if self.connection_status:
+                time_7 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_7} - Button 7 was clicked')
+            else:
+                self.stall_motor_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
 
         elif button == 'connect_serial':
             time_8 = datetime.datetime.now().strftime('%H:%M')
@@ -404,9 +414,18 @@ class MainWindow(QMainWindow):
             self.toggle_connection()
         
         elif button == 'bind_output':
-            time_9 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_9} - Button 9 was clicked')
-            self.bind_output_start()
+            self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
+            if self.connection_status:
+                if self.EmgUnit.initialized:
+                    time_9 = datetime.datetime.now().strftime('%H:%M')
+                    #self.handle_console_output(f'{time_9} - Button 9 was clicked')
+                    self.bind_output_start()
+                else:
+                    self.bind_output_animation.start()
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
+            else:
+                self.bind_output_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
 
     def handle_console_output(self, output):
         # Shift the buffer to the left and add the new output at the end
