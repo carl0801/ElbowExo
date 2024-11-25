@@ -90,10 +90,10 @@
                                                     border: none;
                                                     </string>
                                                 </property>
-                                                <property name="maximumSize">
+                                                <property name="minimumSize">
                                                     <size>
-                                                        <width>1900</width>
-                                                        <height>40</height>
+                                                        <width>100</width>
+                                                        <height>55</height>
                                                     </size>
                                                 </property>
                                             </widget>
@@ -136,9 +136,9 @@
                                         </item>
                                         <item>
                                             <widget class="QWidget" name="shimmer_status_widget">
-                                                <property name="maximumSize">
+                                                <property name="minimumSize">
                                                     <size>
-                                                        <width>1900</width>
+                                                        <width>100</width>
                                                         <height>55</height>
                                                     </size>
                                                 </property>
@@ -158,14 +158,7 @@
                                                                 <string>
                                                                     border: none;
                                                                     font-size: 16px;
-                                                                    
                                                                 </string>
-                                                            </property>
-                                                            <property name="maximumSize">
-                                                                <size>
-                                                                    <width>140</width>
-                                                                    <height>70</height>
-                                                                </size>
                                                             </property>
                                                         </widget>
                                                     </item>
@@ -218,6 +211,12 @@
                                                     border: none;
                                                     </string>
                                                 </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
+                                                        <height>55</height>
+                                                    </size>
+                                                </property>
                                                 <property name="maximumSize">
                                                     <size>
                                                         <width>1900</width>
@@ -251,7 +250,7 @@
                                         <number>20</number> <!-- Spacing of 20 pixels -->
                                     </property>
                                         <item>
-                                            <widget class="QLabel" name="control_shimmer_title">
+                                            <widget class="QLabel" name="control_motor_title">
                                                 <property name="text">
                                                     <string>Control Motor</string>
                                                 </property>
@@ -269,6 +268,12 @@
                                                 <property name="maximumSize">
                                                     <size>
                                                         <width>1900</width>
+                                                        <height>50</height>
+                                                    </size>
+                                                </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
                                                         <height>40</height>
                                                     </size>
                                                 </property>

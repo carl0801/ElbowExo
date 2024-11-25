@@ -20,6 +20,7 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('app_dependency/mainwindow.ui', self)
         self.collums = ['menu_widget', 'console_widget', 'statusBar_widget']
+        self.titles = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title', 'animation_title']
         self.image_index = 0
         self.image_target = 1
         self.images = sorted(glob.glob("app_dependency/frames/*.png"))
@@ -41,12 +42,12 @@ class MainWindow(QMainWindow):
         # Start video frame update
         self.animation_timer = QTimer(self)
         self.animation_timer.timeout.connect(self.update_frame)
-        self.animation_timer.start(50)  # Update every 50 ms
+        self.animation_timer.start(10)  # Update every 10 ms
 
         # Resize event timer
         self.resize_timer = QTimer(self)
+        self.resize_timer.setSingleShot(True)  # Ensure it only runs once per resize
         self.resize_timer.timeout.connect(self.resize_window)
-        self.resize_timer.start(10) # Update every 10 ms
 
         # Animations
         self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
@@ -54,11 +55,31 @@ class MainWindow(QMainWindow):
         # Initialize the buttons and connect them to the corresponding functions
         for button in self.findChildren(QPushButton):
             button.clicked.connect(lambda _, name=button.objectName(): self.on_button_click(name.replace('_button', '')))
-         
+
+    def resizeEvent(self, event):
+        # Stop the timer if it's already running
+        if self.resize_timer.isActive():
+            self.resize_timer.stop()
+
+        # Start the timer again with a delay
+        self.resize_timer.start(10)  # Wait for 10 ms after the resize event to trigger
+
+        # Optionally, call the base class implementation
+        super().resizeEvent(event)
+
     def resize_window(self):
         
+        # Adjust the size of the widgets
         for column in self.collums:
             self.findChild(QWidget, f'{column}').setFixedWidth(int(self.width()/3.1))
+
+        # Adjust the size of the titles
+        for title in self.titles:
+            self.findChild(QWidget, f'{title}').setFixedHeight(int(self.height()/15))
+        
+        # Adjust the size of the buttons
+        for button in self.findChildren(QPushButton):
+            button.setFixedHeight(int(self.height()/20))
 
         # Adjust the size of the groupboxes
         self.control_shimmer_groupbox.setFixedHeight(int(self.height()/2.2))
@@ -67,6 +88,10 @@ class MainWindow(QMainWindow):
         self.muscle_graph_groupbox.setFixedHeight(int(self.height()/2.2))
         self.console_groupbox.setFixedHeight(int(self.height()/2.2))
         self.animation_groupbox.setFixedHeight(int(self.height()/2.2))
+
+        # Adjust the size of the graph
+        self.block_graph.setFixedHeight(int(self.height() / 5))
+        self.block_graph.setFixedWidth(int(self.width() / 4.5))
 
     def image_loader(self):
         pixmap = QPixmap(self.images[self.image_index])
@@ -216,8 +241,8 @@ class MainWindow(QMainWindow):
         self.block_graph.addItem(self.bar_item)
 
         
-        self.block_graph.setFixedHeight(200)
-        self.block_graph.setFixedWidth(int(self.width() / 3.5))
+        self.block_graph.setFixedHeight(int(self.height() / 5))
+        self.block_graph.setFixedWidth(int(self.width() / 4.5))
         self.block_graph.setStyleSheet("border: none;")
         self.block_graph.addLegend()
 
@@ -426,7 +451,6 @@ class MainWindow(QMainWindow):
             self.toggle_connection()
         
         elif button == 'bind_output':
-            self.image_target += 10
             self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
             if self.connection_status:
                 if self.EmgUnit.initialized:
