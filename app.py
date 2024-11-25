@@ -4,8 +4,9 @@ import re
 import numpy as np
 import datetime
 import pyqtgraph as pg
+import glob
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QGraphicsColorizeEffect
-from PyQt5.QtGui import QTextCursor
+from PyQt5.QtGui import QTextCursor, QPixmap
 from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QPoint
 from PyQt5 import uic
 
@@ -19,6 +20,9 @@ class MainWindow(QMainWindow):
         super(MainWindow, self).__init__()
         uic.loadUi('app_dependency/mainwindow.ui', self)
         self.collums = ['menu_widget', 'console_widget', 'statusBar_widget']
+        self.image_index = 0
+        self.image_target = 1
+        self.images = sorted(glob.glob("app_dependency/frames/*.png"))
         self.serial_comm = SerialCommunication()
         self.EmgUnit = EMG_Shimmer()
         self.consolebuffer = np.empty(100, dtype=object)
@@ -33,6 +37,11 @@ class MainWindow(QMainWindow):
         height = int(screen.height() * 0.7)
         self.setGeometry(0, 0, width, height)
         self.init_timer()
+
+        # Start video frame update
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_frame)
+        self.timer.start(50)  # Update every 50 ms
 
         # Animations
         self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
@@ -51,8 +60,41 @@ class MainWindow(QMainWindow):
         self.motor_groupbox.setFixedHeight(int(self.height()/2.2))
         self.information_groupbox.setFixedHeight(int(self.height()/2.2))
         self.muscle_graph_groupbox.setFixedHeight(int(self.height()/2.2))
+        self.console_groupbox.setFixedHeight(int(self.height()/2.2))
+        self.animation_groupbox.setFixedHeight(int(self.height()/2.2))
 
         super().resizeEvent(event)
+
+    def update_frame(self):
+
+        # Check if the image index is within the bounds of the list
+        if self.image_target >= len(self.images):
+            self.image_target = len(self.images) - 1
+        elif self.image_target < 0:
+            self.image_target = 0
+
+
+        if self.image_index < self.image_target:
+            pixmap = QPixmap(self.images[self.image_index])
+            pixmap = pixmap.copy(0, 0, pixmap.width() - 100, pixmap.height())
+            pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+            # Make the white background color transparent
+            pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
+
+            self.animation_widget.setPixmap(pixmap)
+            self.image_index += 1
+
+        elif self.image_index > self.image_target:
+            pixmap = QPixmap(self.images[self.image_index])
+            pixmap = pixmap.copy(0, 0, pixmap.width() - 100, pixmap.height())
+            pixmap = pixmap.scaled(self.animation_widget.size(), Qt.KeepAspectRatio, Qt.SmoothTransformation)
+
+            # Make the white background color transparent
+            pixmap.setMask(pixmap.createMaskFromColor(Qt.white, Qt.MaskInColor))
+
+            self.animation_widget.setPixmap(pixmap)
+            self.image_index -= 1
 
     def create_color_animation(self, widget, color):
         # Create a colorize effect for the widget
@@ -100,13 +142,14 @@ class MainWindow(QMainWindow):
         :param duration: The duration (in milliseconds) for one full shake cycle.
         :return: The QPropertyAnimation instance.
         """
+
         # Create a property animation on the 'pos' property of the button
         animation = QPropertyAnimation(button, b"pos")
         animation.setDuration(duration)
-
+        
         # Get the button's original position
         original_pos = QPoint(button.x(), button.y())
-        print(original_pos.x(), original_pos.y())
+        #print(original_pos.x(), original_pos.y())
         # Set keyframes for the shake animation
         animation.setKeyValueAt(0.0, original_pos)  # Start at the original position
         animation.setKeyValueAt(0.25, original_pos + QPoint(-amplitude, 0))  # Move left
@@ -259,18 +302,23 @@ class MainWindow(QMainWindow):
         self.update_timer.stop()
 
     def bind_output_start(self):
-        if self.bind_output:
-            self.bind_output = False
-            self.stop_send_velocity_from_shimmer()
-            self.bind_output_button.setText("Bind Output")
-            self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
-            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Unbound the output from the shimmer.")
+        self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
+        if self.EmgUnit.initialized:
+            if self.bind_output:
+                self.bind_output = False
+                self.stop_send_velocity_from_shimmer()
+                self.bind_output_button.setText("Bind Output")
+                self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Unbound the output from the shimmer.")
+            else:
+                self.bind_output = True
+                self.start_send_velocity_from_shimmer()
+                self.bind_output_button.setText("Unbind Output")
+                self.bind_output_button.setStyleSheet(design.RED_BUTTON)
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.")
         else:
-            self.bind_output = True
-            self.start_send_velocity_from_shimmer()
-            self.bind_output_button.setText("Unbind Output")
-            self.bind_output_button.setStyleSheet(design.RED_BUTTON)
-            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.") 
+            self.bind_output_animation.start()
+            self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.") 
 
     def on_button_click(self, button):
         if button == 'initialize_shimmer':
@@ -340,20 +388,20 @@ class MainWindow(QMainWindow):
 
             # Clear the input field
             self.findChild(QLineEdit, 'velocity_input').clear()
-
-        elif button == 'connect_serial':
-            time_6 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_6} - Button 6 was clicked')
-            self.toggle_connection()
         
         elif button == 'enable_motor':
-            time_7 = datetime.datetime.now().strftime('%H:%M')
-            #self.handle_console_output(f'{time_7} - Button 7 was clicked')
+            time_6 = datetime.datetime.now().strftime('%H:%M')
+            #self.handle_console_output(f'{time_6} - Button 6 was clicked')
             self.toggle_motor_enable()
         
         elif button == 'stall_motor':
+            time_7 = datetime.datetime.now().strftime('%H:%M')
+            #self.handle_console_output(f'{time_7} - Button 7 was clicked')
+
+        elif button == 'connect_serial':
             time_8 = datetime.datetime.now().strftime('%H:%M')
             #self.handle_console_output(f'{time_8} - Button 8 was clicked')
+            self.toggle_connection()
         
         elif button == 'bind_output':
             time_9 = datetime.datetime.now().strftime('%H:%M')
