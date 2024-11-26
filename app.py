@@ -51,6 +51,9 @@ class MainWindow(QMainWindow):
 
         # Animations
         self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+
+        # Add returnPressed signal to the velocity input field
+        self.findChild(QLineEdit, 'velocity_input').returnPressed.connect(lambda: self.on_button_click('send_velocity'))
         
         # Initialize the buttons and connect them to the corresponding functions
         for button in self.findChildren(QPushButton):
@@ -260,6 +263,7 @@ class MainWindow(QMainWindow):
             self.connection_status = False
             self.connect_serial_button.setStyleSheet(design.GREEN_BUTTON)
             self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
+            self.stall_motor_button.setText("")
             self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
             self.connect_serial_button.setText("Connected to Serial")
             self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Disconnected from the serial port.")
@@ -294,6 +298,8 @@ class MainWindow(QMainWindow):
                     self.MotorEnabled = bool(parts[3])
                     if len(parts) > 5:
                         self.encoder_label.setText(f"Encoder: {parts[5]}")
+                        self.encoder_value = parts[5]
+                        self.image_target = int(self.encoder_value / 2)
                     if self.MotorEnabled:
                         self.enable_motor_button.setText("Disable Motor")
                         self.enable_motor_button.setStyleSheet(design.RED_BUTTON)
@@ -301,10 +307,10 @@ class MainWindow(QMainWindow):
                         self.enable_motor_button.setText("Enable Motor")
                         self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
                     self.MotorStalled = bool(parts[4])
-                    if self.MotorStalled:
+                    if self.MotorStalled or not bool(parts[1]) and self.MotorEnabled:
                         self.stall_motor_button.setText("Motor is stopped")
                         self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
-                    else:
+                    elif self.MotorEnabled:
                         self.stall_motor_button.setText("Motor is running")
                         self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
             except Exception as e:

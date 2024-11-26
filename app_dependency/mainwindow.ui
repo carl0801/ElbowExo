@@ -293,9 +293,6 @@
                                         </item>
                                         <item>
                                             <widget class="QPushButton" name="stall_motor_button">
-                                                <property name="text">
-                                                    <string>Motor is stopped</string>
-                                                </property>
                                                 <property name="styleSheet">
                                                     <string>
                                                     border: none;
