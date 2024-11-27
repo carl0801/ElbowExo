@@ -6,6 +6,14 @@ import threading
 import numpy as np
 import time
 import serial.tools.list_ports
+import subprocess
+import platform
+
+def open_windows_bluetooth_settings():
+        if platform.system() == "Windows":
+            subprocess.run(["start", "ms-settings:bluetooth"], shell=True)
+        else:
+            print("This feature is only supported on Windows.")
 
 class SerialCommunication:
     def __init__(self):
@@ -131,6 +139,7 @@ class EMG_Shimmer():
                         pass
 
         print("No active Bluetooth COM port found.")
+        open_windows_bluetooth_settings()
         return None
 
     def connect(self):

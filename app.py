@@ -14,11 +14,6 @@ import platform
 from libraries.com import SerialCommunication, EMG_Shimmer
 import app_dependency.design as design
 
-def open_windows_bluetooth_settings():
-        if platform.system() == "Windows":
-            subprocess.run(["start", "ms-settings:bluetooth"], shell=True)
-        else:
-            print("This feature is only supported on Windows.")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -286,7 +281,7 @@ class MainWindow(QMainWindow):
                     self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer Initialization failed')
                     self.shimmer_status_animation.stop()
                     self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
-                    open_windows_bluetooth_settings()
+                    
             
             # Disconnect the shimmer
             elif self.EmgUnit.initialized:
