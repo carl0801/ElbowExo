@@ -24,6 +24,7 @@ class MainWindow(QMainWindow):
         self.image_index = 0
         self.image_target = 0
         self.images = sorted(glob.glob("app_dependency/frames/*.png"))
+        self.print_velocity = 0
         self.serial_comm = SerialCommunication()
         self.EmgUnit = EMG_Shimmer()
         self.consolebuffer = np.empty(100, dtype=object)
@@ -195,7 +196,14 @@ class MainWindow(QMainWindow):
 
     def send_velocity_from_shimmer(self):
         if self.connection_status:
-            self.serial_comm.send(f"{self.EmgUnit.shimmer_output_processed},1,0\n")
+            if self.print_velocity % 10 == 0:
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.shimmer_output_processed)}")
+            self.print_velocity += 1
+            if self.EmgUnit.shimmer_output_processed > 50:
+                self.EmgUnit.shimmer_output_processed = 50
+            elif self.EmgUnit.shimmer_output_processed < -50:
+                self.EmgUnit.shimmer_output_processed = -50
+            self.serial_comm.send(f"{int(self.EmgUnit.shimmer_output_processed)},1,0\n")
 
     def start_send_velocity_from_shimmer(self):
         self.update_timer_vel = QTimer()

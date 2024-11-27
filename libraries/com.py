@@ -98,7 +98,7 @@ class EMG_Shimmer():
         ports = serial.tools.list_ports.comports()
 
         for port in ports:
-            #print(f"Checking port: {port.device}, Description: {port.description}, HWID: {port.hwid}")  # Debug output
+            print(f"Checking port: {port.device}, Description: {port.description}, HWID: {port.hwid}")  # Debug output
 
             # Match by hardware ID for SPP (Serial Port Profile)
             if "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}" in port.hwid.upper():
@@ -108,7 +108,7 @@ class EMG_Shimmer():
                         # Try opening the port and check if it's responsive
                         with serial.Serial(port.device, 9600, timeout=1) as ser:
                             # Send a test command (replace with one your device responds to)
-                            #print(f"Checking if {port.device} is active...")
+                            print(f"Checking if {port.device} is active...")
                             ser.write(b'AT\r\n')  # Example command, replace with one supported by your device
                             time.sleep(0.5)  # Wait for response
                             if ser.in_waiting > 0:  # Check if there's any data received
@@ -135,7 +135,7 @@ class EMG_Shimmer():
 
     def connect(self):
         try:
-            self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:FB:4C:BE")
+            self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:C5:5F:90")
             self.shimmer_device = shimmer.Shimmer3(self.TYPE, debug=True)
             self.res = self.shimmer_device.connect(com_port=self.PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
             self.shimmer_device.set_sampling_rate(650)
@@ -197,7 +197,7 @@ class EMG_Shimmer():
 
     def process_data(self):
         while self.running:
-            sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=200) *0.001
+            sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=200)
             print(sensor_mean)
             self.shimmer_output_processed = sensor_mean
             time.sleep(0.1)
