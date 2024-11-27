@@ -7,11 +7,18 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMe
 from PyQt5.QtGui import QTextCursor, QPixmap
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
+import subprocess
+import platform
 
 # Import the SerialCommunication and EMG_Shimmer classes from the libraries module
 from libraries.com import SerialCommunication, EMG_Shimmer
 import app_dependency.design as design
 
+def open_windows_bluetooth_settings():
+        if platform.system() == "Windows":
+            subprocess.run(["start", "ms-settings:bluetooth"], shell=True)
+        else:
+            print("This feature is only supported on Windows.")
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -259,6 +266,8 @@ class MainWindow(QMainWindow):
             self.bind_output_button.setStyleSheet(design.RED_BUTTON)
             self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.")
 
+    
+
     def on_button_click(self, button):
         if button == 'initialize_shimmer':
             if not self.EmgUnit.initialized:
@@ -277,6 +286,7 @@ class MainWindow(QMainWindow):
                     self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer Initialization failed')
                     self.shimmer_status_animation.stop()
                     self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
+                    open_windows_bluetooth_settings()
             
             # Disconnect the shimmer
             elif self.EmgUnit.initialized:
