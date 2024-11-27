@@ -1,0 +1,524 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>MainWindow</class>
+    <widget class="QMainWindow" name="MainWindow">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>1024</width>
+                <height>768</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>AppPYQT</string>
+        </property>
+        <property name="styleSheet">
+            <string>
+                QMainWindow {
+                    background-color: #f4f4f4;
+                    font-family: 'Segoe UI';
+                }
+                QPushButton {
+                    background-color: #4CAF50;
+                    border: none;
+                    color: white;
+                    padding: 10px 20px;
+                    text-align: center;
+                    text-decoration: none;
+                    font-size: 16px;
+                    border-radius: 8px;
+                }
+                QPushButton:hover {
+                    background-color: #45a049;
+                }
+                QPushButton:pressed {
+                    background-color: #3e8e41;
+                }
+                QLabel {
+                    color: #333;
+                    font-size: 16px;
+                }
+                QLineEdit {
+                    background-color: white;
+                    color: #333;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                    padding: 5px;
+                }
+                QTextEdit {
+                    background-color: white;
+                    color: #333;
+                    border: 1px solid #ccc;
+                    border-radius: 5px;
+                }
+            </string>
+        </property>
+        <widget class="QWidget" name="centralwidget">
+            <layout class="QHBoxLayout" name="App_layout">
+                <item>
+                    <widget class="QWidget" name="menu_widget">
+                        <layout class="QVBoxLayout" name="menu_layout">
+                            <item>
+                                <widget class="QGroupBox" name="control_shimmer_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            font-size: 16px;
+                                            color: white;
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="shimmer_groupbox_layout">
+                                    <property name="spacing">
+                                        <number>20</number> <!-- Spacing of 20 pixels -->
+                                    </property>
+                                        <item>
+                                            <widget class="QLabel" name="control_shimmer_title">
+                                                <property name="text">
+                                                    <string>Control Shimmer</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>Qt::AlignCenter</set>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    color: #333;
+                                                    font-size: 22px; 
+                                                    font-weight: bold;
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
+                                                        <height>55</height>
+                                                    </size>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="initialize_shimmer_button">
+                                                <property name="text">
+                                                    <string>Initialize Shimmer</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="start_streaming_button">
+                                                <property name="text">
+                                                    <string>Start Streaming</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="stop_streaming_button">
+                                                <property name="text">
+                                                    <string>Stop Streaming</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QWidget" name="shimmer_status_widget">
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
+                                                        <height>55</height>
+                                                    </size>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    color: #333;
+                                                    </string>
+                                                </property>
+                                                <layout class="QHBoxLayout" name="circle_layout">
+                                                    <item>
+                                                        <widget class="QLabel" name="shimmer_status_label">
+                                                            <property name="text">
+                                                                <string>Shimmer Status:</string>
+                                                            </property>
+                                                            <property name="styleSheet">
+                                                                <string>
+                                                                    border: none;
+                                                                    font-size: 16px;
+                                                                </string>
+                                                            </property>
+                                                        </widget>
+                                                    </item>
+                                                    <item>
+                                                        <widget class="QLabel" name="shimmer_status">
+                                                            <property name="fixedSize">
+                                                                <size>
+                                                                    <width>40</width>
+                                                                    <height>40</height>
+                                                                </size>
+                                                            </property>
+                                                            <property name="styleSheet">
+                                                                <string>
+                                                                    background-color: #333; 
+                                                                    border-radius: 20px;
+                                                                    border: 2px solid #111;
+                                                                </string>
+                                                            </property>
+                                                        </widget>
+                                                    </item>
+                                                </layout>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QGroupBox" name="muscle_graph_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="muscle_graph_layout">
+                                        <item>
+                                            <widget class="QLabel" name="muscle_movement_title">
+                                                <property name="text">
+                                                    <string>Control Signal</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>Qt::AlignCenter</set>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    color: #333;
+                                                    font-size: 22px; 
+                                                    font-weight: bold;
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
+                                                        <height>55</height>
+                                                    </size>
+                                                </property>
+                                                <property name="maximumSize">
+                                                    <size>
+                                                        <width>1900</width>
+                                                        <height>50</height>
+                                                    </size>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QWidget" name="statusBar_widget">
+                        <layout class="QVBoxLayout" name="statusBar_layout">
+                            <item>
+                                <widget class="QGroupBox" name="motor_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            font-size: 16px;
+                                            color: white;
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="motor_groupbox_layout">
+                                    <property name="spacing">
+                                        <number>20</number> <!-- Spacing of 20 pixels -->
+                                    </property>
+                                        <item>
+                                            <widget class="QLabel" name="control_motor_title">
+                                                <property name="text">
+                                                    <string>Control Motor</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>Qt::AlignCenter</set>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    color: #333;
+                                                    font-size: 22px; 
+                                                    font-weight: bold;
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                                <property name="maximumSize">
+                                                    <size>
+                                                        <width>1900</width>
+                                                        <height>50</height>
+                                                    </size>
+                                                </property>
+                                                <property name="minimumSize">
+                                                    <size>
+                                                        <width>100</width>
+                                                        <height>40</height>
+                                                    </size>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="enable_motor_button">
+                                                <property name="text">
+                                                    <string>Enable Motor</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="stall_motor_button">
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLineEdit" name="velocity_input">
+                                                <property name="placeholderText">
+                                                    <string>Enter Velocity</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    color: #333;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="send_velocity_button">
+                                                <property name="text">
+                                                    <string>Send Velocity</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QGroupBox" name="information_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                            color: #333;
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="information_groupbox_layout">
+                                        <item>
+                                            <widget class="QLabel" name="stall_guard_label">
+                                                <property name="text">
+                                                    <string>StallGuard: 0</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLabel" name="velocity_label">
+                                                <property name="text">
+                                                    <string>Velocity: 0</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLabel" name="encoder_label">
+                                                <property name="text">
+                                                    <string>Encoder: 0</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="connect_serial_button">
+                                                <property name="text">
+                                                    <string>Connect To Serial</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    border: none;
+                                                    color: white;
+                                                    font-weight: normal;
+                                                    font-size: 16px;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+                <item>
+                    <widget class="QWidget" name="console_widget">
+                        <layout class="QVBoxLayout" name="control_output">
+                            <item>
+                                <widget class="QGroupBox" name="animation_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                            color: #333;
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="animation_groupbox_layout">
+                                        <item>
+                                            <widget class="QLabel" name="animation_title">
+                                                <property name="text">
+                                                    <string>Animation</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>Qt::AlignCenter</set>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                    color: #333;
+                                                    font-size: 22px; 
+                                                    font-weight: bold;
+                                                    border: none;
+                                                    </string>
+                                                </property>
+                                                <property name="maximumSize">
+                                                    <size>
+                                                        <width>1900</width>
+                                                        <height>50</height>
+                                                    </size>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QLabel" name="animation_widget">
+                                                <property name="styleSheet">
+                                                    <string>
+                                                        border: none;
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QGroupBox" name="console_groupbox">
+                                    <property name="styleSheet">
+                                        <string>
+                                            font-size: 18px;
+                                            font-weight: bold;
+                                            color: #333;
+                                            border: 2px solid white;
+                                            border-radius: 5px;
+                                            padding: 10px;
+                                        </string>
+                                    </property>
+                                    <layout class="QVBoxLayout" name="information_groupbox_layout">
+                                        <item>
+                                            <widget class="QTextEdit" name="console_text">
+                                                <property name="placeholderText">
+                                                    <string>Console Output</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                        background-color: white;
+                                                        font-weight: normal;
+                                                        font-size: 16px;
+                                                        border: 1px solid #ccc;
+                                                        border-radius: 5px;
+                                                        padding: 15px;
+                                                    </string>
+                                                </property>
+                                                <property name="readOnly">
+                                                    <bool>true</bool>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
+                                            <widget class="QPushButton" name="bind_output_button">
+                                                <property name="text">
+                                                    <string>Bind Output</string>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                        QPushButton {
+                                                            background-color: #007BFF; /* Default Button Background */
+                                                            border: none;
+                                                            color: white;
+                                                            padding: 10px 20px;
+                                                            text-align: center;
+                                                            text-decoration: none;
+                                                            font-size: 16px;
+                                                            border-radius: 8px;
+                                                        }
+                                                        QPushButton:hover {
+                                                            background-color: #0069D9; /* Hover State */
+                                                        }
+                                                        QPushButton:pressed {
+                                                            background-color: #0056B3; /* Clicked State */
+                                                        }
+                                                    </string>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                    </layout>
+                                </widget>
+                            </item>
+                        </layout>
+                    </widget>
+                </item>
+            </layout>
+        </widget>
+    </widget>
+    <resources/>
+    <connections/>
+</ui>
