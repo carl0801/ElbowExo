@@ -9,7 +9,7 @@ import time
 import serial 
 from pywifi import PyWiFi, const, Profile
 
-# Automatically connect PC to the ESP32 Wi-Fi
+""" # Automatically connect PC to the ESP32 Wi-Fi
 def connect_to_wifi(ssid, password):
     wifi = PyWiFi()
     iface = wifi.interfaces()[0]  # Get the first wireless interface
@@ -41,7 +41,7 @@ def connect_to_wifi(ssid, password):
 ssid = 'ESP32_Hotspot'
 password = '12345678'
 if not connect_to_wifi(ssid, password):
-    raise Exception('Failed to connect to Wi-Fi')
+    raise Exception('Failed to connect to Wi-Fi') """
 
 TYPE = util.SHIMMER_ExG_0
 PORT = "COM7"

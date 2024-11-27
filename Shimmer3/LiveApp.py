@@ -12,7 +12,7 @@ PORT = "COM7"
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
 shimmer.connect(com_port=PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
-shimmer.set_sampling_rate(200)
+shimmer.set_sampling_rate(650)
 shimmer.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
 #shimmer.#print_object_properties()
 #print(shimmer.get_available_sensors())
@@ -49,9 +49,7 @@ def data_collection():
                 for packet in packets:
                     sensor1 = packet[3]
                     sensor2 = packet[4]
-                    #message = f"Sensor1: {sensor1}, Sensor2: {sensor2}"
-                    #print(f"Sending: {message}")
-
+                   
                     # Append data to lists
                     sensor1_data.append(sensor1)
                     sensor2_data.append(sensor2)

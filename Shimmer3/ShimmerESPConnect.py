@@ -8,7 +8,7 @@ import filter
 import time
 import serial 
 from pywifi import PyWiFi, const, Profile
-
+""" 
 # Automatically connect PC to the ESP32 Wi-Fi
 def connect_to_wifi(ssid, password):
     wifi = PyWiFi()
@@ -47,7 +47,7 @@ def connect_to_wifi(ssid, password):
 ssid = 'ESP32_Hotspot'
 password = '12345678'
 if not connect_to_wifi(ssid, password):
-    raise Exception('Failed to connect to Wi-Fi')
+    raise Exception('Failed to connect to Wi-Fi') """
 
 TYPE = util.SHIMMER_ExG_0
 PORT = "COM7"
@@ -75,17 +75,18 @@ sensor2_data_filtered = np.zeros(buffer_size)
 # Lock to handle threading
 data_lock = threading.Lock()
 
-HOST = '192.168.4.22'  # Updated to match the ESP32 IP, if set to `local_ip`
+""" HOST = '192.168.4.22'  # Updated to match the ESP32 IP, if set to `local_ip`
 PORT = 80   
 
 # Socket initialization - Keep this socket open for use by all threads
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-sock.connect((HOST, PORT))
+sock.connect((HOST, PORT)) """
 
 #define a function that sends the velocity to the motor over serial
 def sendvelocity(velocity):
     velocity = str(velocity) + '\n'
-    sock.sendall(velocity.encode('utf-8'))
+    #sock.sendall(velocity.encode('utf-8'))
+    print(velocity)
     
 def update():
     global sensor1_data_filtered, sensor2_data_filtered, Filter
