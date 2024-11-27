@@ -1,13 +1,11 @@
 
 import sys
-import re
 import numpy as np
 import datetime
 import pyqtgraph as pg
-import glob
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QGraphicsColorizeEffect
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget
 from PyQt5.QtGui import QTextCursor, QPixmap
-from PyQt5.QtCore import Qt, QTimer, QPropertyAnimation, QEasingCurve, QPoint
+from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
 
 # Import the SerialCommunication and EMG_Shimmer classes from the libraries module
@@ -18,40 +16,35 @@ import app_dependency.design as design
 class MainWindow(QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
-        uic.loadUi('app_dependency/mainwindow.ui', self)
-        self.collums = ['menu_widget', 'console_widget', 'statusBar_widget']
-        self.titles = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title', 'animation_title']
+        uic.loadUi(design.UI_FILE_PATH, self)
+        self.collums = design.CULLOMS
+        self.titles = design.TITLES
+
+        self.encoder_value = 0
         self.image_index = 0
         self.image_target = 0
-        self.images = sorted(glob.glob("app_dependency/frames/*.png"))
-        self.print_velocity = 0
+        self.images = design.EXO_IMAGES
+
         self.serial_comm = SerialCommunication()
         self.EmgUnit = EMG_Shimmer()
-        self.consolebuffer = np.empty(100, dtype=object)
         self.startTime = datetime.datetime.now()
+        self.consolebuffer = np.empty(100, dtype=object)
+
         self.bind_output = False
         self.connection_status = False
-        self.sent_velocity = 0
-        self.encoder_value = 0
-        self.add_graph()
+
         screen = QDesktopWidget().screenGeometry()
         width = int(screen.width() * 0.7)
         height = int(screen.height() * 0.7)
         self.setGeometry(0, 0, width, height)
-        self.init_timer()
-
-        # Start video frame update
-        self.animation_timer = QTimer(self)
-        self.animation_timer.timeout.connect(self.update_frame)
-        self.animation_timer.start(10)  # Update every 10 ms
-
-        # Resize event timer
-        self.resize_timer = QTimer(self)
-        self.resize_timer.setSingleShot(True)  # Ensure it only runs once per resize
-        self.resize_timer.timeout.connect(self.resize_window)
-
+        self.add_graph()
+        
+        # Init timers
+        self.animation_timer = self.create_timer(10, self.update_frame)
+        self.resize_timer = self.create_timer(0, self.resize_window, single_shot=True)
+        
         # Animations
-        self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+        self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
 
         # Add returnPressed signal to the velocity input field
         self.findChild(QLineEdit, 'velocity_input').returnPressed.connect(lambda: self.on_button_click('send_velocity'))
@@ -125,75 +118,6 @@ class MainWindow(QMainWindow):
             self.image_loader()
             self.image_index -= 1
 
-    def create_color_animation(self, widget, color):
-        # Create a colorize effect for the widget
-        effect = QGraphicsColorizeEffect(widget)
-        effect.setColor(color)
-        
-        # Apply the effect to the widget
-        widget.setGraphicsEffect(effect)
-        
-        # Create a property animation on the 'color' property of the effect
-        animation = QPropertyAnimation(effect, b"color")
-        animation.setDuration(3000)  # Duration of one full cycle (in milliseconds)
-        
-        # Set the start and end color based on the input color
-        animation.setStartValue(color)  # Start color
-        
-        # Choose the end color based on the current color
-        if color == design.RED:
-            animation.setEndValue(design.DARKER_RED)  # Darker red
-        elif color == design.GREEN:
-            animation.setEndValue(design.DARKER_GREEN)  # Darker green
-        elif color == design.YELLOW:
-            animation.setEndValue(design.DARKER_YELLOW)  # Darker yellow
-        
-        # Set the keyframes to alternate back and forth
-        animation.setKeyValueAt(0.5, animation.endValue())  # Midway through, switch to the end color
-        animation.setKeyValueAt(1.0, color)  # At the end, switch back to the start color
-        
-        # Loop indefinitely
-        animation.setLoopCount(-1)  # Infinite loop
-        
-        # Apply easing curve for smooth animation
-        animation.setEasingCurve(QEasingCurve.InOutQuad)
-
-        animation.start()
-        
-        return animation
-
-    def create_shake_animation(self, button, amplitude=10, duration=200):
-        """
-        Creates a horizontal shake animation for a button, making it move left and right.
-
-        :param button: The QPushButton to animate.
-        :param amplitude: The distance (in pixels) the button moves left and right.
-        :param duration: The duration (in milliseconds) for one full shake cycle.
-        :return: The QPropertyAnimation instance.
-        """
-
-        # Create a property animation on the 'pos' property of the button
-        animation = QPropertyAnimation(button, b"pos")
-        animation.setDuration(duration)
-        
-        # Get the button's original position
-        original_pos = QPoint(button.x(), button.y())
-        #print(original_pos.x(), original_pos.y())
-        # Set keyframes for the shake animation
-        animation.setKeyValueAt(0.0, original_pos)  # Start at the original position
-        animation.setKeyValueAt(0.25, original_pos + QPoint(-amplitude, 0))  # Move left
-        animation.setKeyValueAt(0.5, original_pos)  # Return to the center
-        animation.setKeyValueAt(0.75, original_pos + QPoint(amplitude, 0))  # Move right
-        animation.setKeyValueAt(1.0, original_pos)  # Return to the center
-
-        # Apply easing curve for smooth movement
-        animation.setEasingCurve(QEasingCurve.InOutQuad)
-
-        # Loop indefinitely
-        animation.setLoopCount(2)
-
-        return animation
-
     def send_velocity_from_shimmer(self):
         if self.connection_status:
             if self.print_velocity % 10 == 0:
@@ -206,36 +130,10 @@ class MainWindow(QMainWindow):
             self.serial_comm.send(f"{int(self.EmgUnit.shimmer_output_processed)},1,0\n")
 
     def start_send_velocity_from_shimmer(self):
-        self.update_timer_vel = QTimer()
-        self.update_timer_vel.timeout.connect(self.send_velocity_from_shimmer)
-        self.update_timer_vel.start(200)  # Update every 200 ms
+        self.update_timer_vel = self.create_timer(200, self.send_velocity_from_shimmer)
     
     def stop_send_velocity_from_shimmer(self):
         self.update_timer_vel.stop()
-
-    def update_stylesheet(self, widget: QWidget, property_name: str, value: str):
-        """
-        Updates a specific property in a widget's stylesheet.
-
-        Args:
-            widget (QWidget): The widget whose stylesheet needs updating.
-            property_name (str): The name of the CSS property to update (e.g., "background-color").
-            value (str): The new value for the property (e.g., "red", "#FFFFFF").
-        """
-        # Get the current stylesheet
-        current_style = widget.styleSheet()
-
-        # Create the CSS rule for the property
-        new_property = f"{property_name}: {value};"
-
-        # Use regex to remove any existing rule for the property
-        updated_style = re.sub(fr"{property_name}:\s*[^;]+;", '', current_style)
-
-        # Add the new property to the updated stylesheet
-        updated_style += new_property
-
-        # Apply the updated stylesheet to the widget
-        widget.setStyleSheet(updated_style)
 
     def add_graph(self):
         # Block Graph for Muscle Block Visualization
@@ -259,15 +157,23 @@ class MainWindow(QMainWindow):
         # Add the block graph to the layout
         self.muscle_graph_layout.addWidget(self.block_graph, alignment=Qt.AlignCenter)
 
-    def init_timer(self):
-        self.timer = QTimer()
-        self.timer.timeout.connect(self.update_serial_data)
-        self.timer.start(50)  # Poll every 100 ms
+    def create_timer(self, frequency, callback, single_shot=False):
+        '''Create a QTimer object that triggers the callback function at the specified frequency.'''
+        timer = QTimer()
+        timer.timeout.connect(callback)
+
+        if single_shot:
+            timer.setSingleShot(True)
+        else:
+            timer.start(frequency) 
+        
+        return timer
 
     def toggle_connection(self):
-        self.connect_serial_button_animation = self.create_shake_animation(self.connect_serial_button)
+        self.connect_serial_button_animation = design.shake_animation(self.connect_serial_button)
         if self.connection_status:
             self.serial_comm.disconnect()
+            self.update_serial_timer.stop()
             self.connection_status = False
             self.connect_serial_button.setStyleSheet(design.GREEN_BUTTON)
             self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
@@ -277,6 +183,7 @@ class MainWindow(QMainWindow):
             self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Disconnected from the serial port.")
         else:
             if self.serial_comm.connect():
+                self.update_serial_timer = self.create_timer(50, self.update_serial_data)
                 self.connection_status = True
                 self.connect_serial_button.setText("Disconnect from Serial")
                 self.connect_serial_button.setStyleSheet(design.RED_BUTTON)
@@ -333,9 +240,7 @@ class MainWindow(QMainWindow):
             self.bar_item.setOpts(brush='#E57373')
 
     def start_block_graph_update(self):
-        self.update_timer = QTimer()
-        self.update_timer.timeout.connect(self.update_block_graph)
-        self.update_timer.start(200)  # Update every 200 ms
+        self.update_timer = self.create_timer(200, self.update_block_graph)
 
     def stop_block_graph_update(self):
         self.update_timer.stop()
@@ -358,7 +263,7 @@ class MainWindow(QMainWindow):
         if button == 'initialize_shimmer':
             if not self.EmgUnit.initialized:
                 self.shimmer_status_animation.stop()
-                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.YELLOW)
+                self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.YELLOW)
                 self.EmgUnit.connect()
                 time_2 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_2} - Button 2 was clicked')
@@ -371,7 +276,7 @@ class MainWindow(QMainWindow):
                 elif not self.EmgUnit.initialized:
                     self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer Initialization failed')
                     self.shimmer_status_animation.stop()
-                    self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+                    self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
             
             # Disconnect the shimmer
             elif self.EmgUnit.initialized:
@@ -379,12 +284,12 @@ class MainWindow(QMainWindow):
                 self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer disconnected')
                 self.EmgUnit.shimmer_device.disconnect()
                 self.shimmer_status_animation.stop()
-                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+                self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
                 self.initialize_shimmer_button.setText("Initialize Shimmer")
                 self.initialize_shimmer_button.setStyleSheet(design.GREEN_BUTTON)
 
         elif button == 'start_streaming':
-            self.start_streaming_animation = self.create_shake_animation(self.start_streaming_button)
+            self.start_streaming_animation = design.shake_animation(self.start_streaming_button)
             if self.EmgUnit.initialized:
                 time_3 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_3} - Button 3 was clicked')
@@ -392,27 +297,27 @@ class MainWindow(QMainWindow):
                 if res:
                     self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming started')
                     self.shimmer_status_animation.stop()
-                    self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.GREEN)
+                    self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.GREEN)
                     self.start_block_graph_update()
 
                 else:
                     self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming failed')
                     self.shimmer_status_animation.stop()
-                    self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.RED)
+                    self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.RED)
             else:
                 self.start_streaming_animation.start()
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
 
                 
         elif button == 'stop_streaming':
-            self.stop_streaming_animation = self.create_shake_animation(self.stop_streaming_button)
+            self.stop_streaming_animation = design.shake_animation(self.stop_streaming_button)
             if self.EmgUnit.initialized:
                 time_4 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_4} - Button 4 was clicked')
                 self.EmgUnit.stop_shimmer()
                 self.handle_console_output(f'{datetime.datetime.now().strftime("%H:%M")} - Shimmer streaming stopped')
                 self.shimmer_status_animation.stop()
-                self.shimmer_status_animation = self.create_color_animation(self.shimmer_status, design.YELLOW)
+                self.shimmer_status_animation = design.color_animation(self.shimmer_status, design.YELLOW)
                 if self.update_timer.isActive():
                     self.stop_block_graph_update()
             else:
@@ -420,7 +325,8 @@ class MainWindow(QMainWindow):
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
         
         elif button == 'send_velocity':
-            self.send_velocity_animation = self.create_shake_animation(self.send_velocity_button)
+            self.send_velocity_animation = design.shake_animation(self.send_velocity_button)
+            self.sent_velocity = 0
             if self.connection_status:
                 time_5 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_5} - Button 5 was clicked')
@@ -440,7 +346,7 @@ class MainWindow(QMainWindow):
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
         
         elif button == 'enable_motor':
-            self.enable_motor_animation = self.create_shake_animation(self.enable_motor_button)
+            self.enable_motor_animation = design.shake_animation(self.enable_motor_button)
             if self.connection_status:
                 time_6 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_6} - Button 6 was clicked')
@@ -450,7 +356,7 @@ class MainWindow(QMainWindow):
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
         
         elif button == 'stall_motor':
-            self.stall_motor_animation = self.create_shake_animation(self.stall_motor_button)
+            self.stall_motor_animation = design.shake_animation(self.stall_motor_button)
             if self.connection_status:
                 time_7 = datetime.datetime.now().strftime('%H:%M')
                 #self.handle_console_output(f'{time_7} - Button 7 was clicked')
@@ -464,7 +370,8 @@ class MainWindow(QMainWindow):
             self.toggle_connection()
         
         elif button == 'bind_output':
-            self.bind_output_animation = self.create_shake_animation(self.bind_output_button)
+            self.bind_output_animation = design.shake_animation(self.bind_output_button)
+            self.print_velocity = 0
             if self.connection_status:
                 if self.EmgUnit.initialized:
                     time_9 = datetime.datetime.now().strftime('%H:%M')

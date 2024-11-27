@@ -98,7 +98,7 @@ class EMG_Shimmer():
         ports = serial.tools.list_ports.comports()
 
         for port in ports:
-            print(f"Checking port: {port.device}, Description: {port.description}, HWID: {port.hwid}")  # Debug output
+            #print(f"Checking port: {port.device}, Description: {port.description}, HWID: {port.hwid}")  # Debug output
 
             # Match by hardware ID for SPP (Serial Port Profile)
             if "BTHENUM\\{00001101-0000-1000-8000-00805F9B34FB}" in port.hwid.upper():
@@ -108,7 +108,7 @@ class EMG_Shimmer():
                         # Try opening the port and check if it's responsive
                         with serial.Serial(port.device, 9600, timeout=1) as ser:
                             # Send a test command (replace with one your device responds to)
-                            print(f"Checking if {port.device} is active...")
+                            #print(f"Checking if {port.device} is active...")
                             ser.write(b'AT\r\n')  # Example command, replace with one supported by your device
                             time.sleep(0.5)  # Wait for response
                             if ser.in_waiting > 0:  # Check if there's any data received
