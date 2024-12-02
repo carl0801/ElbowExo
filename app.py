@@ -105,6 +105,9 @@ class MainWindow(QMainWindow):
         # Adjust the size of the buttons
         for button in self.findChildren(QPushButton):
             button.setFixedHeight(int(self.height()/20))
+        
+        self.findChild(QPushButton, 'bind_output_button').setFixedWidth(int(self.width()/5))
+        self.findChild(QCheckBox, 'test_mode_checkbox').setFixedWidth(int(self.width()/20))
 
         # Adjust the size of the groupboxes
         self.control_shimmer_groupbox.setFixedHeight(int(self.height()/2.2))
