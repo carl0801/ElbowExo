@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QCheckBox
-from PyQt5.QtGui import QTextCursor, QPixmap
+from PyQt5.QtGui import QTextCursor, QPixmap, QIcon
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
 
@@ -22,6 +22,9 @@ class MainWindow(QMainWindow):
         self.titles = design.TITLES
         self.test_mode = False
         self.emg_signal = []
+
+        # Set the application icon
+        self.setWindowIcon(QIcon(design.APP_ICON))
 
         self.sent_velocity = 0
         self.encoder_value = 0
