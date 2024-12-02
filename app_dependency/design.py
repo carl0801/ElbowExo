@@ -8,7 +8,7 @@ UI_FILE_PATH = 'app_dependency/mainwindow.ui'
 
 # Widget names
 CULLOMS = ['menu_widget', 'console_widget', 'statusBar_widget']
-TITLES = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title', 'animation_title']
+TITLES = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title', 'animation_title', 'muscle_graph_subtitle1', 'muscle_graph_subtitle2']
 
 # Images for exo-skeleton animation
 EXO_IMAGES = sorted(glob.glob("app_dependency/frames/*.png"))

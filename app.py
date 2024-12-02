@@ -3,25 +3,27 @@ import sys
 import numpy as np
 import datetime
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QCheckBox
 from PyQt5.QtGui import QTextCursor, QPixmap
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
-import subprocess
-import platform
 
 # Import the SerialCommunication and EMG_Shimmer classes from the libraries module
 from libraries.com import SerialCommunication, EMG_Shimmer
 import app_dependency.design as design
+import libraries.loadData as loadData
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, test_mode=False):
         super(MainWindow, self).__init__()
         uic.loadUi(design.UI_FILE_PATH, self)
         self.collums = design.CULLOMS
         self.titles = design.TITLES
+        self.test_mode = False
+        self.emg_signal = []
 
+        self.sent_velocity = 0
         self.encoder_value = 0
         self.image_index = 0
         self.image_target = 0
@@ -31,6 +33,9 @@ class MainWindow(QMainWindow):
         self.EmgUnit = EMG_Shimmer()
         self.startTime = datetime.datetime.now()
         self.consolebuffer = np.empty(100, dtype=object)
+
+        self.checkbox = self.findChild(QCheckBox, 'test_mode_checkbox')
+        self.checkbox.stateChanged.connect(self.update_test_mode)
 
         self.bind_output = False
         self.connection_status = False
@@ -54,6 +59,27 @@ class MainWindow(QMainWindow):
         # Initialize the buttons and connect them to the corresponding functions
         for button in self.findChildren(QPushButton):
             button.clicked.connect(lambda _, name=button.objectName(): self.on_button_click(name.replace('_button', '')))
+    
+    def update_test_mode(self, state):
+        # Update the self.test_mode variable based on checkbox state
+        self.test_mode = state == 2  # True if checked, False otherwise
+                # Load the shimmer data if the test mode is enabled
+
+        if self.test_mode:
+            self.shimmer_data = loadData.loadShimmer(n=1)
+            self.EmgUnit.Filter.set_signal(self.shimmer_data[:, 1], self.shimmer_data[:, 2])
+            self.test_control_output = self.EmgUnit.Filter.get_control_signal()
+            self.test_samples = len(self.shimmer_data)
+        
+        if self.bind_output and not self.test_mode:
+            if self.update_timer_vel.isActive():
+                self.stop_send_velocity_from_shimmer()
+                self.bind_output = False
+                self.test_samples = len(self.shimmer_data)
+                self.bind_output_button.setText("Bind Output")
+                self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
+
+        self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} Test Mode is {'enabled' if self.test_mode else 'disabled'}")
 
     def resizeEvent(self, event):
         # Stop the timer if it's already running
@@ -121,15 +147,22 @@ class MainWindow(QMainWindow):
             self.image_index -= 1
 
     def send_velocity_from_shimmer(self):
-        if self.connection_status:
+        if self.test_mode:
+            if self.test_samples > 0:
+                if self.print_velocity % 10 == 0:
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[len(self.shimmer_data)-self.test_samples])}")
+                self.print_velocity += 1
+                self.test_samples -= 1
+                self.serial_comm.send(f"{int(self.test_control_output[len(self.shimmer_data)-self.test_samples])},1,0\n")
+            else:
+                self.stop_send_velocity_from_shimmer()
+                self.bind_output = False
+                self.test_samples = len(self.shimmer_data)
+        else:    
             if self.print_velocity % 10 == 0:
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.shimmer_output_processed)}")
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
             self.print_velocity += 1
-            if self.EmgUnit.shimmer_output_processed > 50:
-                self.EmgUnit.shimmer_output_processed = 50
-            elif self.EmgUnit.shimmer_output_processed < -50:
-                self.EmgUnit.shimmer_output_processed = -50
-            self.serial_comm.send(f"{int(self.EmgUnit.shimmer_output_processed)},1,0\n")
+            self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0\n")
 
     def start_send_velocity_from_shimmer(self):
         self.update_timer_vel = self.create_timer(200, self.send_velocity_from_shimmer)
@@ -138,19 +171,20 @@ class MainWindow(QMainWindow):
         self.update_timer_vel.stop()
 
     def add_graph(self):
-        # Block Graph for Muscle Block Visualization
+         # Block Graph for Muscle Block Visualization
         self.block_graph = pg.PlotWidget(background=design.BACKGROUND_COLOR.name())
-        self.block_graph.setYRange(-100, 100)  # Set the range of the y-axis
-        self.block_graph.setXRange(-0.2, 0.18)  # Center the bar graph
+        self.block_graph.setYRange(-1, 1)  # Set the range of the y-axis
+        self.block_graph.setXRange(-0.8, 0.9)  # Center the bar graph
         self.block_graph.hideAxis('bottom')
         self.block_graph.hideAxis('left')
         self.block_graph.hideAxis('right')
         self.block_graph.hideAxis('top')
 
-        self.bar_item = pg.BarGraphItem(x=[0], height=[100], width=0.5, brush='#007BFF')
-        self.block_graph.addItem(self.bar_item)
+        self.bar_item1 = pg.BarGraphItem(x=[-0.6], height=[100], width=0.7, brush='#007BFF')
+        self.bar_item2 = pg.BarGraphItem(x=[0.6], height=[100], width=0.7, brush='#007BFF')
+        self.block_graph.addItem(self.bar_item1)
+        self.block_graph.addItem(self.bar_item2)
 
-        
         self.block_graph.setFixedHeight(int(self.height() / 5))
         self.block_graph.setFixedWidth(int(self.width() / 4.5))
         self.block_graph.setStyleSheet("border: none;")
@@ -234,12 +268,18 @@ class MainWindow(QMainWindow):
                 print(f"Error reading from serial port: {e}")            
 
     def update_block_graph(self):
-        self.muscleBlock = self.EmgUnit.shimmer_output_processed
-        self.bar_item.setOpts(height=self.muscleBlock)
-        if self.muscleBlock > 0:
-            self.bar_item.setOpts(brush='#007BFF')
+        self.muscleBlock1 = np.mean(self.EmgUnit.shimmer_output_processed[0]) 
+        self.muscleBlock2 = np.mean(self.EmgUnit.shimmer_output_processed[1])
+        self.bar_item1.setOpts(height=self.muscleBlock1)
+        self.bar_item2.setOpts(height=self.muscleBlock2)
+        if self.muscleBlock1 > 0:
+            self.bar_item1.setOpts(brush='#007BFF')
         else:
-            self.bar_item.setOpts(brush='#E57373')
+            self.bar_item1.setOpts(brush='#E57373')
+        if self.muscleBlock2 > 0:
+            self.bar_item2.setOpts(brush='#007BFF')
+        else:
+            self.bar_item2.setOpts(brush='#E57373')
 
     def start_block_graph_update(self):
         self.update_timer = self.create_timer(200, self.update_block_graph)
@@ -260,8 +300,6 @@ class MainWindow(QMainWindow):
             self.bind_output_button.setText("Unbind Output")
             self.bind_output_button.setStyleSheet(design.RED_BUTTON)
             self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Bound the output to the shimmer.")
-
-    
 
     def on_button_click(self, button):
         if button == 'initialize_shimmer':
@@ -375,19 +413,29 @@ class MainWindow(QMainWindow):
             self.toggle_connection()
         
         elif button == 'bind_output':
-            self.bind_output_animation = design.shake_animation(self.bind_output_button)
-            self.print_velocity = 0
-            if self.connection_status:
-                if self.EmgUnit.initialized:
-                    time_9 = datetime.datetime.now().strftime('%H:%M')
-                    #self.handle_console_output(f'{time_9} - Button 9 was clicked')
-                    self.bind_output_start()
+            if self.test_mode:
+                self.bind_output_animation = design.shake_animation(self.bind_output_button)
+                self.print_velocity = 0
+                if True:
+                        self.bind_output_start()
                 else:
                     self.bind_output_animation.start()
-                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
+                
             else:
-                self.bind_output_animation.start()
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
+                self.bind_output_animation = design.shake_animation(self.bind_output_button)
+                self.print_velocity = 0
+                if self.connection_status:
+                    if self.EmgUnit.initialized:
+                        time_9 = datetime.datetime.now().strftime('%H:%M')
+                        #self.handle_console_output(f'{time_9} - Button 9 was clicked')
+                        self.bind_output_start()
+                    else:
+                        self.bind_output_animation.start()
+                        self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
+                else:
+                    self.bind_output_animation.start()
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
 
     def handle_console_output(self, output):
         # Shift the buffer to the left and add the new output at the end

@@ -225,6 +225,46 @@
                                                 </property>
                                             </widget>
                                         </item>
+                                        <item>
+                                            <layout class="QHBoxLayout" name="muscle_graph_subtitles_layout">
+                                                <item>
+                                                    <widget class="QLabel" name="muscle_graph_subtitle1">
+                                                        <property name="text">
+                                                            <string>Bicep</string>
+                                                        </property>
+                                                        <property name="styleSheet">
+                                                            <string>
+                                                            color: #333;
+                                                            font-size: 18px; 
+                                                            font-weight: bold;
+                                                            border: none;
+                                                            </string>
+                                                        </property>
+                                                        <property name="alignment">
+                                                            <set>Qt::AlignCenter</set>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item>
+                                                    <widget class="QLabel" name="muscle_graph_subtitle2">
+                                                        <property name="text">
+                                                            <string>Tricep</string>
+                                                        </property>
+                                                        <property name="styleSheet">
+                                                            <string>
+                                                            color: #333;
+                                                            font-size: 18px; 
+                                                            font-weight: bold;
+                                                            border: none;
+                                                            </string>
+                                                        </property>
+                                                        <property name="alignment">
+                                                            <set>Qt::AlignCenter</set>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
+                                        </item>
                                     </layout>
                                 </widget>
                             </item>
@@ -484,31 +524,60 @@
                                             </widget>
                                         </item>
                                         <item>
-                                            <widget class="QPushButton" name="bind_output_button">
-                                                <property name="text">
-                                                    <string>Bind Output</string>
-                                                </property>
-                                                <property name="styleSheet">
-                                                    <string>
-                                                        QPushButton {
-                                                            background-color: #007BFF; /* Default Button Background */
-                                                            border: none;
-                                                            color: white;
-                                                            padding: 10px 20px;
-                                                            text-align: center;
-                                                            text-decoration: none;
-                                                            font-size: 16px;
-                                                            border-radius: 8px;
-                                                        }
-                                                        QPushButton:hover {
-                                                            background-color: #0069D9; /* Hover State */
-                                                        }
-                                                        QPushButton:pressed {
-                                                            background-color: #0056B3; /* Clicked State */
-                                                        }
-                                                    </string>
-                                                </property>
-                                            </widget>
+                                            <layout class="QHBoxLayout" name="bind_output_layout">
+                                                <item>
+                                                    <widget class="QPushButton" name="bind_output_button">
+                                                        <property name="text">
+                                                            <string>Bind Output</string>
+                                                        </property>
+                                                        <property name="styleSheet">
+                                                            <string>
+                                                                QPushButton {
+                                                                    background-color: #007BFF; /* Default Button Background */
+                                                                    border: none;
+                                                                    color: white;
+                                                                    padding: 10px 20px;
+                                                                    text-align: center;
+                                                                    text-decoration: none;
+                                                                    font-size: 16px;
+                                                                    border-radius: 8px;
+                                                                }
+                                                                QPushButton:hover {
+                                                                    background-color: #0069D9; /* Hover State */
+                                                                }
+                                                                QPushButton:pressed {
+                                                                    background-color: #0056B3; /* Clicked State */
+                                                                }
+                                                            </string>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                                <item>
+                                                    <widget class="QCheckBox" name="test_mode_checkbox">
+                                                        <property name="text">
+                                                            <string>TM</string>
+                                                        </property>
+                                                        <property name="styleSheet">
+                                                            <string>
+                                                                QCheckBox {
+                                                                    font-size: 16px;
+                                                                    color: #333;
+                                                                    border: none;
+                                                                }
+                                                            </string>
+                                                        </property>
+                                                        <property name="checked">
+                                                            <bool>false</bool>
+                                                        </property>
+                                                        <property name="maximumSize">
+                                                            <size>
+                                                                <width>70</width>
+                                                                <height>60</height>
+                                                            </size>
+                                                        </property>
+                                                    </widget>
+                                                </item>
+                                            </layout>
                                         </item>
                                     </layout>
                                 </widget>
