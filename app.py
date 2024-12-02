@@ -72,7 +72,7 @@ class MainWindow(QMainWindow):
             self.shimmer_data = loadData.loadShimmer(n=1)
             self.EmgUnit.Filter.set_signal(self.shimmer_data[:, 1], self.shimmer_data[:, 2])
             self.test_control_output = self.EmgUnit.Filter.get_control_signal()
-            self.test_samples = len(self.shimmer_data)
+            self.test_samples = 0
         
         if self.bind_output and not self.test_mode:
             if self.update_timer_vel.isActive():
@@ -142,8 +142,7 @@ class MainWindow(QMainWindow):
             self.image_target = len(self.images) - 1
         elif self.image_target < 0:
             self.image_target = 0
-
-
+            
         if self.image_index < self.image_target:
             self.image_loader()
             self.image_index += 1
@@ -154,12 +153,12 @@ class MainWindow(QMainWindow):
 
     def send_velocity_from_shimmer(self):
         if self.test_mode:
-            if self.test_samples > 0:
+            if self.test_samples < len(self.shimmer_data):
                 if self.print_velocity % 10 == 0:
-                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[len(self.shimmer_data)-self.test_samples])}")
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[self.test_samples]*100)}")
                 self.print_velocity += 1
-                self.test_samples -= 1
-                self.serial_comm.send(f"{int(self.test_control_output[len(self.shimmer_data)-self.test_samples])},1,0\n")
+                self.test_samples +=10
+                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0\n")
             else:
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
