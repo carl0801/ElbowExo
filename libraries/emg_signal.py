@@ -54,6 +54,7 @@ class Signal:
         self.filtered_signals = None
         self.control_signal = None
         self.control_value = None
+        self.control_signal_scale = 400
 
     def set_signal(self, sensor1_data, sensor2_data):
         data = np.vstack((sensor1_data, sensor2_data))
@@ -75,7 +76,7 @@ class Signal:
         # Try to get closer to peak value (from mean to max on sinusodial wave)
         self.control_signal = control_signal / 0.637
         # Return the mean of the last window values
-        self.control_value = np.mean(control_signal[-self.window:])
+        self.control_value = int(np.mean(control_signal[-self.window:])*self.control_signal_scale)
         
     def get_control_value(self):
         self.filter()

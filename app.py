@@ -139,7 +139,7 @@ class MainWindow(QMainWindow):
             self.image_target = len(self.images) - 1
         elif self.image_target < 0:
             self.image_target = 0
-            
+
         if self.image_index < self.image_target:
             self.image_loader()
             self.image_index += 1
@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[self.test_samples]*100)}")
                 self.print_velocity += 1
                 self.test_samples +=10
-                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0\n")
+                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0,0\n")
             else:
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
@@ -164,7 +164,9 @@ class MainWindow(QMainWindow):
             if self.print_velocity % 10 == 0:
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
             self.print_velocity += 1
-            self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0\n")
+            self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
+
+    
 
     def start_send_velocity_from_shimmer(self):
         self.update_timer_vel = self.create_timer(200, self.send_velocity_from_shimmer)
@@ -234,10 +236,10 @@ class MainWindow(QMainWindow):
     def toggle_motor_enable(self):
         if self.connection_status:
             if self.MotorEnabled:
-                self.serial_comm.send(f"{self.sent_velocity},0,1\n")
+                self.serial_comm.send(f"{self.sent_velocity},0,1,0\n")
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Disabled Motor")
             else:
-                self.serial_comm.send(f"{self.sent_velocity},1,1\n")
+                self.serial_comm.send(f"{self.sent_velocity},1,1,0\n")
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Enabled Motor")
         
     def update_serial_data(self):
@@ -262,6 +264,7 @@ class MainWindow(QMainWindow):
                     self.MotorStalled = bool(parts[4])
                     if self.MotorStalled or not bool(parts[1]) and self.MotorEnabled:
                         self.stall_motor_button.setText("Motor is stopped")
+                        #self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Motor is stopped")
                         self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
                     elif self.MotorEnabled:
                         self.stall_motor_button.setText("Motor is running")
@@ -379,7 +382,7 @@ class MainWindow(QMainWindow):
                     try:
                         velocity = int(self.findChild(QLineEdit, 'velocity_input').text())
                         self.sent_velocity = velocity
-                        self.serial_comm.send(f"{velocity},1,0\n")
+                        self.serial_comm.send(f"{velocity},1,0,0\n")
                         self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {velocity}")
                     except ValueError:
                         QMessageBox.warning(self, "Input Error", "Please enter a valid velocity.")
@@ -429,7 +432,7 @@ class MainWindow(QMainWindow):
                 self.print_velocity = 0
                 if self.connection_status:
                     if self.EmgUnit.initialized:
-                        time_9 = datetime.datetime.now().strftime('%H:%M')
+                        #time_9 = datetime.datetime.now().strftime('%H:%M')
                         #self.handle_console_output(f'{time_9} - Button 9 was clicked')
                         self.bind_output_start()
                     else:
@@ -438,6 +441,18 @@ class MainWindow(QMainWindow):
                 else:
                     self.bind_output_animation.start()
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
+
+        elif button == 'reset_encoder':
+            if self.connection_status:
+                #time_10 = datetime.datetime.now().strftime('%H:%M')
+                #self.handle_console_output(f'{time_10} - Button 10 was clicked')
+                self.serial_comm.reset_encoder()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Encoder reset")
+            else:
+                self.reset_encoder_animation = design.shake_animation(self.reset_encoder_button)
+                self.reset_encoder_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
+            
 
     def handle_console_output(self, output):
         # Shift the buffer to the left and add the new output at the end

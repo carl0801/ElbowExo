@@ -78,6 +78,12 @@ class SerialCommunication:
             return self.port.readline().decode().strip()
         return None
 
+    def reset_encoder(self):
+        self.send("0,0,0,1\n")
+        print("Encoder reset.")
+
+    
+
 class EMG_Shimmer():
     def __init__(self):
         self.TYPE = util.SHIMMER_ExG_0
