@@ -3,7 +3,7 @@ import numpy as np
 import filter
 
 # Load the data from the .npz file
-data = np.load('RawMeasurements\BevægelseVertikaltFlexEx.npz')['data']
+data = np.load('Htest.npz')['data']
 
 # Extract the timestamps and the GSR data
 timestamps = data[:, 0]
@@ -18,7 +18,11 @@ cutoff = 5
 
 test = filter.generate_filter(fs=650)
 sensor_data = filter.run(sensor1_data,sensor2_data, test)
- 
+
+plt.figure()
+#plt.plot(timestamps, sensor1_data, label='Sensor 1')
+plt.plot(timestamps, sensor2_data, label='Sensor 2')
+
 
 plt.figure()
 plt.plot(timestamps, sensor_data, label='Sensor 1')

@@ -4,7 +4,7 @@ import numpy as np
 import keyboard
 
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM7"
+PORT = "COM6"
 run = True
 moving_state = 0
 
