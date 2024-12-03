@@ -26,7 +26,7 @@ class MainWindow(QMainWindow):
         # Set the application icon
         self.setWindowIcon(QIcon(design.APP_ICON))
 
-        self.encoder_range = 800
+        self.encoder_range = 1100-40
         self.sent_velocity = 0
         self.encoder_value = 0
         self.image_index = 0

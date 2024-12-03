@@ -229,4 +229,5 @@ class EMG_Shimmer():
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
+            print(self.control_output)
             time.sleep(0.1)
