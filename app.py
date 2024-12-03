@@ -4,7 +4,7 @@ import numpy as np
 import datetime
 import pyqtgraph as pg
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QCheckBox
-from PyQt5.QtGui import QTextCursor, QPixmap
+from PyQt5.QtGui import QTextCursor, QPixmap, QIcon
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
 
@@ -23,6 +23,10 @@ class MainWindow(QMainWindow):
         self.test_mode = False
         self.emg_signal = []
 
+        # Set the application icon
+        self.setWindowIcon(QIcon(design.APP_ICON))
+
+        self.encoder_range = 800
         self.sent_velocity = 0
         self.encoder_value = 0
         self.image_index = 0
@@ -254,7 +258,7 @@ class MainWindow(QMainWindow):
                     if len(parts) > 5:
                         self.encoder_label.setText(f"Encoder: {parts[5]}")
                         self.encoder_value = parts[5]
-                        self.image_target = int(self.encoder_value / 2)
+                        self.image_target = int(self.encoder_value / (self.encoder_range/len(self.images)))
                     if self.MotorEnabled:
                         self.enable_motor_button.setText("Disable Motor")
                         self.enable_motor_button.setStyleSheet(design.RED_BUTTON)

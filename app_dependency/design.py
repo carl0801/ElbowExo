@@ -12,6 +12,7 @@ TITLES = ['control_shimmer_title', 'muscle_movement_title', 'control_motor_title
 
 # Images for exo-skeleton animation
 EXO_IMAGES = sorted(glob.glob("app_dependency/frames/*.png"))
+APP_ICON = 'app_dependency/icon.png'
 
 # Color for aaplication
 RED = QColor("#F44336")
