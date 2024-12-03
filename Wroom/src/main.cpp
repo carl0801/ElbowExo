@@ -68,7 +68,8 @@ void serialCommInTask(void * parameter) {
       stepper_driver.disable();
       velocity = 0;
     } 
-    vTaskDelay(250 / portTICK_PERIOD_MS); // Serial communication delay
+    Serial.read(); // Clear the buffer
+    vTaskDelay(150 / portTICK_PERIOD_MS); // Serial communication delay
   }
 }
 
@@ -77,7 +78,7 @@ void serialCommOutTask(void * parameter) {
   for (;;) {
     Serial.printf("%d,%d,%u,%d,%d,%d\n", stallguard_result, velocity, vel_actual, motor_enable, motor_stall, temp_newPosition);
 
-    vTaskDelay(250 / portTICK_PERIOD_MS); // Print delay
+    vTaskDelay(25000 / portTICK_PERIOD_MS); // Print delay
   }
 }
 
@@ -107,7 +108,7 @@ void moveAtVelocity(int velocity) {
   double dutyCycleFraction = pulseDuration * frequency; // e.g., for 10 Hz -> 0.002 * 10 = 0.02
 
   // Limit duty cycle fraction to 1.0 (to avoid overflows)
-  dutyCycleFraction = constrain(dutyCycleFraction, 0.0, 1.0);
+  dutyCycleFraction = 0.5;//constrain(dutyCycleFraction, 0.0, 1.0);
 
   // Set the direction pin based on velocity sign
   digitalWrite(dirPin, velocity > 0 ? HIGH : LOW);
