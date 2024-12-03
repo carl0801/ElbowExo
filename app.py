@@ -49,7 +49,7 @@ class MainWindow(QMainWindow):
         height = int(screen.height() * 0.7)
         self.setGeometry(0, 0, width, height)
         self.add_graph()
-        
+        self.control_output_prev = 0
         # Init timers
         self.animation_timer = self.create_timer(10, self.update_frame)
         self.resize_timer = self.create_timer(0, self.resize_window, single_shot=True)
@@ -165,10 +165,12 @@ class MainWindow(QMainWindow):
                 self.bind_output = False
                 self.test_samples = len(self.shimmer_data)
         else:    
-            if self.print_velocity % 10 == 0:
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
-            self.print_velocity += 1
-            self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
+            if abs(self.EmgUnit.control_output - self.control_output_prev) > 10:
+                self.control_output_prev = self.EmgUnit.control_output
+                if self.print_velocity % 1 == 0:
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
+                self.print_velocity += 1
+                self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
 
     
 
@@ -277,18 +279,15 @@ class MainWindow(QMainWindow):
                 print(f"Error reading from serial port: {e}")            
 
     def update_block_graph(self):
-        self.muscleBlock1 = np.mean(self.EmgUnit.shimmer_output_processed[0]) 
-        self.muscleBlock2 = np.mean(self.EmgUnit.shimmer_output_processed[1])
+        self.muscleBlock1 = (self.EmgUnit.shimmer_output_processed) 
+        #self.muscleBlock2 = np.mean(self.EmgUnit.shimmer_output_processed[1])
         self.bar_item1.setOpts(height=self.muscleBlock1)
-        self.bar_item2.setOpts(height=self.muscleBlock2)
+        self.bar_item2.setOpts(height=1)
         if self.muscleBlock1 > 0:
             self.bar_item1.setOpts(brush='#007BFF')
         else:
             self.bar_item1.setOpts(brush='#E57373')
-        if self.muscleBlock2 > 0:
-            self.bar_item2.setOpts(brush='#007BFF')
-        else:
-            self.bar_item2.setOpts(brush='#E57373')
+       
 
     def start_block_graph_update(self):
         self.update_timer = self.create_timer(200, self.update_block_graph)
