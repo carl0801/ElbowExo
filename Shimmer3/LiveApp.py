@@ -7,7 +7,7 @@ from pyqtgraph.Qt import QtWidgets, QtCore
 import threading
 import filter
 TYPE = util.SHIMMER_ExG_0
-PORT = "COM7"
+PORT = "COM6"
 
 # Initialize Shimmer
 shimmer = shimmer.Shimmer3(TYPE, debug=True)
