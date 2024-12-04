@@ -425,7 +425,7 @@ class MainWindow(QMainWindow):
                 self.bind_output_animation = design.shake_animation(self.bind_output_button)
                 self.print_velocity = 0
                 if True:
-                        self.bind_output_start()
+                    self.bind_output_start()
                 else:
                     self.bind_output_animation.start()
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.") 
@@ -466,8 +466,13 @@ class MainWindow(QMainWindow):
         # Move the cursor to the end of the text
         self.console_text.moveCursor(QTextCursor.End)
 
+    def close_application(self):
+            app.exec_()
+            self.serial_comm.disconnect()
+            self.EmgUnit.stop_shimmer()
+
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     window = MainWindow()
     window.show()
-    sys.exit(app.exec_())
+    sys.exit(window.close_application())
