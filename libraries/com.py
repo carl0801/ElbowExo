@@ -246,11 +246,12 @@ class EMG_Shimmer():
                 global shimmer_output_processed
                 sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=100)*4
                 #print(sensor_mean)
-                if sensor_mean < 15 and sensor_mean >-15:
+                if sensor_mean < 15 and sensor_mean >-10:
                     sensor_mean = 0
                 else:
                     sensor_mean = sensor_mean
-                
+                if abs(sensor_mean) > 100:
+                    pass
                 self.shimmer_output_processed = sensor_mean*-1
                 self.control_output = sensor_mean*-1
                 time.sleep(0.05)

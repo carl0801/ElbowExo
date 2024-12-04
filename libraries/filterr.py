@@ -25,10 +25,10 @@ def filter_emg_data(data, coeff=generate_filter()):
     filtered_data = np.abs(filtered_data)
     return filtered_data
 
-def combine_sensors(sensor1, sensor2, multiplier=3.0):
-    return sensor1 - multiplier * sensor2
+def combine_sensors(sensor1, sensor2, multiplier=3.0, weight=2.5):
+    return sensor1 - multiplier * (sensor2 * weight)
 
-def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5.0, multiplier=3.0, window_size=300):
+def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5.0, multiplier=3.0, weight=1.0, window_size=300):
     """
     This function takes in the sensor data, filters it, combines it, 
     thresholds it, and then takes the moving average. If single_window is 
@@ -50,6 +50,8 @@ def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5
         The minimum absolute value of the data
     multiplier : float
         The multiplier for the second sensor
+    weight : float
+        The weight for the second sensor
     window_size : int
         The size of the window for the moving average
 
@@ -61,7 +63,7 @@ def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5
     filtered_sensor1 = filter_emg_data(sensor1, filter)
     filtered_sensor2 = filter_emg_data(sensor2, filter)
     # combine the sensors
-    combined_sensor = combine_sensors(filtered_sensor1, filtered_sensor2, multiplier)
+    combined_sensor = combine_sensors(filtered_sensor1, filtered_sensor2, multiplier, weight)
     # threshold
     combined_sensor = np.where(np.abs(combined_sensor) > threshold, combined_sensor, 0)
     # moving average
@@ -71,9 +73,6 @@ def run(sensor1, sensor2, filter=generate_filter(), single_window=0, threshold=5
         return value
 
     return combined_sensor
-    
-    
-    
 
 if __name__ == '__main__':
     import time
@@ -95,7 +94,7 @@ if __name__ == '__main__':
 
     # Apply the filter
     start = time.time()
-    signal = run(sensor1_data, sensor2_data, filter)
+    signal = run(sensor1_data, sensor2_data, filter, weight=2.0)  # Example weight of 2.0 for sensor2
     end = time.time()
     samples = len(sensor1_data)
     print('Time taken to filter the signal: %.2f s' % (end - start))
@@ -114,5 +113,3 @@ if __name__ == '__main__':
     ax2.tick_params(axis='y', labelcolor='tab:blue')
     fig.tight_layout()
     plt.show()
-    
-    
