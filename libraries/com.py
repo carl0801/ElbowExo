@@ -101,6 +101,8 @@ class EMG_Shimmer():
         self.Filter = filterr.generate_filter(fs=650)
         self.initialized = False
         self.filter_type = "old"
+        self.up_counter = 0
+        self.down_counter = 0
 
 
     def find_bluetooth_com_port(self, device_name=None, target_mac=None):
@@ -244,14 +246,34 @@ class EMG_Shimmer():
                 global shimmer_output_processed
                 sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=100)*4
                 #print(sensor_mean)
-                if sensor_mean < 0 and sensor_mean >-15:
+                if sensor_mean < 15 and sensor_mean >-15:
                     sensor_mean = 0
                 else:
                     sensor_mean = sensor_mean
                 
-                self.shimmer_output_processed = sensor_mean
-                self.control_output = sensor_mean
+                self.shimmer_output_processed = sensor_mean*-1
+                self.control_output = sensor_mean*-1
                 time.sleep(0.05)
+        
+            """ if self.filter_type == "old":
+                while self.running:
+                    global shimmer_output_processed
+                    sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=100)*4
+                    #print(sensor_mean)
+                    if sensor_mean < 15 and sensor_mean >-15:
+                        sensor_mean = 0
+                    elif sensor_mean > 15:
+                        if self.up_counter < 55:
+                            self.up_counter+=1
+                        self.shimmer_output_processed = -(15+self.up_counter)
+                        self.control_output = -(15+self.up_counter)
+                    elif sensor_mean < -15:
+                        if self.down_counter < 55:
+                            self.down_counter+=1
+                        self.shimmer_output_processed = -(-15-self.down_counter)
+                        self.control_output = -(-15-self.down_counter)
+                    
+                    time.sleep(0.1) """
 
         elif self.filter_type == "new":
             while self.running:

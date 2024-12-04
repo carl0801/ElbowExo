@@ -12,7 +12,7 @@ start_time = time.time()
 
 while True:
     current_time = time.time()
-    if current_time - start_time >=0.7:
+    if current_time - start_time >=0.05:
         direction *= -1
         start_time = current_time
         velocity = direction * abs(velocity)

@@ -69,7 +69,7 @@ void serialCommInTask(void * parameter) {
       velocity = 0;
     } 
     Serial.read(); // Clear the buffer
-    vTaskDelay(150 / portTICK_PERIOD_MS); // Serial communication delay
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Serial communication delay
   }
 }
 
@@ -78,7 +78,7 @@ void serialCommOutTask(void * parameter) {
   for (;;) {
     Serial.printf("%d,%d,%u,%d,%d,%d\n", stallguard_result, velocity, vel_actual, motor_enable, motor_stall, temp_newPosition);
 
-    vTaskDelay(25000 / portTICK_PERIOD_MS); // Print delay
+    vTaskDelay(2500 / portTICK_PERIOD_MS); // Print delay
   }
 }
 
@@ -179,7 +179,7 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(stallGuardPin), handleInterrupt, RISING);
   
   pinMode(enablePin, OUTPUT);
-
+  Serial.setRxBufferSize(200);
   Serial.begin(115200);
   //uartLoopbackTest();
   // driver setup
