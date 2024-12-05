@@ -276,6 +276,12 @@ class EMG_Shimmer():
         multiplier_triceps = (target_max_value / abs(min_value)) * self.Filter.multiplier_triceps
         self.Filter.set_multipliers(multiplier_biceps, multiplier_triceps)
 
+        # Print calibration values
+        print(f"Min calibration value: {min_value}")
+        print(f"Max calibration value: {max_value}")
+        print(f"Multiplier biceps: {multiplier_biceps}")
+        print(f"Multiplier triceps: {multiplier_triceps}")
+
 
 
 
