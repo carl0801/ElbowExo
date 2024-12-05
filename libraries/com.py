@@ -234,13 +234,19 @@ class EMG_Shimmer():
             print(self.control_output)
             time.sleep(0.1)
         
-    def calibrate():
+    def calibrate(self):
         calibrations_values = []
-        # Calibrate Biceps
-        print("Calibrating Biceps for 5 seconds...")
-        start_time = time.time()
-        while time.time() - start_time < 5:
+        def collect_calibration_values():
             
+        # Start new thread
+        calibrate_thread = threading.Thread(target=collect_calibration_values, daemon=True)
+        calibrate_thread.start()
+
+        # Wait for calibration values to be collected
+        input("Press Enter to stop collecting calibration values...")
+
+        # Save calibration 
+
 
             
 
