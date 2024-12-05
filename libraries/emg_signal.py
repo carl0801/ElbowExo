@@ -73,7 +73,7 @@ class Signal:
         # Combine the sensors
         
         control_signals = np.abs(self.filtered_signals)
-        control_signal = control_signals[0] * self.multiplier_biceps - control_signals[1] * self.multiplier_triceps
+        control_signal = -control_signals[0] * self.multiplier_biceps + control_signals[1] * self.multiplier_triceps
         # Threshold
         control_signal = np.where(np.abs(control_signal) > self.threshold, control_signal, 0)
         # Moving average

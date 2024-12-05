@@ -165,7 +165,7 @@ class MainWindow(QMainWindow):
                 self.bind_output = False
                 self.test_samples = len(self.shimmer_data)
         else:    
-            if abs(self.EmgUnit.control_output - self.control_output_prev) > 5:
+            if abs(self.EmgUnit.control_output - self.control_output_prev) > 1:
                 self.control_output_prev = self.EmgUnit.control_output
                 
                 if self.print_velocity % 1 == 0:
