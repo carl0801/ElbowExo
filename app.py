@@ -461,7 +461,7 @@ class MainWindow(QMainWindow):
         elif button == 'calibrate_shimmer':
             if self.EmgUnit.initialized:
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Calibrating Shimmer...")
-                self.EmgUnit.calibrate()
+                self.create_timer(100, self.EmgUnit.calibrate(), single_shot=True)
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer calibration completed.")
             else:
                 self.calibrate_shimmer_animation = design.shake_animation(self.calibrate_shimmer_button)

@@ -240,7 +240,7 @@ class EMG_Shimmer():
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
-            print(f"Control output: {self.control_output}")
+            #print(f"Control output: {self.control_output}")
             # Dynamic sleep time adjuster for specified frequency
             total_updates += 1
             time.sleep(sleep_time)
