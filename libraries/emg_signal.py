@@ -79,7 +79,7 @@ class Signal:
         # Try to get closer to peak value (from mean to max on sinusodial wave)
         self.control_signal = control_signal / 0.637
         # Return the mean of the last window values
-        self.control_value = int(np.mean(control_signal[-self.window:]))
+        self.control_value = np.mean(control_signal[-self.window:])
         
     def get_control_value(self):
         self.filter()

@@ -280,14 +280,15 @@ class MainWindow(QMainWindow):
                 print(f"Error reading from serial port: {e}")            
 
     def update_block_graph(self):
-        self.muscleBlock1 = (self.EmgUnit.shimmer_output_processed) 
+        #self.muscleBlock1 = np.mean(self.EmgUnit.shimmer_output_processed[0])
         #self.muscleBlock2 = np.mean(self.EmgUnit.shimmer_output_processed[1])
-        self.bar_item1.setOpts(height=self.muscleBlock1)
-        self.bar_item2.setOpts(height=1)
-        if self.muscleBlock1 > 0:
-            self.bar_item1.setOpts(brush='#007BFF')
-        else:
-            self.bar_item1.setOpts(brush='#E57373')
+        #self.bar_item1.setOpts(height=self.muscleBlock1)
+        #self.bar_item2.setOpts(height=1)
+        #if self.muscleBlock1 > 0:
+        #    self.bar_item1.setOpts(brush='#007BFF')
+        #else:
+        #    self.bar_item1.setOpts(brush='#E57373')
+        pass
        
 
     def start_block_graph_update(self):
@@ -456,7 +457,17 @@ class MainWindow(QMainWindow):
                 self.reset_encoder_animation = design.shake_animation(self.reset_encoder_button)
                 self.reset_encoder_animation.start()
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Not connected to the serial port.")
-            
+        
+        elif button == 'calibrate_shimmer':
+            if self.EmgUnit.initialized:
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Calibrating Shimmer...")
+                self.EmgUnit.calibrate()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer calibration completed.")
+            else:
+                self.calibrate_shimmer_animation = design.shake_animation(self.calibrate_shimmer_button)
+                self.calibrate_shimmer_animation.start()
+                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Shimmer not initialized.")
+
 
     def handle_console_output(self, output):
         # Shift the buffer to the left and add the new output at the end
