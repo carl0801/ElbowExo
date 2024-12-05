@@ -99,7 +99,7 @@ class EMG_Shimmer():
         self.initialized = False
         self.up_counter = 0
         self.down_counter = 0
-
+        self.control_freq = 10 # Hz
 
     def find_bluetooth_com_port(self, device_name=None, target_mac=None):
         """
@@ -225,27 +225,58 @@ class EMG_Shimmer():
                 self.sensor_idx = (self.sensor_idx + num_new) % self.buffer_size
 
     def process_data(self):
+        update_freq = self.control_freq
+        total_updates = update_freq
+        timer_update_start = time.time()
+        sleep_time = 1/update_freq
+        # Wait 1 second for data to be collected
+        time.sleep(1)
+
         while self.running:
             sensor1_sequential = self.get_sequential_data(self.sensor1_data, self.sensor_idx)
             sensor2_sequential = self.get_sequential_data(self.sensor2_data, self.sensor_idx)
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
-            print(self.control_output)
-            time.sleep(0.1)
-        
-    def calibrate(self):
+            # Dynamic sleep time adjuster for specified frequency
+            total_updates += 1
+            time.sleep(sleep_time)
+            current_freq = total_updates / (time.time() - timer_update_start)
+            # Update sleep time based on current frequency
+            if current_freq > update_freq:
+                sleep_time += 0.01
+            elif current_freq < update_freq:
+                sleep_time -= 0.01
+            if sleep_time < 0.01:
+                sleep_time = 0.0            
+
+    def calibrate(self, target_max_value = 70, max_muscle_exertion = 0.5):
         calibrations_values = []
+        colleting_calibration_values = True
         def collect_calibration_values():
-            
+            while colleting_calibration_values:
+                # Add control_value to calibrations_values list
+                calibrations_values.append(self.control_output)
+                # Wait for new data
+                time.sleep(1/self.control_freq)
+
         # Start new thread
         calibrate_thread = threading.Thread(target=collect_calibration_values, daemon=True)
         calibrate_thread.start()
 
         # Wait for calibration values to be collected
         input("Press Enter to stop collecting calibration values...")
+        # Stop the thread
+        colleting_calibration_values = False        
 
         # Save calibration 
+        min_value = min(calibrations_values) * max_muscle_exertion
+        max_value = max(calibrations_values) * max_muscle_exertion
+        multiplier_biceps = (target_max_value / max_value) * self.Filter.multiplier_biceps
+        multiplier_triceps = (target_max_value / abs(min_value)) * self.Filter.multiplier_triceps
+        self.Filter.set_multipliers(multiplier_biceps, multiplier_triceps)
+
+
 
 
             
