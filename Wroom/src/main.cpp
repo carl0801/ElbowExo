@@ -117,8 +117,6 @@ void moveAtVelocity(int velocity) {
   stepper.adjustFrequency(frequency, dutyCycleFraction);
 }
 
-
-
 void mainLoop(void * parameter) {
   for (;;) {
 
@@ -137,7 +135,6 @@ void mainLoop(void * parameter) {
       //stepper_driver.moveAtVelocity(0);
       moveAtVelocity(0);
     }
-  
     vTaskDelay(10 / portTICK_PERIOD_MS); // Motor control delay
   }
 }
@@ -192,58 +189,9 @@ void setup() {
   stepper_driver.disableStealthChop();
   stepper_driver.setRunCurrent(RUN_CURRENT_PERCENT);
   stepper_driver.setHoldCurrent(50);
-  /* stepper_driver.enableStealthChop();
-
-  stepper_driver.useExternalSenseResistors();
-  stepper_driver.setStealthChopDurationThreshold(230); // lower lim SG
-  stepper_driver.setCoolStepDurationThreshold(0xFFFF); // upper lim SG
-   */
   stepper_driver.setMicrostepsPerStep(0);
-
-  
-
-  // enable spreadCycle for low speed
-
-
-  // NOTES:
-  //  DISABLE COOLSTEP DURING STALLGUARD HOMING. COOLSTEP CAUSES SPURIOUS DETECTION OF MOTOR STALLS
-  //  ENABLE COOLSTEP AFTER HOMING AND DISABLE STALLGUARD.
-
-  //  TUNING:
-  //  ENABLE STEALTCHCHOP. DISABLE COOLSTEP. TUNE STALLGUARD ONLY FIRST. THEN DISABLE STALLGUARD AND TUNE COOLSTEP.
-
-
-  //  ADDRESSES:
-  //  ADDRESS_TPWMTHRS = SETSTEALTHCHOPDURATIONTHRESHOLD --> LOWER LIM FOR STALLGUARD
-  //  ADDRESS_TCOOLTHRS = SETCOOLSTEPDURATIONTHRESHOLD --> UPPER LIM FOR STALLGUARD
-  //  ADDRESS_SGTHRS = SETSTALLGUARDTHRESHOLD
-  //  ADDRESS_TSTEP = SETINTERSTEPDURATION
-
-
-  // Coolstep related:
-  //  high currect increment (SEUP): faster current ramp-up -> faster response to high-torque demands. Too high: motor oscillations
-  //  standstill/low velocity: cannot measure motor load. Coolstep disabled below a certain velocity -> set by coolstep lower threshold
-  //  when below velocity threshold: current is set with IRUN and IHOLD. When above threshold: current is set by coolstep
-  //  Coolstep increments current with SEUP and decrements with SEDN.
-  //  SEMIN sets the current where coolstep starts to increment current. SEMAX sets the maximum current, where coolstep decrements current.
-  //  SG_RESULT is the stallguard value, but is actually also motor current. COOLSTEP uses SG_RESULT to monitor motor current.
-  //  TPWMTHRS: Upper velocity value. When above this velocity, SpreadCycle is used, and CoolStep and Stallguard are disabled.
-  //  TCOOLTHRS: Lower velocity value. When below this velocity, CoolStep is disabled.
-
-  //  Tuning CoolStep:
-  //  If stallguard has been implemented, SEMIN can be set as SEMIN = 1+SGTHRS/16 for a starting value.
-  // coolstep setup (DON'T USE WHEN USING STALLGUARD)
   stepper_driver.disableCoolStep();
-  //stepper_driver.enableCoolStep();
-  //stepper_driver.setCoolStepDurationThreshold(0xFFFF);
-  //stepper_driver.set
-  //stepper_driver.moveAtVelocity(100);
-
-
-  // stallguard setup (DISABLE COOLSTEP)
   stepper_driver.setStallGuardThreshold(0);
-
-  
 
   if (debug) {
     delay(1000);

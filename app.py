@@ -254,6 +254,7 @@ class MainWindow(QMainWindow):
             try:
                 data = self.serial_comm.read()
                 if data:
+                    #floatParts = list(map(float, data.split(',')))
                     parts = list(map(int, data.split(',')))
                     self.stall_guard_label.setText(f"StallGuard: {parts[0]}")
                     self.velocity_label.setText(f"Velocity: {parts[1]}")
