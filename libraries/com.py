@@ -277,6 +277,7 @@ class EMG_Shimmer():
         print(f"Max calibration value: {max_value}")
         print(f"Multiplier biceps: {multiplier_biceps}")
         print(f"Multiplier triceps: {multiplier_triceps}")
+        print(f"Activation threshold: {activation_threshold}")
 
 
 
