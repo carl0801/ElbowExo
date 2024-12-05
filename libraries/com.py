@@ -8,8 +8,6 @@ import time
 import serial.tools.list_ports
 import subprocess
 import platform
-import libraries.filterr as filterr
-
 
 def open_windows_bluetooth_settings():
         if platform.system() == "Windows":
@@ -97,10 +95,8 @@ class EMG_Shimmer():
         self.sensor2_data = np.zeros(self.buffer_size)
         self.velocity_output = 0
         self.shimmer_device = None
-        #self.Filter =  filter.Signal()
-        self.Filter = filterr.generate_filter(fs=650)
+        self.Filter =  filter.Signal()
         self.initialized = False
-        self.filter_type = "old"
         self.up_counter = 0
         self.down_counter = 0
 
@@ -212,79 +208,45 @@ class EMG_Shimmer():
         return np.concatenate((buffer[start_index:], buffer[:start_index]))
 
     def data_collection(self):
-        if self.filter_type == "old":
-            while self.running:
-                n_of_packets, packets = self.shimmer_device.read_data_packet_extended()
-                if n_of_packets > 0:
-                    for packet in packets:
-                        sensor1 = packet[3]
-                        sensor2 = packet[4]
-                        self.sensor1_data[self.sensor_idx % self.buffer_size] = sensor1
-                        self.sensor2_data[self.sensor_idx % self.buffer_size] = sensor2
-                        self.sensor_idx += 1
-                        #print(f"Sensor 1: {sensor1}, Sensor 2: {sensor2}")
-        elif self.filter_type == "new":
-             while self.running:
-                n_of_packets, packets = self.shimmer_device.read_data_packet_extended()
-                if n_of_packets > 0:
-                    # Extract sensor1 and sensor2 data for all packets at once
-                    sensor1_values = np.array([packet[3] for packet in packets])
-                    sensor2_values = np.array([packet[4] for packet in packets])
-                    num_new = len(sensor1_values)
+        while self.running:
+            n_of_packets, packets = self.shimmer_device.read_data_packet_extended()
+            if n_of_packets > 0:
+                # Extract sensor1 and sensor2 data for all packets at once
+                sensor1_values = np.array([packet[3] for packet in packets])
+                sensor2_values = np.array([packet[4] for packet in packets])
+                num_new = len(sensor1_values)
 
-                    # Insert new data in circular fashion
-                    for i in range(num_new):
-                        self.sensor1_data[(self.sensor_idx + i) % self.buffer_size] = sensor1_values[i]
-                        self.sensor2_data[(self.sensor_idx + i) % self.buffer_size] = sensor2_values[i]
+                # Insert new data in circular fashion
+                for i in range(num_new):
+                    self.sensor1_data[(self.sensor_idx + i) % self.buffer_size] = sensor1_values[i]
+                    self.sensor2_data[(self.sensor_idx + i) % self.buffer_size] = sensor2_values[i]
 
-                    # Update index to the next write position in the circular buffer
-                    self.sensor_idx = (self.sensor_idx + num_new) % self.buffer_size
+                # Update index to the next write position in the circular buffer
+                self.sensor_idx = (self.sensor_idx + num_new) % self.buffer_size
 
     def process_data(self):
-        if self.filter_type == "old":
-            while self.running:
-                global shimmer_output_processed
-                sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=100)*4
-                #print(sensor_mean)
-                if sensor_mean < 15 and sensor_mean >-10:
-                    sensor_mean = 0
-                else:
-                    sensor_mean = sensor_mean
-                if abs(sensor_mean) > 100:
-                    pass
-                self.shimmer_output_processed = sensor_mean*-1
-                self.control_output = sensor_mean*-1
-                time.sleep(0.05)
+        while self.running:
+            sensor1_sequential = self.get_sequential_data(self.sensor1_data, self.sensor_idx)
+            sensor2_sequential = self.get_sequential_data(self.sensor2_data, self.sensor_idx)
+            self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
+            self.shimmer_output_processed = self.Filter.get_filtered_signals()
+            self.control_output = self.Filter.get_control_value()
+            print(self.control_output)
+            time.sleep(0.1)
         
-            """ if self.filter_type == "old":
-                while self.running:
-                    global shimmer_output_processed
-                    sensor_mean = filterr.run(self.sensor1_data, self.sensor2_data, self.Filter, single_window=100)*4
-                    #print(sensor_mean)
-                    if sensor_mean < 15 and sensor_mean >-15:
-                        sensor_mean = 0
-                    elif sensor_mean > 15:
-                        if self.up_counter < 55:
-                            self.up_counter+=1
-                        self.shimmer_output_processed = -(15+self.up_counter)
-                        self.control_output = -(15+self.up_counter)
-                    elif sensor_mean < -15:
-                        if self.down_counter < 55:
-                            self.down_counter+=1
-                        self.shimmer_output_processed = -(-15-self.down_counter)
-                        self.control_output = -(-15-self.down_counter)
-                    
-                    time.sleep(0.1) """
+    def calibrate():
+        calibrations_values = []
+        # Calibrate Biceps
+        print("Calibrating Biceps for 5 seconds...")
+        start_time = time.time()
+        while time.time() - start_time < 5:
+            
 
-        elif self.filter_type == "new":
-            while self.running:
-                sensor1_sequential = self.get_sequential_data(self.sensor1_data, self.sensor_idx)
-                sensor2_sequential = self.get_sequential_data(self.sensor2_data, self.sensor_idx)
-                self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
-                self.shimmer_output_processed = self.Filter.get_filtered_signals()
-                self.control_output = self.Filter.get_control_value()
-                print(self.control_output)
-                time.sleep(0.1)
+            
+
+            
+
+        
 
 
         
