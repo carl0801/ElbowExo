@@ -253,7 +253,7 @@ class EMG_Shimmer():
             if sleep_time < 0.01:
                 sleep_time = 0.0            
 
-    def calibrate(self, target_max_value = 70, max_muscle_exertion = 0.5):
+    def calibrate(self, target_max_value = 70, max_muscle_exertion = 0.5, min_muscle_exertion = 0.05):
         calibrations_values = []
         run = time.time()
         while run + 10 > time.time():
@@ -263,11 +263,14 @@ class EMG_Shimmer():
             time.sleep(1/self.control_freq)
      
         # Save calibration 
-        min_value = min(calibrations_values) * max_muscle_exertion
-        max_value = max(calibrations_values) * max_muscle_exertion
+        min_value = min(calibrations_values)
+        max_value = max(calibrations_values) 
         multiplier_biceps = (target_max_value / max_value) * self.Filter.multiplier_biceps
         multiplier_triceps = (target_max_value / abs(min_value)) * self.Filter.multiplier_triceps
-        self.Filter.set_multipliers(multiplier_biceps, multiplier_triceps)
+        activation_threshold = min_muscle_exertion * (multiplier_biceps + multiplier_triceps) / 2
+        multiplier_biceps *= max_muscle_exertion
+        multiplier_triceps *= max_muscle_exertion
+        self.Filter.set_multipliers(multiplier_biceps, multiplier_triceps, activation_threshold)
 
         # Print calibration values
         print(f"Min calibration value: {min_value}")

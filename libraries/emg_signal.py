@@ -39,7 +39,7 @@ def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
     
 
 class Signal:
-    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=65, threshold=0.2, multiplier_biceps=1.0, multiplier_triceps=1.0, convolve_window_size=65*4):
+    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=65, threshold=0.0, multiplier_biceps=1.0, multiplier_triceps=1.0, convolve_window_size=65*4):
         self.fs = fs
         self.lowcut = lowcut
         self.highcut = highcut
@@ -55,9 +55,10 @@ class Signal:
         self.control_signal = None
         self.control_value = None
 
-    def set_multipliers(self, multiplier_biceps, multiplier_triceps):
+    def set_multipliers(self, multiplier_biceps, multiplier_triceps, threshold=0.0):
         self.multiplier_biceps = multiplier_biceps
         self.multiplier_triceps = multiplier_triceps
+        self.threshold = threshold
 
     def set_signal(self, sensor1_data, sensor2_data):
         data = np.vstack((sensor1_data, sensor2_data))
