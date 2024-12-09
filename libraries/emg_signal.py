@@ -5,8 +5,8 @@ def butter_bandpass(lowcut, highcut, fs, order=4):
     sos = butter(order, [lowcut, highcut], btype='bandpass', fs=fs, output='sos')
     return sos
 
-def notch_filter(freq, fs, order=5):
-    sos  = butter(order, [freq-2.0, freq+2.0], btype='bandstop', fs=fs, output='sos')
+def notch_filter(freq, fs, order=3):
+    sos  = butter(order, [freq-1.5, freq+1.5], btype='bandstop', fs=fs, output='sos')
     return sos
 
 def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
@@ -33,8 +33,11 @@ def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
     sos_b = butter_bandpass(lowcut, highcut, fs)
     # notch filter
     sos_n = notch_filter(notch_freq, fs)
+    # Notch harmonics
+    sos_n2 = notch_filter(notch_freq*2, fs)
+    sos_n3 = notch_filter(notch_freq*3, fs)
     # Stack the sos matrices
-    sos = np.vstack((sos_b, sos_n))
+    sos = np.vstack((sos_b, sos_n, sos_n2, sos_n3))
     return sos
     
 
