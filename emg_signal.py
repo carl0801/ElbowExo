@@ -33,8 +33,12 @@ def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
     sos_b = butter_bandpass(lowcut, highcut, fs)
     # notch filter
     sos_n = notch_filter(notch_freq, fs)
+    # Test with more notch frq
+    """ sos_n2 = notch_filter(notch_freq*2, fs)
+    sos_n3 = notch_filter(notch_freq*3, fs)
+    sos_n4 = notch_filter(notch_freq*4, fs) """
     # Stack the sos matrices
-    sos = np.vstack((sos_b, sos_n))
+    sos = np.vstack((sos_b, sos_n)) #, sos_n2, sos_n3, sos_n4))
     return sos
     
 

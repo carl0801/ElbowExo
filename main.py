@@ -91,7 +91,7 @@ def update():
         sensor1_sequential = get_sequential_data(sensor1_data, sensor_idx)
         sensor2_sequential = get_sequential_data(sensor2_data, sensor_idx)
         shimmerSignal.set_signal(sensor1_sequential, sensor2_sequential)
-        control_value = shimmerSignal.get_control_value()
+        control_value = shimmerSignal.get_filtered_signals()
         limited_speed = 7000*control_value
         # restrict speed to 2500 rpm
         if limited_speed > 2000:
