@@ -8,6 +8,7 @@ import time
 import serial.tools.list_ports
 import subprocess
 import platform
+import struct
 
 def open_windows_bluetooth_settings():
         if platform.system() == "Windows":
@@ -78,8 +79,24 @@ class SerialCommunication:
         return None
 
     def reset_encoder(self):
-        self.send("0,0,0,1\n")
+        #self.send("0,0,0,1\n")
+        packet = self.create_packet(0, 0, 0, 1, 1, 0)
+        self.port.write(packet)
         print("Encoder reset.")
+
+    # Function to create a packet with the 3 validity bits, 5 boolean values, and velocity(int16_t)
+    def create_packet(self, b3, mot_en, mot_stl, b6, enc_rst, velocity):
+        # Pack the 8 boolean values into a single byte little-endian
+        bool_byte = 0b00000101  # Start with validity bits (101)
+        bool_byte |= (b3 << 3)
+        bool_byte |= (mot_en << 4)
+        bool_byte |= (mot_stl << 5)
+        bool_byte |= (b6 << 6)
+        bool_byte |= (enc_rst << 7)
+
+        # Create the 3-byte packet
+        packet = struct.pack('@Bh', bool_byte, velocity)
+        return packet
 
     
 

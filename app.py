@@ -12,7 +12,7 @@ from PyQt5 import uic
 from libraries.com import SerialCommunication, EMG_Shimmer
 import app_dependency.design as design
 import libraries.loadData as loadData
-
+import struct
 
 class MainWindow(QMainWindow):
     def __init__(self, test_mode=False):
@@ -159,7 +159,11 @@ class MainWindow(QMainWindow):
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[self.test_samples]*100)}")
                 self.print_velocity += 1
                 self.test_samples +=10
-                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0,0\n")
+                #self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0,0\n")
+                # create shimmer velocity as a 16 bit integer
+                shimmer_vel = int(self.test_control_output[self.test_samples]*100)
+                packet = self.serial_comm.create_packet(0,1,0,0,0,shimmer_vel)
+                self.serial_comm.port.write(packet)
             else:
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
@@ -171,7 +175,9 @@ class MainWindow(QMainWindow):
                 if self.print_velocity % 1 == 0:
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
                 self.print_velocity += 1
-                self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
+                #self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
+                packet = self.serial_comm.create_packet(0,1,0,0,0,int(self.EmgUnit.control_output))
+                self.serial_comm.port.write(packet)
 
     
 
@@ -242,43 +248,115 @@ class MainWindow(QMainWindow):
 
     def toggle_motor_enable(self):
         if self.connection_status:
+            
             if self.MotorEnabled:
-                self.serial_comm.send(f"{self.sent_velocity},0,1,0\n")
+                #self.serial_comm.send(f"{self.sent_velocity},0,1,0\n")
+                packet = self.serial_comm.create_packet(0,0,0,0,0,self.sent_velocity)
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Disabled Motor")
             else:
-                self.serial_comm.send(f"{self.sent_velocity},1,1,0\n")
+                #self.serial_comm.send(f"{self.sent_velocity},1,1,0\n")
+                packet = self.serial_comm.create_packet(0,1,0,0,0,self.sent_velocity)
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Enabled Motor")
+            self.serial_comm.port.write(packet)
         
+    # def update_serial_data(self):
+    #     if self.connection_status:
+    #         try:
+    #             data = self.serial_comm.read_line()
+    #             if data:
+    #                 split_data = data.split(',')
+    #                 if split_data[0] == 'z':
+    #                     parts = list(map(int, split_data[1:]))
+    #                     self.stall_guard_label.setText(f"StallGuard: {parts[0]}")
+    #                     self.velocity_label.setText(f"Velocity: {parts[1]}")
+    #                     self.MotorEnabled = bool(parts[3])
+    #                     if len(parts) > 5:
+    #                         self.encoder_label.setText(f"Encoder: {parts[5]}")
+    #                         self.encoder_value = parts[5]
+    #                         self.image_target = int(self.encoder_value / (self.encoder_range/len(self.images)))
+    #                     if self.MotorEnabled:
+    #                         self.enable_motor_button.setText("Disable Motor")
+    #                         self.enable_motor_button.setStyleSheet(design.RED_BUTTON)
+    #                     else:
+    #                         self.enable_motor_button.setText("Enable Motor")
+    #                         self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
+    #                     self.MotorStalled = bool(parts[4])
+    #                     if self.MotorStalled or not bool(parts[1]) and self.MotorEnabled:
+    #                         self.stall_motor_button.setText("Motor is stopped")
+    #                         #self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Motor is stopped")
+    #                         self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
+    #                     elif self.MotorEnabled:
+    #                         self.stall_motor_button.setText("Motor is running")
+    #                         self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
+    #                 else:
+    #                     self.handle_console_output(f"string received: {data}")
+    #         except Exception as e:
+    #             print(f"Error reading from serial port: {e}")            
     def update_serial_data(self):
         if self.connection_status:
             try:
-                data = self.serial_comm.read()
-                if data:
-                    parts = list(map(int, data.split(',')))
-                    self.stall_guard_label.setText(f"StallGuard: {parts[0]}")
-                    self.velocity_label.setText(f"Velocity: {parts[1]}")
-                    self.MotorEnabled = bool(parts[3])
-                    if len(parts) > 5:
-                        self.encoder_label.setText(f"Encoder: {parts[5]}")
-                        self.encoder_value = parts[5]
-                        self.image_target = int(self.encoder_value / (self.encoder_range/len(self.images)))
-                    if self.MotorEnabled:
-                        self.enable_motor_button.setText("Disable Motor")
-                        self.enable_motor_button.setStyleSheet(design.RED_BUTTON)
-                    else:
-                        self.enable_motor_button.setText("Enable Motor")
-                        self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
-                    self.MotorStalled = bool(parts[4])
-                    if self.MotorStalled or not bool(parts[1]) and self.MotorEnabled:
-                        self.stall_motor_button.setText("Motor is stopped")
-                        #self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Motor is stopped")
-                        self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
-                    elif self.MotorEnabled:
-                        self.stall_motor_button.setText("Motor is running")
-                        self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
-            except Exception as e:
-                print(f"Error reading from serial port: {e}")            
+                header = self.serial_comm.port.read(1)
+                if header:
+                    # Extract the last 3 bits from the header
+                    header_bits = (header[0] & 0b00000101)
+                    if header_bits == 0b101:  # Check if the header bits are '101'
+                        # Read the rest of the struct (7 bytes: 1 byte for booleans, 2 bytes for velocity, 4 bytes for position)
+                        data = header + self.serial_comm.port.read(7)
+                        if len(data) == 8:  # Ensure we have the complete struct
+                            # Unpack the binary struct of a byte, int16, int64
+                            unpacked_data = struct.unpack('@Bhi', data)
+                            bool_byte, self.velocity, self.encoder_value = unpacked_data
 
+                            # Extract individual booleans from the packed byte
+                            var1 = bool(bool_byte & 0b00000001)
+                            var2 = bool(bool_byte & 0b00000010)
+                            var3 = bool(bool_byte & 0b00000100)
+                            var4 = bool(bool_byte & 0b00001000)
+                            self.MotorEnabled = bool(bool_byte & 0b00010000)
+                            self.MotorStalled = bool(bool_byte & 0b00100000)
+                            home = bool(bool_byte & 0b010000000)
+                            encoder_reset = bool(bool_byte & 0b10000000)
+
+                            # Update the GUI elements with the parsed data
+                            self.stall_guard_label.setText(f"Motor Enable: {self.MotorEnabled}")
+                            self.velocity_label.setText(f"Velocity: {self.velocity}")
+                            self.encoder_label.setText(f"Encoder: {self.encoder_value}")
+                            self.image_target = int(self.encoder_value / (self.encoder_range/len(self.images)))
+
+                            if self.MotorEnabled:
+                                self.enable_motor_button.setText("Disable Motor")
+                                self.enable_motor_button.setStyleSheet(design.RED_BUTTON)
+                            else:
+                                self.enable_motor_button.setText("Enable Motor")
+                                self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
+
+                            if self.MotorStalled or not self.velocity and self.MotorEnabled:
+                                self.stall_motor_button.setText("Motor is stopped")
+                                self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
+                            elif self.MotorEnabled:
+                                self.stall_motor_button.setText("Motor is running")
+                                self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
+                            
+                        else:
+                            print("Incomplete binary struct received.")
+                            self.handle_console_output(f"Incomplete binary struct received. Data: {data}")
+                    else:
+                        # Treat this as an error message string
+                        error_message = header + self.serial_comm.port.read(self.serial_comm.port.in_waiting)
+                        msg_len = len(error_message)
+                        try:
+                            error_message = error_message.decode('utf-8')
+                            self.handle_console_output(f"Error msg of len. {msg_len} received: {error_message}")
+                        except UnicodeDecodeError:
+                            raw_bytes = ' '.join(f"{byte:02x}" for byte in error_message)
+                            self.handle_console_output(f"Error bytes of len. {msg_len} received: {raw_bytes}")
+                else:
+                    print(f"No header read. {header}")
+                    self.handle_console_output(f"No header received. {header}")
+            except Exception as e:
+                print(f"Error reading from serial port: {e}")
+                self.handle_console_output(f"Error reading from serial port: {e}")
+                
     def update_block_graph(self):
         self.muscleBlock1 = (self.EmgUnit.shimmer_output_processed) 
         #self.muscleBlock2 = np.mean(self.EmgUnit.shimmer_output_processed[1])
@@ -386,7 +464,9 @@ class MainWindow(QMainWindow):
                     try:
                         velocity = int(self.findChild(QLineEdit, 'velocity_input').text())
                         self.sent_velocity = velocity
-                        self.serial_comm.send(f"{velocity},1,0,0\n")
+                        #self.serial_comm.send(f"{velocity},1,0,0\n")
+                        packet = self.serial_comm.create_packet(0,1,0,0,0,velocity)
+                        self.serial_comm.port.write(packet)
                         self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {velocity}")
                     except ValueError:
                         QMessageBox.warning(self, "Input Error", "Please enter a valid velocity.")
