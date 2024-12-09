@@ -42,7 +42,7 @@ def generate_sos(fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0):
     
 
 class Signal:
-    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=65, threshold=0.0, multiplier_biceps=1.0, multiplier_triceps=1.0, convolve_window_size=65*4):
+    def __init__(self, fs=650, lowcut=20.0, highcut=250.0, notch_freq=50.0, window=65, threshold=0.0, multiplier_biceps=1.0, multiplier_triceps=2.0, convolve_window_size=65*4):
         self.fs = fs
         self.lowcut = lowcut
         self.highcut = highcut
