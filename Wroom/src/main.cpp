@@ -4,10 +4,12 @@
 #include "freertos/task.h"
 #include <ESP32Encoder.h> 
 #include <ESP32Servo.h>
+#include "FastAccelStepper.h"
 
 HardwareSerial & serial_stream = Serial2;
-ESP32PWM stepper;
-ESP32Encoder encoder;
+FastAccelStepperEngine engine = FastAccelStepperEngine();
+FastAccelStepper *stepper = NULL;
+
 
 const int TX_PIN = 17;
 const int RX_PIN = 16;
@@ -27,19 +29,18 @@ int minMaxVelocity = 80;
 int maxEncoderValue = 1100;
 int minEncoderValue = 40;
 bool encoder_reset = false;
-
 volatile bool motor_enable = false;
 volatile bool motor_stall = false;
 volatile signed int velocity = 0;
-
+volatile signed int velocity_old = 0;
 uint16_t vel_actual = 0;
 uint16_t stallguard_result = 0;
-
 TMC2209 stepper_driver;
 int serial_int = 0;
 float serial_timeout = 10000.0; // milliseconds
 float serial_timeout_start = 0.0;
 float serial_time_elapsed = 0.0;
+
 // serial comunication receiver task
 void serialCommInTask(void * parameter) {
   for (;;) {
@@ -57,8 +58,8 @@ void serialCommInTask(void * parameter) {
         motor_enable = (receivedData.substring(separator1 + 1, separator2).toInt() == 1);
         motor_stall = (receivedData.substring(separator2 + 1).toInt() == 1);
         encoder_reset = (receivedData.substring(separator3 + 1).toInt() == 1);
-        if (encoder_reset) {
-          encoder.setCount(0);}
+        /* if (encoder_reset) {
+          encoder.setCount(0);} */
           //temp_newPosition = 0;
       }
       //velocity = constrain(velocity, -2000, 2000); // Limit velocity to -2000 to 2000
@@ -94,27 +95,22 @@ for (;;) {
 void moveAtVelocity(int velocity) {
   if (velocity == 0) {
     // Stop the motor by writing zero duty cycle
-    stepper.write(0);
-    return;
+    stepper->stopMove();
+    return;}
+  
+  else if (velocity > 0) {
+    // Move the motor forward
+    stepper->setSpeedInHz(abs(velocity));
+    stepper->runForward();
+    
   }
-
-  // Calculate frequency from velocity (pulses per second)
-  double frequency = abs(velocity);
-
-  // Set the pulse duration (fixed at 0.2 ms)
-  double pulseDuration = 0.0002; // 0.2 milliseconds in seconds
-
-  // Calculate the duty cycle as a fraction
-  double dutyCycleFraction = pulseDuration * frequency; // e.g., for 10 Hz -> 0.002 * 10 = 0.02
-
-  // Limit duty cycle fraction to 1.0 (to avoid overflows)
-  dutyCycleFraction = 0.5;//constrain(dutyCycleFraction, 0.0, 1.0);
-
-  // Set the direction pin based on velocity sign
-  digitalWrite(dirPin, velocity > 0 ? HIGH : LOW);
-
-  // Adjust PWM frequency and duty cycle
-  stepper.adjustFrequency(frequency, dutyCycleFraction);
+  else if(velocity < 0) {
+    // Move the motor backward
+    stepper->setSpeedInHz(abs(velocity));
+    stepper->runBackward();
+  }
+  velocity_old = velocity;
+ 
 }
 
 void mainLoop(void * parameter) {
@@ -124,36 +120,21 @@ void mainLoop(void * parameter) {
       velocity = (velocity > minMaxVelocity) ? minMaxVelocity : (velocity < -minMaxVelocity) ? -minMaxVelocity : velocity; // Limit velocity to -50 to 50
       if (temp_newPosition < minEncoderValue && velocity > 0) {
         velocity = 0;
+        stepper->stopMove();
       }
       else if (temp_newPosition > maxEncoderValue && velocity < 0) {
         velocity = 0;
+        stepper->stopMove();
       }
-      //stepper_driver.moveAtVelocity(velocity);
       moveAtVelocity(velocity);
+      
     }
     else {
       //stepper_driver.moveAtVelocity(0);
-      moveAtVelocity(0);
+      stepper->setSpeedInHz(0);
+      stepper->runForward();
     }
-    vTaskDelay(10 / portTICK_PERIOD_MS); // Motor control delay
-  }
-}
-
-void IRAM_ATTR handleInterrupt() {
-  motor_stall = true;
-}
-
-void encoderTask(void * parameter) {
-  for (;;) {
-    long newPosition = encoder.getCount() / 2;
-    if (newPosition != temp_newPosition) {
-      //Serial.printf("Position: %ld\n", newPosition);
-      temp_newPosition = newPosition;
-    }
-
-    // vi kan nemt tilføje Z-pin her, hvis vi vil have en tæller for hver omdrejning
-
-    vTaskDelay(10 / portTICK_PERIOD_MS); // Encoder update delay
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Motor control delay
   }
 }
 
@@ -164,22 +145,26 @@ void setup() {
   pinMode(Zpin, INPUT);
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
-  encoder.attachSingleEdge( Apin, Bpin );
-  encoder.setCount ( 0 );
-  
-  // attach pwm pins
-  stepper.attachPin(stepPin, 0, 16);
+ 
+  engine.init();
+  stepper = engine.stepperConnectToPin(stepPin);
+  if (stepper) {
+    stepper->setDirectionPin(dirPin);
+    stepper->setEnablePin(enablePin);
+    stepper->setAutoEnable(true);
 
-  
-  //ESP32 needs special "IRAM_ATTR" in interrupt
-  // Set stalled motor flag with function stored in IRAM
-  attachInterrupt(digitalPinToInterrupt(stallGuardPin), handleInterrupt, RISING);
-  
+    stepper->setSpeedInHz(100);       // 500 steps/s
+    stepper->setAcceleration(4000);    // 100 steps/s²
+    //stepper->runForward();
+    stepper->setLinearAcceleration(20);
+    stepper->attachToPulseCounter(QUEUES_MCPWM_PCNT, 0, 0);
+    stepper->clearPulseCounter();
+  }
+
   pinMode(enablePin, OUTPUT);
   Serial.setRxBufferSize(200);
   Serial.begin(115200);
-  //uartLoopbackTest();
-  // driver setup
+
   stepper_driver.setup(serial_stream);
   stepper_driver.setHardwareEnablePin(enablePin);
   stepper_driver.enable();
@@ -192,49 +177,13 @@ void setup() {
   stepper_driver.setMicrostepsPerStep(0);
   stepper_driver.disableCoolStep();
   stepper_driver.setStallGuardThreshold(0);
-
-  if (debug) {
-    delay(1000);
-    if (not stepper_driver.isCommunicating()) {
-      Serial.println("Stepper driver not communicating!");
-    }
-    else {
-      Serial.println("Stepper driver communicating!");
-      TMC2209::Settings settings = stepper_driver.getSettings();
-      Serial.println("Settings:");
-      Serial.printf("is_setup: %d\n", settings.is_setup);
-      Serial.printf("software_enabled: %d\n", settings.software_enabled);
-      Serial.printf("microsteps_per_step: %u\n", settings.microsteps_per_step);
-      Serial.printf("inverse_motor_direction_enabled: %d\n", settings.inverse_motor_direction_enabled);
-      Serial.printf("stealth_chop_enabled: %d\n", settings.stealth_chop_enabled);
-      Serial.printf("standstill_mode: %u\n", settings.standstill_mode);
-      Serial.printf("irun_percent: %u\n", settings.irun_percent);
-      Serial.printf("irun_register_value: %u\n", settings.irun_register_value);
-      Serial.printf("ihold_percent: %u\n", settings.ihold_percent);
-      Serial.printf("ihold_register_value: %u\n", settings.ihold_register_value);
-      Serial.printf("iholddelay_percent: %u\n", settings.iholddelay_percent);
-      Serial.printf("iholddelay_register_value: %u\n", settings.iholddelay_register_value);
-      Serial.printf("automatic_current_scaling_enabled: %d\n", settings.automatic_current_scaling_enabled);
-      Serial.printf("automatic_gradient_adaptation_enabled: %d\n", settings.automatic_gradient_adaptation_enabled);
-      Serial.printf("pwm_offset: %u\n", settings.pwm_offset);
-      Serial.printf("pwm_gradient: %u\n", settings.pwm_gradient);
-      Serial.printf("cool_step_enabled: %d\n", settings.cool_step_enabled);
-      Serial.printf("analog_current_scaling_enabled: %d\n", settings.analog_current_scaling_enabled);
-      Serial.printf("internal_sense_resistors_enabled: %d\n", settings.internal_sense_resistors_enabled);
-      Serial.println("Settings printed");
-    }
-  }
-  else {
-    delay(200);
-  }
-
+ 
 
   xTaskCreatePinnedToCore(mainLoop, "MainLoopTask", 4096, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(serialCommOutTask, "serialCommOutTaskTask", 4096, NULL, 2, NULL, 1);
   xTaskCreatePinnedToCore(serialCommInTask, "serialCommInTask", 4096, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(updateInfoTask, "updateInfoTask", 4096, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(encoderTask, "encoderTask", 4096, NULL, 1, NULL, 1);
-  // xTaskCreate(checkMotorStalled, "CheckMotorStalledTask", 4096, NULL, 1, NULL);
+
 }
 
 

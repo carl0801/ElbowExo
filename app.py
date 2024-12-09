@@ -248,7 +248,7 @@ class MainWindow(QMainWindow):
             else:
                 self.serial_comm.send(f"{self.sent_velocity},1,1,0\n")
                 self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Enabled Motor")
-        
+         
     def update_serial_data(self):
         if self.connection_status:
             try:
