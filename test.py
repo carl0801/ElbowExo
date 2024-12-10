@@ -1,29 +1,22 @@
 import time
-
+import numpy as np
 import libraries.com as com
 
-velocity = 20
+velocity = 0
 
 jashda = com.SerialCommunication()
 jashda.connect()
 
-direction = 1
+
 start_time = time.time()
 
+# make a control output simulated as a sinusoidal signal with a frequency of 0.1 Hz and amplitude of 15
+
+#jashda.send("-20,1,0,0\n")
+
 while True:
-    current_time = time.time()
-    direction = -1
-    """ if current_time - start_time >=7.0:
-        direction *= -1
-        start_time = current_time """
-    velocity = direction * abs(velocity)
-    # Add your code to use the velocity variable here
+    velocity -=2 #int(15 * (1 + np.sin(0.1 * 2 * np.pi * (time.time() - start_time))))-10
     jashda.send(f"{velocity},1,0,0\n")
-    #jashda.port.reset_output_buffer()
-    #jashda.port.reset_input_buffer()
-    #jashda.port.flush()
-    print(f"Sent: {velocity}")
-    #time.sleep(0.5)  # Small sleep to prevent high CPU usage
-    velocity -= 10
-    time.sleep(2)  # Small sleep to prevent high CPU usage
+    print(f"Velocity: {velocity}")
+    time.sleep(0.1)
 

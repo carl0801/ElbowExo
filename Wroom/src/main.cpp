@@ -5,11 +5,13 @@
 #include <ESP32Encoder.h> 
 #include <ESP32Servo.h>
 #include "FastAccelStepper.h"
+#include <driver/pcnt.h>
 
 HardwareSerial & serial_stream = Serial2;
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
 
+ESP32Encoder encoder;
 
 const int TX_PIN = 17;
 const int RX_PIN = 16;
@@ -22,13 +24,13 @@ const int Bpin = 4;
 const int Zpin = 2;
 const int stepPin = 5;
 const int dirPin = 18;
-long temp_newPosition = 0;
+volatile long temp_newPosition = 0;
 bool home = true;
 bool debug = false;
 int minMaxVelocity = 80;
-int maxEncoderValue = 1100;
-int minEncoderValue = 40;
-bool encoder_reset = false;
+int maxEncoderValue = 2100;
+int minEncoderValue = 300;
+volatile bool encoder_reset = false;
 volatile bool motor_enable = false;
 volatile bool motor_stall = false;
 volatile signed int velocity = 0;
@@ -58,9 +60,6 @@ void serialCommInTask(void * parameter) {
         motor_enable = (receivedData.substring(separator1 + 1, separator2).toInt() == 1);
         motor_stall = (receivedData.substring(separator2 + 1).toInt() == 1);
         encoder_reset = (receivedData.substring(separator3 + 1).toInt() == 1);
-        /* if (encoder_reset) {
-          encoder.setCount(0);} */
-          //temp_newPosition = 0;
       }
       //velocity = constrain(velocity, -2000, 2000); // Limit velocity to -2000 to 2000
     }
@@ -80,6 +79,17 @@ void serialCommOutTask(void * parameter) {
     Serial.printf("%d,%d,%u,%d,%d,%d\n", stallguard_result, velocity, vel_actual, motor_enable, motor_stall, temp_newPosition);
 
     vTaskDelay(2500 / portTICK_PERIOD_MS); // Print delay
+  }
+}
+
+void encoderTask(void* parameter) {
+  for (;;) {
+    long newPosition = encoder.getCount() / 2;
+    if (newPosition != temp_newPosition) {
+      //Serial.printf("Position: %ld\n", newPosition);
+      temp_newPosition = newPosition;
+    }
+    vTaskDelay(30 / portTICK_PERIOD_MS); // Encoder task delay
   }
 }
 
@@ -110,13 +120,17 @@ void moveAtVelocity(int velocity) {
     stepper->runBackward();
   }
   velocity_old = velocity;
- 
 }
 
 void mainLoop(void * parameter) {
   for (;;) {
-
-    if (motor_enable && !motor_stall) {
+    if (encoder_reset) {
+      encoder.setCount(0);
+      temp_newPosition = 0; // Synchronize the temporary position
+      velocity = 0;         // Stop motor movement
+      stepper->stopMove();  
+    }
+    else if (motor_enable && !motor_stall && !encoder_reset) {
       velocity = (velocity > minMaxVelocity) ? minMaxVelocity : (velocity < -minMaxVelocity) ? -minMaxVelocity : velocity; // Limit velocity to -50 to 50
       if (temp_newPosition < minEncoderValue && velocity > 0) {
         velocity = 0;
@@ -127,14 +141,13 @@ void mainLoop(void * parameter) {
         stepper->stopMove();
       }
       moveAtVelocity(velocity);
-      
     }
     else {
       //stepper_driver.moveAtVelocity(0);
-      stepper->setSpeedInHz(0);
-      stepper->runForward();
+      stepper->stopMove();
     }
-    vTaskDelay(50 / portTICK_PERIOD_MS); // Motor control delay
+    encoder_reset = false;
+    vTaskDelay(30 / portTICK_PERIOD_MS); // Motor control delay
   }
 }
 
@@ -160,6 +173,9 @@ void setup() {
     stepper->attachToPulseCounter(QUEUES_MCPWM_PCNT, 0, 0);
     stepper->clearPulseCounter();
   }
+ 
+  encoder.attachHalfQuad(Apin, Bpin, PCNT_UNIT_7);
+  encoder.setCount(0);
 
   pinMode(enablePin, OUTPUT);
   Serial.setRxBufferSize(200);
@@ -183,6 +199,7 @@ void setup() {
   xTaskCreatePinnedToCore(serialCommOutTask, "serialCommOutTaskTask", 4096, NULL, 2, NULL, 1);
   xTaskCreatePinnedToCore(serialCommInTask, "serialCommInTask", 4096, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(updateInfoTask, "updateInfoTask", 4096, NULL, 1, NULL, 1);
+  xTaskCreatePinnedToCore(encoderTask, "encoderTask", 4096, NULL, 1, NULL, 0);
 
 }
 
