@@ -15,15 +15,15 @@ ax1 = axs[0]
 ax2 = ax1.twinx()
 ax3 = axs[1]
 
-loadcell_line, = ax1.plot(loadcellData[:, 0], -loadcellData[:, 1], 'g', label='Loadcell')
-control_signal_line, = ax2.plot(shimmerData[:, 0], control_signal, 'r', label='Control Signal')
+loadcell_line, = ax1.plot(loadcellData[:, 0], -loadcellData[:, 1], 'tab:green', label='Loadcell')
+control_signal_line, = ax2.plot(shimmerData[:, 0], control_signal, 'tab:red', label='Control Signal')
 
 ax1.set_xlabel('Time [s]')
-ax1.set_ylabel('Loadcell [g]', color='g')
-ax2.set_ylabel('Control Signal [mV]', color='r')
+ax1.set_ylabel('Loadcell [g]', color='tab:green')
+ax2.set_ylabel('Control Signal [mV]', color='tab:red')
 
-ax1.tick_params(axis='y', colors='g')
-ax2.tick_params(axis='y', colors='r')
+ax1.tick_params(axis='y', colors='tab:green')
+ax2.tick_params(axis='y', colors='tab:red')
 
 ax1.legend(handles=[loadcell_line, control_signal_line])
 
@@ -37,8 +37,8 @@ scalefactor = min(scalefactor_min, scalefactor_max)
 # Scale ax2
 ax2.set_ylim(ax1_ylim[0] * scalefactor, ax1_ylim[1] * scalefactor)
 
-ax3.plot(shimmerData[:, 0], filtered_signals[0], 'b', label='Biceps Signal')
-ax3.plot(shimmerData[:, 0], filtered_signals[1], 'y', label='Triceps Signal')
+ax3.plot(shimmerData[:, 0], filtered_signals[0], 'tab:blue', label='Biceps Signal')
+ax3.plot(shimmerData[:, 0], filtered_signals[1], 'tab:orange', label='Triceps Signal')
 ax3.set_xlabel('Time [s]')
 ax3.set_ylabel('Filtered Signal [mV]')
 ax3.legend(loc='upper right')
