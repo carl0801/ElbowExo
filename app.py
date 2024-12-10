@@ -73,21 +73,21 @@ class MainWindow(QMainWindow):
         self.test_mode = state == 2  # True if checked, False otherwise
                 # Load the shimmer data if the test mode is enabled
 
-        self.EmgUnit.set_test_mode(self.test_mode)
+        #self.EmgUnit.set_test_mode(self.test_mode)
         
-        """ if self.test_mode:
+        if self.test_mode:
             self.shimmer_data = loadData.loadShimmer(n=2)
             self.EmgUnit.Filter.set_signal(self.shimmer_data[:, 1], self.shimmer_data[:, 2])
             self.test_control_output = self.EmgUnit.Filter.get_control_signal()*self.multiplier
-            self.test_samples = 0 """
+            self.test_samples = 0
         
-        """ if self.bind_output and not self.test_mode:
+        if self.bind_output and not self.test_mode:
             if self.update_timer_vel.isActive():
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
                 self.test_samples = len(self.shimmer_data)
                 self.bind_output_button.setText("Bind Output")
-                self.bind_output_button.setStyleSheet(design.BLUE_BUTTON) """
+                self.bind_output_button.setStyleSheet(design.BLUE_BUTTON)
 
         self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} Test Mode is {'enabled' if self.test_mode else 'disabled'}")
 
@@ -159,7 +159,7 @@ class MainWindow(QMainWindow):
             self.image_index -= 1
 
     def send_velocity_from_shimmer(self):
-        """ if self.test_mode:
+        if self.test_mode:
             if self.test_samples < len(self.shimmer_data):
                 if self.print_velocity % 10 == 0:
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[self.test_samples]*100)}")
@@ -170,14 +170,14 @@ class MainWindow(QMainWindow):
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
                 self.test_samples = len(self.shimmer_data)
-        else: """    
-        if abs(self.EmgUnit.control_output - self.control_output_prev) > 1:
-            self.control_output_prev = self.EmgUnit.control_output
-            
-            if self.print_velocity % 1 == 0:
-                self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
-            self.print_velocity += 1
-            self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
+        else:    
+            if abs(self.EmgUnit.control_output - self.control_output_prev) > 1:
+                self.control_output_prev = self.EmgUnit.control_output
+                
+                if self.print_velocity % 1 == 0:
+                    self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output*self.multiplier)}")
+                self.print_velocity += 1
+                self.serial_comm.send(f"{int(self.EmgUnit.control_output*self.multiplier)},1,0,0\n")
 
     
 

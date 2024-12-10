@@ -3,6 +3,8 @@ import glob
 import os
 import numpy as np
 import time
+import matplotlib.pyplot as plt
+import emg_signal as filter
 
 def load(n=0):
     # Find files with the highest number
@@ -56,6 +58,35 @@ def loadShimmer(n=0):
     shimmerData[:, 2] = np.int16(shimmerData[:, 2])
 
     return shimmerData
+
+def display_loaded_data(n):
+    shimmerData = loadShimmer(n)
+    figure = plt.figure()
+    plt.subplot(2, 1, 1)
+    plt.plot(shimmerData[:, 0], shimmerData[:, 1], label='Shimmer 1')
+    plt.plot(shimmerData[:, 0], shimmerData[:, 2], label='Shimmer 2')
+    plt.legend()
+    plt.xlabel('Time (s)')
+    plt.ylabel('Sensor reading')
+    plt.title('Shimmer data')
+    plt.grid(True)
+    
+    data_filter = filter.Signal()
+    data_filter.set_signal(shimmerData[:, 1], shimmerData[:, 2])
+    control_value = data_filter.get_control_signal()
+    
+    plt.subplot(2, 1, 2)
+    # Ensure control_value has the same length as shimmerData[:, 0]
+    if control_value.size == shimmerData[:, 0].size:
+        plt.plot(shimmerData[:, 0], control_value, label='Control Value')
+    else:
+        print(f"Error: control_value length {control_value.size} does not match shimmerData length {shimmerData[:, 0].size}")
+    plt.legend()
+    plt.xlabel('Time (s)')
+    plt.ylabel('Control Value')
+    plt.title('Control Value')
+    plt.grid(True)
+    plt.show()
 
 class Shimmer3:
     def __init__(self, TYPE, debug=False):
@@ -129,3 +160,6 @@ class socket:
             self.connected = False
         else:
             print("Connection is already closed.")
+
+if __name__ == '__main__':
+    display_loaded_data(5)

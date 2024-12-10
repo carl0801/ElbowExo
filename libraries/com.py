@@ -1,4 +1,4 @@
-import libraries.shimmer as shimmer
+from libraries.shimmer import Shimmer3
 import libraries.util as util
 import libraries.emg_signal as filter
 import serial
@@ -101,12 +101,15 @@ class EMG_Shimmer():
         self.down_counter = 0
         self.control_freq = 10 # Hz
         self.colleting_calibration_values = True
+        self.test_mode = False
 
     def set_test_mode(self, test_mode):
         if test_mode:
-            import libraries.loadData.Shimmer3 as shimmer
+            from libraries.loadData import Shimmer3
+            self.shimmer_device = Shimmer3(self.TYPE, debug=False)
         else:
-            import libraries.shimmer as shimmer
+            from libraries.shimmer import Shimmer3
+        self.test_mode = test_mode
 
     def find_bluetooth_com_port(self, device_name=None, target_mac=None):
         """
@@ -159,9 +162,12 @@ class EMG_Shimmer():
         return None
 
     def connect(self):
+        if self.test_mode:
+            self.initialized = True
+            return
         try:
             self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:C5:5F:90")
-            self.shimmer_device = shimmer.Shimmer3(self.TYPE, debug=True)
+            self.shimmer_device = Shimmer3(self.TYPE, debug=True)
             self.res = self.shimmer_device.connect(com_port=self.PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
             self.shimmer_device.set_sampling_rate(650)
             self.shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
@@ -246,7 +252,7 @@ class EMG_Shimmer():
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
-            print(f"Control output: {self.control_output}")
+            #print(f"Control output: {self.control_output*1500}")
             # Dynamic sleep time adjuster for specified frequency
             total_updates += 1
             time.sleep(sleep_time)
