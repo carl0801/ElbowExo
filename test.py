@@ -15,7 +15,7 @@ start_time = time.time()
 #jashda.send("-20,1,0,0\n")
 
 while True:
-    velocity -=2 #int(15 * (1 + np.sin(0.1 * 2 * np.pi * (time.time() - start_time))))-10
+    velocity = int(15 * (1 + np.sin(0.1 * 2 * np.pi * (time.time() - start_time))))-10
     jashda.send(f"{velocity},1,0,0\n")
     print(f"Velocity: {velocity}")
     time.sleep(0.1)

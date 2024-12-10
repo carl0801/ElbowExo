@@ -551,6 +551,40 @@
                                             </widget>
                                         </item>
                                         <item>
+                                            <widget class="QSlider" name="slider">
+                                                <property name="orientation">
+                                                    <enum>Qt::Horizontal</enum>
+                                                </property>
+                                                <property name="styleSheet">
+                                                    <string>
+                                                        QSlider {
+                                                            background-color: #f4f4f4;
+                                                            border: none;
+                                                        }
+                                                        QSlider::groove:horizontal {
+                                                            border: 1px solid #999999;
+                                                            height: 10px;
+                                                            background: #f4f4f4;
+                                                            margin: 0px;
+                                                        }
+                                                        QSlider::handle:horizontal {
+                                                            background: #007BFF;
+                                                            border: 1px solid #007BFF;
+                                                            width: 20px;
+                                                            margin: -5px 0;
+                                                            border-radius: 10px;
+                                                        }
+                                                    </string>
+                                                </property>
+                                                <property name="minimum">
+                                                    <number>0</number>
+                                                </property>
+                                                <property name="maximum">
+                                                    <number>20</number>
+                                                </property>
+                                            </widget>
+                                        </item>
+                                        <item>
                                             <layout class="QHBoxLayout" name="bind_output_layout">
                                                 <item>
                                                     <widget class="QPushButton" name="bind_output_button">

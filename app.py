@@ -3,7 +3,7 @@ import sys
 import numpy as np
 import datetime
 import pyqtgraph as pg
-from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QCheckBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QPushButton, QMessageBox, QLineEdit, QDesktopWidget, QCheckBox, QSlider
 from PyQt5.QtGui import QTextCursor, QPixmap, QIcon
 from PyQt5.QtCore import Qt, QTimer
 from PyQt5 import uic
@@ -32,6 +32,7 @@ class MainWindow(QMainWindow):
         self.image_index = 0
         self.image_target = 0
         self.images = design.EXO_IMAGES
+        self.multiplier = 1
 
         self.serial_comm = SerialCommunication()
         self.EmgUnit = EMG_Shimmer()
@@ -63,6 +64,9 @@ class MainWindow(QMainWindow):
         # Initialize the buttons and connect them to the corresponding functions
         for button in self.findChildren(QPushButton):
             button.clicked.connect(lambda _, name=button.objectName(): self.on_button_click(name.replace('_button', '')))
+
+         # Connect the slider's value change signal to the on_slider_change function
+        self.findChild(QSlider, 'slider').valueChanged.connect(self.on_slider_change)
     
     def update_test_mode(self, state):
         # Update the self.test_mode variable based on checkbox state
@@ -70,9 +74,9 @@ class MainWindow(QMainWindow):
                 # Load the shimmer data if the test mode is enabled
 
         if self.test_mode:
-            self.shimmer_data = loadData.loadShimmer(n=1)
+            self.shimmer_data = loadData.loadShimmer(n=2)
             self.EmgUnit.Filter.set_signal(self.shimmer_data[:, 1], self.shimmer_data[:, 2])
-            self.test_control_output = self.EmgUnit.Filter.get_control_signal()
+            self.test_control_output = self.EmgUnit.Filter.get_control_signal()*self.multiplier
             self.test_samples = 0
         
         if self.bind_output and not self.test_mode:
@@ -291,6 +295,9 @@ class MainWindow(QMainWindow):
         #    self.bar_item1.setOpts(brush='#E57373')
         pass
        
+    def on_slider_change(self):
+        self.multiplier = self.findChild(QSlider, 'slider').value()
+        print(self.multiplier)
 
     def start_block_graph_update(self):
         self.update_timer = self.create_timer(200, self.update_block_graph)
