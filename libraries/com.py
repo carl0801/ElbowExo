@@ -26,6 +26,11 @@ class SerialCommunication:
         self.vendor_id = "1A86"  
         self.product_id = "7523"  
 
+        self.baud = 460800 #115200
+        self.start_byte = 0x8e
+        self.end_byte = 0x0a
+        self.ack_pack = struct.pack('@BBB', self.start_byte, 0x01, self.end_byte)
+        self.data_request_pack = struct.pack('@BBB', self.start_byte, 0x02, self.end_byte)
 
     def find_device(self, vendor_id=None, product_id=None, keyword=None):
         """
@@ -59,7 +64,7 @@ class SerialCommunication:
             if not self.port_name:
                 #print("ESP32 not found.")
                 return False
-            self.port = serial.Serial(self.port_name, baudrate=115200, timeout=1)
+            self.port = serial.Serial(self.port_name, baudrate=self.baud, timeout=1)
             return True
         except Exception as e:
             print(f"Connection failed: {e}")
@@ -78,25 +83,50 @@ class SerialCommunication:
             return self.port.readline().decode().strip()
         return None
 
+    def read_data(self):
+        if self.port and self.port.is_open and self.port.in_waiting:
+            return self.port.readline(13)
+        return None
+
     def reset_encoder(self):
-        #self.send("0,0,0,1\n")
-        packet = self.create_packet(0, 0, 0, 1, 1, 0)
-        self.port.write(packet)
-        print("Encoder reset.")
+        packet = self.send_packet(0, 0, 1, 0)
+        if self.port and self.port.is_open:
+            self.port.write(packet)
+            print("Encoder reset.")
 
     # Function to create a packet with the 3 validity bits, 5 boolean values, and velocity(int16_t)
-    def create_packet(self, b3, mot_en, mot_stl, b6, enc_rst, velocity):
-        # Pack the 8 boolean values into a single byte little-endian
-        bool_byte = 0b00000101  # Start with validity bits (101)
-        bool_byte |= (b3 << 3)
-        bool_byte |= (mot_en << 4)
-        bool_byte |= (mot_stl << 5)
-        bool_byte |= (b6 << 6)
-        bool_byte |= (enc_rst << 7)
-
-        # Create the 3-byte packet
-        packet = struct.pack('@Bh', bool_byte, velocity)
-        return packet
+    def send_packet(self, mot_en, mot_stl, enc_rst, velocity):
+        
+        bool_byte = 0x00000010
+        bool_byte |= mot_en << 4
+        bool_byte |= mot_stl << 3
+        bool_byte |= enc_rst << 2
+        # Create the byte packet
+        packet = struct.pack('@BBhB', self.start_byte, bool_byte, velocity, self.end_byte)
+        if self.port and self.port.is_open:
+            self.port.write(packet)
+    
+    def send_ack(self):
+        if self.port and self.port.is_open:
+            self.port.write(self.ack_pack)
+   
+    def send_data_request(self):
+        if self.port and self.port.is_open:
+            self.port.write(self.data_request_pack)
+    
+    
+    
+    def unpack_data(self, data):
+        # Unpack the data
+        start, bool_byte, velocity, position, end = struct.unpack('@BBhqB', data)
+        # Extract the boolean values
+        mot_en = (bool_byte >> 4) & 0x01
+        mot_stl = (bool_byte >> 3) & 0x01
+        enc_rst = (bool_byte >> 2) & 0x01
+        return mot_en, mot_stl, enc_rst, velocity, position
+        
+        
+        
 
     
 

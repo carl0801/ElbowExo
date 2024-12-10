@@ -2,38 +2,46 @@
 #include <TMC2209.h>
 #include <Wire.h>
 #include <Arduino.h>
+#include <freertos/FreeRTOS.h>
 #include "freertos/task.h"
 #include <ESP32Encoder.h> 
 #include "FastAccelStepper.h"
 #include <soc/pcnt_struct.h>
+#include <cstring>
 
 
 #define tmc2209_connected false
 #define debug false
 
-//ESP32PWM stepper;
-ESP32Encoder encoder;
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
+
+//ESP32PWM stepper;
+ESP32Encoder encoder_dummy; // dummy encoder which will share pcnt with fastAccelStepper
+ESP32Encoder encoder; // real encoder which will be bumped to a different pcnt unit
+// watchdog timer for encoder loop
+extern bool loopTaskWDTEnabled;
+extern TaskHandle_t loopTaskHandle;
+
+// start and end bytes for serial communication packets
+#define STARTBYTE 0x8e
+#define ENDBYTE 0x0a
+// types of payload in packets
+#define INFO_TYPE uint8_t
+#define VEL_TYPE int16_t 
+#define POS_TYPE int64_t
+
 
 
 // Binary serial communication struct
 struct SerialData {
-  // the first 3 bits are used for checking validity: 101 = valid
-  bool var0 = 1;
-  bool var1 = 0;
-  bool var2 = 1;
-  bool var3 = 0;
-  bool motor_enable = 0;
-  bool motor_stall = 0;
-  bool home = 0;
-  bool encoder_reset = 0;
-  int16_t velocity = 0.0;
-  int64_t position = 0.0;
+  INFO_TYPE info = 0;
+  VEL_TYPE velocity = 0.0;
+  POS_TYPE position = 0.0;
 };
 
-SerialData control;
-SerialData dataOut;
+//volatile SerialData request;
+//volatile SerialData out;
 
 
 #ifndef tmc2209_connected
@@ -74,157 +82,185 @@ int64_t position = 0; // Current position
 int64_t new_position = 0; // New position
 int64_t max_encoder_count = 4096; // Max encoder count
 int8_t encoder_revs = 0; // Number of encoder revolutions
-// long encoder_time = 0; // Time of last encoder update
-// long encoder_time_old = 0; // Time of second last encoder update
-// long dt = 0; // Time since last encoder update
-// long vel_encoder = 0; // Encoder velocity
-// int16_t position_delta = 0; // Change in position
+
 bool encoder_reset = false; // Reset encoder position
 
 
-// Motor control variables
+// Motor requests variables
 volatile bool motor_enable = false;
-volatile signed int velocity = 0;
-volatile signed int velocity_old = 0;
-int minMaxVelocity = 80;
+bool motor_stall = false;
+bool trespassing = false;
+int max_velocity = 80;
+
+volatile int16_t velocity = 0;
+int16_t* vel_ptr = 0;
 
 // Serial communication variables
 const int SERIAL_BAUD_RATE = 460800;
-int serial_int = 0;
-float serial_timeout = 10000.0; // milliseconds
-float serial_timeout_start = 0.0;
-float serial_time_elapsed = 0.0;
+bool ack = false; // Acknowledgement flag
+bool to_ack = false; // Flag to send ack
+bool send = false; // Flag to send data
 
+// in and out packet sizes and indices
+uint8_t packet[sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + sizeof(POS_TYPE) + 2]; // packet of size begin+payload+end
+uint8_t request[sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + 2]; // size of start+payload+end
+uint8_t ack_pack[3] = {STARTBYTE, 0x01, ENDBYTE}; // ack packet
+uint8_t velocity_index = 1 + sizeof(INFO_TYPE);
+uint8_t position_index = 1 + sizeof(INFO_TYPE) + sizeof(VEL_TYPE);
+
+// serial timeout variables
 uint16_t serial_timeout_cycles = 10000;
-uint8_t serial_cycles = 0;
+uint16_t serial_cycles = 0;
 bool serial_timeout_flag = false;
+uint16_t bad_packets = 0;
+uint16_t bad_packet_limit = 10;
+
+
+// Task handle for the serial communication task
+TaskHandle_t serialInTaskHandle = NULL;
+TaskHandle_t serialOutTaskHandle = NULL;
+TaskHandle_t sendAckTaskHandle = NULL;
+TaskHandle_t stopSendTaskHandle = NULL;
+TaskHandle_t sendDataTaskHandle = NULL;
+TaskHandle_t setVelocityTaskHandle = NULL;
+TaskHandle_t motorMoveTaskHandle = NULL;
+TaskHandle_t motorMonitorTaskHandle = NULL;
+
+// ISR for serial data available
+void IRAM_ATTR onSerialData() {
+    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+    vTaskNotifyGiveFromISR(serialInTaskHandle, &xHigherPriorityTaskWoken);
+    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+}
+
+
+
+// 1st byte: info (8 bits) - (0?no_ack:ack) (0?nodata:data) (0?motor_enable) (0?encoder_reset) (0?reserved) (0?reserved) (0?reserved) (0?reserved)
 
 // Serial communication receiver task (struct)
 void serialCommInTask(void * parameter) {
   for (;;) {
-    if (Serial.available() >= 3) {  // Ensure at least 3 bytes are available
-      uint8_t packet[3];
-      Serial.readBytes(packet, 3);
+    // Wait for notification from ISR
+    ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(portMAX_DELAY));
+    // wait 2ms for the rest of the packet
+    vTaskDelay(2 / portTICK_PERIOD_MS);
+    if (Serial.available() >= 3) {
+      Serial.readBytesUntil(ENDBYTE, request, sizeof(request));
+      if (request[0] == STARTBYTE) {
+        if (bitRead(request[1], 0)) {
+          // if the packet is an acknowledgement packet
+          ack = true;
+          send = false;
+          xTaskNotifyGive(stopSendTaskHandle);
+        }
+        else {
+          if (bitRead(request[1], 1)) { 
+            // if the packet is a data packet
+            // use pointer reinterpretation to get the velocity
+            vel_ptr = reinterpret_cast<VEL_TYPE*>(&request[0]);
 
-      // Unpack the first byte into individual booleans
-      bool b0 = bitRead(packet[0], 0);
-      bool b1 = bitRead(packet[0], 1);
-      bool b2 = bitRead(packet[0], 2);
-      if (b0 && !b1 && b2) {
-        // Valid packet received
-        // Unpack the booleans from the first byte
-        bool b3 = bitRead(packet[0], 3);
-        bool b4 = bitRead(packet[0], 4);
-        bool b5 = bitRead(packet[0], 5);
-        bool b6 = bitRead(packet[0], 6);
-        bool b7 = bitRead(packet[0], 7);
+            // notify setVelocityTask to update the velocity
+            xTaskNotifyGive(setVelocityTaskHandle);
 
-        // Unpack the 16-bit velocity from the second and third bytes
-        int16_t velocity = (int16_t)packet[1] | ((int16_t)packet[2] << 8);
-        control.velocity = velocity;
-        // Use the parsed data (replace with actual logic)
-        control.motor_enable = b4;
-        //control.motor_stall = b5;
-        encoder_reset = b7;
-
+            // set both ack and send flags to true to indicate we need to send an ack
+            ack = true;
+            send = true;
+          }
+          else {
+            // if packet is not ack, and not data, then it is asking for data
+            ack = false;
+            send = true;
+          }
+         xTaskNotifyGive(serialOutTaskHandle);
+        }
         // Debug output (optional, for verification)
         #ifndef debug
-        Serial.printf("Received: {%d, %d, %d}, bools: %d, %d, %d, %d, %d, %d, %d, %d, %d\n", packet[0], packet[1], packet[2], b1, b2, b3, b4, b5, b6, b7, b8);
+        Serial.printf("Received: (%d, %d, %d, %d), velocity: %d\n", request_header[0], request_header[1], request_header[2], request_header[3], velocity);
         #endif
-
-      }
+        // Reset timeout flag
+        serial_timeout_flag = false;
+        serial_cycles = 0;
+        bad_packets = 0;
+        }
       else {
-          // Invalid packet received
-          // Debug output (optional, for verification)
-          Serial.printf("Invalid packet received. Received: {%d, %d, %d}, checkbools: %d, %d, %d", packet[0], packet[1], packet[2], b0, b1, b2);
+        bad_packets++;
       }
-      // Reset timeout flag
-      serial_cycles = 0;
-    } else {
-      serial_cycles++;
     }
-    // Timeout handling
-    if (serial_cycles > serial_timeout_cycles) {
-      stepper->stopMove();
-      stepper->setEnablePin(enablePin, false);
-      motor_enable = false;
-      control.motor_enable = false;
-      velocity = 0;
-      control.velocity = 0;
-      serial_timeout_flag = true;
-    }
-
-    // Serial communication delay
-    vTaskDelay(50 / portTICK_PERIOD_MS);
+    else {
+        // increment cycle timeout counter
+        serial_cycles++;
+      }
+      // Timeout handling
+      if (serial_cycles > serial_timeout_cycles) {
+        serial_timeout_flag = true;
+      }
+      if (bad_packets > bad_packet_limit) {
+        // Reset the serial port
+        Serial.end();
+        Serial.begin(SERIAL_BAUD_RATE);
+        bad_packets = 0;
+        #ifndef debug
+        Serial.println("Serial reset");
+        #endif
+      }
   }
 }
-
-// // serial communication receiver task (struct)
-// void serialCommInTask(void * parameter) {
-//   for (;;) {
-//     if (Serial.available() > 0) {
-//       uint8_t stream;
-//       Serial.readBytes(&stream, 3);
-      
-//       // stream now contains 3 bytes of data.
-//       // create binary array of the first byte in the byte array
-//       bool binary[8];
-//       for (int i = 0; i < 8; i++) {
-//         binary[i] = bitRead(stream, i);
-//       }
-//       // create 16-bit integer from the second and third bytes in the 'stream' byte array
-
-          
-//       //velocity = control.velocity;
-//       //motor_enable = control.motor_enable;
-//       //motor_stall = control.motor_stall;
-//       //encoder_reset = control.encoder_reset;
-//       serial_cycles = 0;
-//     }
-//     else {
-//       serial_cycles++;
-//     }
-//     if (serial_cycles > serial_timeout) {
-//       stepper->stopMove();
-//       stepper->setEnablePin(enablePin, false);
-//       motor_enable = false;
-//       velocity = 0;
-//       serial_timeout_flag = true;
-//     }
-    
-//     vTaskDelay(20 / portTICK_PERIOD_MS); // Serial communication delay
-//   }
-// }
 
 // serial communication sender task (struct)
 void serialCommOutTask(void * parameter) {
   for (;;) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    if (send) {
+      if (ack) {
+        Serial.write(ack_pack, 3);
+        ack = false;
+      }
+      else {
+        vTaskResume(sendDataTaskHandle);
+      }
+    }
+  }
+}
 
-    dataOut = control;
-    // Create a 5-byte array for the packet
-    uint8_t packet[8];
+void stopSendTask(void * parameter) {
+  for (;;) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    if (!send && ack) {
+      vTaskSuspend(sendDataTaskHandle);
+    }
+  }
+}
 
-    // Pack the booleans into the first byte
-    packet[0] = 0b00000101; // Start with validity bits (101)
-    packet[0] |= (dataOut.var3 << 3);
-    packet[0] |= (dataOut.motor_enable << 4);
-    packet[0] |= (dataOut.motor_stall << 5);
-    packet[0] |= (dataOut.home << 6);
-    packet[0] |= (dataOut.encoder_reset << 7);
+void createPacket(uint8_t * packet) {
+    packet[0] = STARTBYTE;
+    std::memcpy(packet + 1, const_cast<const int16_t*>(&velocity), sizeof(VEL_TYPE));
+    std::memcpy(packet + 1 + sizeof(VEL_TYPE), &position, sizeof(POS_TYPE));
+    packet[sizeof(VEL_TYPE) + sizeof(POS_TYPE) + 1] = ENDBYTE;
+}
 
-    // Pack the velocity (2 bytes)
-    packet[1] = dataOut.velocity & 0xFF;       // Lower byte
-    packet[2] = (dataOut.velocity >> 8) & 0xFF; // Upper byte
+void sendDataTask(void * parameter) {
+  for (;;) {
+    if (send && !ack) {
+        createPacket(packet);
+        Serial.write(packet, sizeof(packet));
+      }
+    }
+    vTaskDelay(100 / portTICK_PERIOD_MS); // Serial communication delay
+  }
 
-
-    dataOut.position = control.position;
-    // Pack the position (4 bytes)
-    packet[3] = dataOut.position & 0xFF;       // 1st byte
-    packet[4] = (dataOut.position >> 8) & 0xFF; // 2nd byte
-    packet[5] = (dataOut.position >> 16) & 0xFF; // 3rd byte
-    packet[6] = (dataOut.position >> 24) & 0xFF; // 4th byte
-    Serial.write(packet, sizeof(packet));
-    vTaskDelay(50 / portTICK_PERIOD_MS); // Print delay
+void setVelocityTask(void * parameter) {
+  for (;;) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    // dereference the pointer to get the velocity
+    velocity = *vel_ptr;
+    // Limit velocity to -50 to 50
+    velocity = (velocity > max_velocity
+    ) ? max_velocity
+     : (velocity < -max_velocity
+    ) ? -max_velocity
+     : velocity; 
+     // notify the motor move task to update the velocity
+    xTaskNotifyGive(motorMoveTaskHandle);
   }
 }
 
@@ -233,58 +269,60 @@ void encoderTask(void * parameter) {
   for (;;) {
     if (encoder_reset) {
       encoder.setCount(0);
-      control.position = 0;
+      position = 0;
       encoder_reset = false;
     }
     else {
-      //encoder_time_old = encoder_time;
-      //encoder_time = millis();
-      new_position = encoder.getCount();
-      //dt = encoder_time - encoder_time_old;
-      //position_delta = new_position - control.position;
-      
-      if (new_position != control.position) {
-        // compute velocity
-        //vel_encoder = position_delta / dt;
-        control.position = new_position;
-      }
+      position = encoder.getCount();
     }
-    vTaskDelay(40 / portTICK_PERIOD_MS); // Encoder update delay
+    vTaskDelay(20 / portTICK_PERIOD_MS); // Encoder update delay
   }
 }
 
-// motor control task
-void motorControlTask(void * parameter) {
+void motorMonitorTask(void * parameter) {
   for (;;) {
-    if (control.motor_enable && !control.motor_stall) {
-      control.velocity = (control.velocity > minMaxVelocity) ? minMaxVelocity : (control.velocity < -minMaxVelocity) ? -minMaxVelocity : control.velocity; // Limit velocity to -50 to 50
-      if (control.position < min_limit && control.velocity > 0) {
-        control.velocity = 0;
+    if ((position <= min_limit && velocity > 0) || (position >= max_limit && velocity < 0)) {
+      trespassing = true;
+    }
+    else {
+      trespassing = false;
+    }
+    if ((trespassing || motor_stall || !motor_enable) && velocity != 0) {
+      stepper->setEnablePin(enablePin, false);
+      motor_enable = false;
+      xTaskNotifyGive(motorMoveTaskHandle);
+    }
+    vTaskDelay(5 / portTICK_PERIOD_MS); // Motor monitor delay
+  }
+}
+
+// motor requests task
+void motorMoveTask(void * parameter) {
+  for (;;) {
+    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    if (motor_enable && !motor_stall && !trespassing) {
+      if (position < min_limit && velocity > 0) {
+        velocity = 0;
         stepper->stopMove();
       }
-      else if (control.position > max_limit && control.velocity < 0) {
-        control.velocity = 0;
+      else if (position > max_limit && velocity < 0) {
+        velocity = 0;
         stepper->stopMove();
       }
-      if (control.velocity != velocity_old) {
-        stepper->setSpeedInHz(abs(control.velocity));
-        velocity_old = control.velocity;
-      }
-      if (control.velocity != 0) {
-        if (control.velocity > 0) {
+      else {
+        stepper->setSpeedInHz(abs(velocity));
+        if (velocity > 0) {
           stepper->runForward();
-          // use ledcWrite to control the LED
         }
-        else if (control.velocity < 0) {
+        else if (velocity < 0) {
           stepper->runBackward();
         }
       }
     }
     else {
       stepper->setSpeedInHz(0);
-      stepper->runForward();
+      stepper->stopMove();
     }
-    vTaskDelay(20 / portTICK_PERIOD_MS); // Motor control delay
   }
 }
 
@@ -359,7 +397,11 @@ void mainLoop(void * parameter) {
   for (;;) {
 
     if (motor_enable && !motor_stall) {
-      velocity = (velocity > minMaxVelocity) ? minMaxVelocity : (velocity < -minMaxVelocity) ? -minMaxVelocity : velocity; // Limit velocity to -50 to 50
+      velocity = (velocity > max_velocity
+    ) ? max_velocity
+     : (velocity < -max_velocity
+    ) ? -max_velocity
+     : velocity; // Limit velocity to -50 to 50
       if (position < min_limit && velocity > 0) {
         velocity = 0;
         stepper->stopMove();
@@ -376,7 +418,7 @@ void mainLoop(void * parameter) {
       stepper->setSpeedInHz(0);
       stepper->runForward();
     }
-    vTaskDelay(50 / portTICK_PERIOD_MS); // Motor control delay
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Motor requests delay
   }
 }
 
@@ -457,11 +499,12 @@ void setup() {
 
   // Encoder Setup
   ESP32Encoder::useInternalWeakPullResistors = puType::up;
+  encoder_dummy.attachSingleEdge(32, 33);
   encoder.attachSingleEdge(Apin, Bpin);
-  //encoder.attachHalfQuad(Apin, Bpin);
   encoder.clearCount();
   encoder.setFilter(1023);
-
+  //loopTaskWDTEnabled = true;
+  //esp_task_wdt_add(loopTaskHandle);
 
 
   #ifndef tmc2209_connected
@@ -496,13 +539,14 @@ void setup() {
   printf("stepper pcnt unit: %d\n", stepper->pulseCounterAttached());
 
 
-  xTaskCreatePinnedToCore(serialCommOutTask, "serialCommOutTaskTask", 4096, NULL,2, NULL, 1);
-  xTaskCreatePinnedToCore(serialCommInTask, "serialCommInTask", 4096, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(encoderTask, "encoderTask", 4096, NULL, 1, NULL, 0);
-  xTaskCreatePinnedToCore(motorControlTask, "MainLoopTask", 4096, NULL, 1, NULL, 0);
-
-  //xTaskCreatePinnedToCore(updateInfoTask, "updateInfoTask", 4096, NULL, 1, NULL, 1);
-  // xTaskCreate(checkMotorStalled, "CheckMotorStalledTask", 4096, NULL, 1, NULL);
+  xTaskCreate(serialCommOutTask, "serialCommOutTask", 4096, NULL, 1, &serialOutTaskHandle);
+  xTaskCreate(serialCommInTask, "serialCommInTask", 4096, NULL, 1, &serialInTaskHandle);
+  xTaskCreate(encoderTask, "encoderTask", 4096, NULL, 2, NULL);
+  xTaskCreate(motorMoveTask, "motorMoveTask", 4096, NULL, 2, &motorMoveTaskHandle);
+  xTaskCreate(motorMonitorTask, "motorMonitorTask", 4096, NULL, 2, &motorMonitorTaskHandle);
+  xTaskCreate(setVelocityTask, "setVelocityTask", 4096, NULL, 1, &setVelocityTaskHandle);
+  xTaskCreate(sendDataTask, "sendDataTask", 4096, NULL, 1, &sendDataTaskHandle);
+  xTaskCreate(stopSendTask, "stopSendTask", 4096, NULL, 1, &stopSendTaskHandle);
 }
 
 
