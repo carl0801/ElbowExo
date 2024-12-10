@@ -63,7 +63,7 @@ class Shimmer3:
         self.data = loadShimmer(self.n)
         self.idx = 0
         self.last_time = time.time()
-        self.sampling_rate = 0
+        self.sampling_rate = 650
     def connect(self, com_port, write_rtc=True, update_all_properties=True, reset_sensors=True):
         pass
     def set_sampling_rate(self, sampling_rate):

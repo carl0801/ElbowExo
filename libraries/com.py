@@ -102,6 +102,12 @@ class EMG_Shimmer():
         self.control_freq = 10 # Hz
         self.colleting_calibration_values = True
 
+    def set_test_mode(self, test_mode):
+        if test_mode:
+            import libraries.loadData.Shimmer3 as shimmer
+        else:
+            import libraries.shimmer as shimmer
+
     def find_bluetooth_com_port(self, device_name=None, target_mac=None):
         """
         Find the active COM port of a Bluetooth device by its MAC address or device name.
