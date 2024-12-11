@@ -102,6 +102,10 @@ class EMG_Shimmer():
         self.control_freq = 10 # Hz
         self.colleting_calibration_values = True
         self.test_mode = False
+        """ self.test_timer = 0
+        self.total_amount_of_samples = 0
+        self.test_data = False
+        self.temp_timer = 0 """
 
     def set_test_mode(self, test_mode):
         if test_mode:
@@ -191,6 +195,7 @@ class EMG_Shimmer():
             # Start the threads
             self.data_thread.start()
             self.process_thread.start()
+            #self.temp_timer = time.time()
             return True
         except Exception as e:
             print(f"Error starting Shimmer: {e}")
@@ -228,6 +233,21 @@ class EMG_Shimmer():
                 sensor1_values = np.array([packet[3] for packet in packets])
                 sensor2_values = np.array([packet[4] for packet in packets])
                 num_new = len(sensor1_values)
+                #for every packet of data, increment the total amount of samples
+                """ if time.time() - self.temp_timer > 10 and not self.test_data:
+                    self.test_timer = time.time()
+                    self.test_data = True
+                if self.test_data:
+                    self.total_amount_of_samples += num_new
+                    if time.time() - self.test_timer > 10:
+                        mah = time.time() - self.test_timer
+                        print("Time passed: ",mah )
+                        print(f"Total amount of samples: {self.total_amount_of_samples}")
+                        print(f"Total amount of samples per second: {self.total_amount_of_samples/mah}")
+                        # stop program
+                        self.running = False
+                        exit()
+                        self.test_data = False """
 
                 # Insert new data in circular fashion
                 for i in range(num_new):
@@ -252,7 +272,8 @@ class EMG_Shimmer():
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
-            #print(f"Control output: {self.control_output*1500}")
+            print(sensor1_sequential[-1])
+            #print(f"Control output: {self.control_output}")
             # Dynamic sleep time adjuster for specified frequency
             total_updates += 1
             time.sleep(sleep_time)
