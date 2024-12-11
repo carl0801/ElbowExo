@@ -170,9 +170,9 @@ class EMG_Shimmer():
             self.initialized = True
             return
         try:
-            self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:C5:5F:90")
+            #self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:C5:5F:90")
             self.shimmer_device = Shimmer3(self.TYPE, debug=True)
-            self.res = self.shimmer_device.connect(com_port=self.PORT, write_rtc=True, update_all_properties=True, reset_sensors=True)
+            self.res = self.shimmer_device.connect(com_port="COM7", write_rtc=True, update_all_properties=True, reset_sensors=True)
             self.shimmer_device.set_sampling_rate(650)
             self.shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
             if self.res:

@@ -1,4 +1,4 @@
-#include <TMC2209.h>
+//#include <TMC2209.h>
 #include <Wire.h>
 #include <Arduino.h>
 #include "freertos/task.h"
@@ -16,13 +16,13 @@ ESP32Encoder encoder;
 const int TX_PIN = 17;
 const int RX_PIN = 16;
 const int stallGuardPin = 15;
-const int enablePin = 19;
+const int enablePin = 5;
 const int SERIAL_BAUD_RATE = 115200;
 const uint8_t RUN_CURRENT_PERCENT = 100;
 const int Apin = 22;
-const int Bpin = 4;
-const int Zpin = 2;
-const int stepPin = 5;
+const int Bpin = 23;
+const int Zpin = 34;
+const int stepPin = 19;
 const int dirPin = 18;
 volatile long temp_newPosition = 0;
 bool home = true;
@@ -37,7 +37,7 @@ volatile signed int velocity = 0;
 volatile signed int velocity_old = 0;
 uint16_t vel_actual = 0;
 uint16_t stallguard_result = 0;
-TMC2209 stepper_driver;
+//TMC2209 stepper_driver;
 int serial_int = 0;
 float serial_timeout = 10000.0; // milliseconds
 float serial_timeout_start = 0.0;
@@ -52,7 +52,8 @@ void serialCommInTask(void * parameter) {
       int separator2 = receivedData.indexOf(',', separator1 + 1);
       int separator3 = receivedData.indexOf(',', separator2 + 1);
       serial_time_elapsed = millis(); // sætter et flag for at holde øje med, hvornår der er sidst blevet modtaget data
-      stepper_driver.enable();
+      //stepper_driver.enable();
+      digitalWrite(enablePin, LOW);
       motor_enable = true;
       if (separator1 != -1 && separator2 != -1 && separator3 != -1) {
         // Parse values from the received string
@@ -65,7 +66,8 @@ void serialCommInTask(void * parameter) {
     }
     if (millis() - serial_time_elapsed > serial_timeout) {
       motor_enable = false;
-      stepper_driver.disable();
+      //stepper_driver.disable();
+      digitalWrite(enablePin, HIGH);
       velocity = 0;
     } 
     Serial.read(); // Clear the buffer
@@ -78,7 +80,7 @@ void serialCommOutTask(void * parameter) {
   for (;;) {
     Serial.printf("%d,%d,%u,%d,%d,%d\n", stallguard_result, velocity, vel_actual, motor_enable, motor_stall, temp_newPosition);
 
-    vTaskDelay(2500 / portTICK_PERIOD_MS); // Print delay
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Print delay
   }
 }
 
@@ -93,14 +95,14 @@ void encoderTask(void* parameter) {
   }
 }
 
-void updateInfoTask(void * parameter) {
+/* void updateInfoTask(void * parameter) {
 for (;;) {
   vel_actual = stepper_driver.getInterstepDuration();
   stallguard_result = stepper_driver.getStallGuardResult();
 
   vTaskDelay(1000 / portTICK_PERIOD_MS); // Print delay
   }
-}
+} */
 
 void moveAtVelocity(int velocity) {
   if (velocity == 0) {
@@ -182,7 +184,7 @@ void setup() {
   Serial.setRxBufferSize(200);
   Serial.begin(115200);
 
-  stepper_driver.setup(serial_stream);
+  /* stepper_driver.setup(serial_stream);
   stepper_driver.setHardwareEnablePin(enablePin);
   stepper_driver.enable();
   motor_enable = true;
@@ -193,13 +195,13 @@ void setup() {
   stepper_driver.setHoldCurrent(50);
   stepper_driver.setMicrostepsPerStep(0);
   stepper_driver.disableCoolStep();
-  stepper_driver.setStallGuardThreshold(0);
+  stepper_driver.setStallGuardThreshold(0); */
  
 
   xTaskCreatePinnedToCore(mainLoop, "MainLoopTask", 4096, NULL, 1, NULL, 0);
   xTaskCreatePinnedToCore(serialCommOutTask, "serialCommOutTaskTask", 4096, NULL, 2, NULL, 1);
   xTaskCreatePinnedToCore(serialCommInTask, "serialCommInTask", 4096, NULL, 1, NULL, 1);
-  xTaskCreatePinnedToCore(updateInfoTask, "updateInfoTask", 4096, NULL, 1, NULL, 1);
+  //xTaskCreatePinnedToCore(updateInfoTask, "updateInfoTask", 4096, NULL, 1, NULL, 1);
   xTaskCreatePinnedToCore(encoderTask, "encoderTask", 4096, NULL, 1, NULL, 0);
 
 }

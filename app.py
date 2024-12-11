@@ -236,7 +236,7 @@ class MainWindow(QMainWindow):
             self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Disconnected from the serial port.")
         else:
             if self.serial_comm.connect():
-                self.update_serial_timer = self.create_timer(50, self.update_serial_data)
+                self.update_serial_timer = self.create_timer(1, self.update_serial_data)
                 self.connection_status = True
                 self.connect_serial_button.setText("Disconnect from Serial")
                 self.connect_serial_button.setStyleSheet(design.RED_BUTTON)
