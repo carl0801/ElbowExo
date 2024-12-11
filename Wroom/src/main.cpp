@@ -172,6 +172,7 @@ void setup() {
     stepper->setLinearAcceleration(20);
     stepper->attachToPulseCounter(QUEUES_MCPWM_PCNT, 0, 0);
     stepper->clearPulseCounter();
+    stepper->setJumpStart(1);
   }
  
   encoder.attachHalfQuad(Apin, Bpin, PCNT_UNIT_7);

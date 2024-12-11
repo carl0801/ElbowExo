@@ -9,14 +9,20 @@ jashda.connect()
 
 
 start_time = time.time()
+reached_20 = False
+# start by ramping up the velocity to 20 then ramp down to -20 then ramp up to 20 and always multiply with random noise between -2 and 2
+while time.time() - start_time < 200:
+    if velocity < 30 and not reached_20:
+        velocity += 1
+        # set flag
+        if velocity == 30:
+            reached_20 = True
+    elif reached_20:
+        velocity -= 1
+        if velocity == -30:
+            reached_20 = False
 
-# make a control output simulated as a sinusoidal signal with a frequency of 0.1 Hz and amplitude of 15
-
-#jashda.send("-20,1,0,0\n")
-
-while True:
-    velocity = int(15 * (1 + np.sin(0.1 * 2 * np.pi * (time.time() - start_time))))-10
-    jashda.send(f"{velocity},1,0,0\n")
     print(f"Velocity: {velocity}")
+    jashda.send(f"{velocity},1,0,0\n")
     time.sleep(0.1)
 

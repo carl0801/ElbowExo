@@ -76,9 +76,9 @@ class MainWindow(QMainWindow):
         #self.EmgUnit.set_test_mode(self.test_mode)
         
         if self.test_mode:
-            self.shimmer_data = loadData.loadShimmer(n=2)
+            self.shimmer_data = loadData.loadShimmer(n=6)
             self.EmgUnit.Filter.set_signal(self.shimmer_data[:, 1], self.shimmer_data[:, 2])
-            self.test_control_output = self.EmgUnit.Filter.get_control_signal()*self.multiplier
+            self.test_control_output = self.EmgUnit.Filter.get_control_signal()#*self.multiplier
             self.test_samples = 0
         
         if self.bind_output and not self.test_mode:
@@ -164,8 +164,8 @@ class MainWindow(QMainWindow):
                 if self.print_velocity % 10 == 0:
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.test_control_output[self.test_samples]*100)}")
                 self.print_velocity += 1
-                self.test_samples +=10
-                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*100)},1,0,0\n")
+                self.test_samples +=20
+                self.serial_comm.send(f"{int(self.test_control_output[self.test_samples]*18)},1,0,0\n")
             else:
                 self.stop_send_velocity_from_shimmer()
                 self.bind_output = False
@@ -182,7 +182,7 @@ class MainWindow(QMainWindow):
     
 
     def start_send_velocity_from_shimmer(self):
-        self.update_timer_vel = self.create_timer(200, self.send_velocity_from_shimmer)
+        self.update_timer_vel = self.create_timer(50, self.send_velocity_from_shimmer)
     
     def stop_send_velocity_from_shimmer(self):
         self.update_timer_vel.stop()
@@ -210,7 +210,7 @@ class MainWindow(QMainWindow):
         # Add the block graph to the layout
         self.muscle_graph_layout.addWidget(self.block_graph, alignment=Qt.AlignCenter)
 
-    def create_timer(self, frequency, callback, single_shot=False):
+    def create_timer(self, millis, callback, single_shot=False):
         '''Create a QTimer object that triggers the callback function at the specified frequency.'''
         timer = QTimer()
         timer.timeout.connect(callback)
@@ -218,7 +218,7 @@ class MainWindow(QMainWindow):
         if single_shot:
             timer.setSingleShot(True)
         else:
-            timer.start(frequency) 
+            timer.start(millis) 
         
         return timer
 

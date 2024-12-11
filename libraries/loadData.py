@@ -4,7 +4,8 @@ import os
 import numpy as np
 import time
 import matplotlib.pyplot as plt
-import emg_signal as filter
+if __name__ == '__main__':
+    import emg_signal as filter
 
 def load(n=0):
     # Find files with the highest number
@@ -51,6 +52,8 @@ def loadShimmer(n=0):
     files.sort(key=lambda x: list(map(float, os.path.splitext(os.path.basename(x))[0].split('-')[0].split('.'))), reverse=True)
     # The nth latest reading
     shimmerData = pickle.load(open(files[n], 'rb'))
+    # print files[n] name
+    print(files[n])
     shimmerData = np.array(shimmerData)
 
     # Make sure shimmer data is a signed int and there is no overflow
@@ -162,4 +165,4 @@ class socket:
             print("Connection is already closed.")
 
 if __name__ == '__main__':
-    display_loaded_data(5)
+    display_loaded_data(6)
