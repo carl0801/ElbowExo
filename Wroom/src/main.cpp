@@ -10,26 +10,35 @@
 #include <cstring>
 
 
-#define tmc2209_connected false
-#define debug false
+#define TMC2209 false
+#define WD true
+#define DEBUG false
+#define BINARY_SERIAL true
+#define SERIAL_INTERRUPT false
 
 FastAccelStepperEngine engine = FastAccelStepperEngine();
 FastAccelStepper *stepper = NULL;
 
 //ESP32PWM stepper;
-ESP32Encoder encoder_dummy; // dummy encoder which will share pcnt with fastAccelStepper
+//ESP32Encoder encoder_dummy; // dummy encoder which will share pcnt with fastAccelStepper
 ESP32Encoder encoder; // real encoder which will be bumped to a different pcnt unit
-// watchdog timer for encoder loop
+// WD timer for encoder loop
+#if WD
 extern bool loopTaskWDTEnabled;
 extern TaskHandle_t loopTaskHandle;
+#endif
 
 // start and end bytes for serial communication packets
-#define STARTBYTE 0x8e
+#define STARTBYTE 0xff
 #define ENDBYTE 0x0a
+#define ACKBYTE 0x06
+#define NACKBYTE 0x15
+#define DATABYTE 0xe4
 // types of payload in packets
 #define INFO_TYPE uint8_t
 #define VEL_TYPE int16_t 
-#define POS_TYPE int64_t
+#define POS_TYPE int16_t
+#define CHKSUM_TYPE uint16_t
 
 
 
@@ -44,7 +53,7 @@ struct SerialData {
 //volatile SerialData out;
 
 
-#ifndef tmc2209_connected
+#if TMC2209
 
 HardwareSerial & serial_stream = Serial2;
 
@@ -58,8 +67,8 @@ uint16_t stallguard_result = 0;
 TMC2209 stepper_driver;
 volatile bool motor_stall = false;
 
-// IRAM_ATTR interrupt handler
-void IRAM_ATTR handleInterrupt() {
+// IRAM_ATTR SERIAL_INTERRUPT handler
+void IRAM_ATTR handleSERIAL_INTERRUPT() {
   motor_stall = true;
 }
 
@@ -72,16 +81,22 @@ const int dirPin = 18;
 
 // Encoder variables
 const int Apin = 22;
-const int Bpin = 4;
+const int Bpin = 23;
 const int Zpin = 21;
 //bool home = false; // whether motor is homed
 //bool encoder_reset = false;
 int64_t max_limit = 1100; // Max position soft limit
 int64_t min_limit = 100; // Min position soft limit
 int64_t position = 0; // Current position
+int16_t* pos_ptr = 0;
 int64_t new_position = 0; // New position
 int64_t max_encoder_count = 4096; // Max encoder count
 int8_t encoder_revs = 0; // Number of encoder revolutions
+
+int16_t encoder_offset = 5000; // Encoder offset
+
+uint8_t info = 0; // Info byte
+
 
 bool encoder_reset = false; // Reset encoder position
 
@@ -96,17 +111,18 @@ volatile int16_t velocity = 0;
 int16_t* vel_ptr = 0;
 
 // Serial communication variables
-const int SERIAL_BAUD_RATE = 460800;
+const int SERIAL_BAUD_RATE = 115200;//460800;
 bool ack = false; // Acknowledgement flag
 bool to_ack = false; // Flag to send ack
-bool send = false; // Flag to send data
+bool send = true; // Flag to send data
 
 // in and out packet sizes and indices
-uint8_t packet[sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + sizeof(POS_TYPE) + 2]; // packet of size begin+payload+end
-uint8_t request[sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + 2]; // size of start+payload+end
-uint8_t ack_pack[3] = {STARTBYTE, 0x01, ENDBYTE}; // ack packet
-uint8_t velocity_index = 1 + sizeof(INFO_TYPE);
-uint8_t position_index = 1 + sizeof(INFO_TYPE) + sizeof(VEL_TYPE);
+uint8_t packet[2 + sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + sizeof(POS_TYPE) + sizeof(CHKSUM_TYPE) + 1]; // packet of size start+type+payload+checksum+end
+uint8_t request[2 + sizeof(INFO_TYPE) + sizeof(VEL_TYPE) + sizeof(CHKSUM_TYPE) + 1]; // size of start+type+payload+checksum+end
+uint8_t ack_pack[sizeof(CHKSUM_TYPE)+3]; // 3 for start,ack,end bytes //[3] = {STARTBYTE, ACKBYTE, ENDBYTE}; // ack packet add checksum of received packet?
+uint8_t velocity_index = 2 + sizeof(INFO_TYPE); // 2 for start and packet type bytes
+uint8_t position_index = 2 + sizeof(INFO_TYPE) + sizeof(VEL_TYPE); // 2 for start and packet type bytes + size of velocity
+CHKSUM_TYPE checksum = 0;
 
 // serial timeout variables
 uint16_t serial_timeout_cycles = 10000;
@@ -115,6 +131,10 @@ bool serial_timeout_flag = false;
 uint16_t bad_packets = 0;
 uint16_t bad_packet_limit = 10;
 
+
+#if DEBUG
+size_t maxWidth = snprintf(nullptr, 0, "V %d, Position: %lld", 99999, 999999999999999999);
+#endif
 
 // Task handle for the serial communication task
 TaskHandle_t serialInTaskHandle = NULL;
@@ -126,24 +146,30 @@ TaskHandle_t setVelocityTaskHandle = NULL;
 TaskHandle_t motorMoveTaskHandle = NULL;
 TaskHandle_t motorMonitorTaskHandle = NULL;
 
+BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+#if SERIAL_INTERRUPT
 // ISR for serial data available
 void IRAM_ATTR onSerialData() {
-    BaseType_t xHigherPriorityTaskWoken = pdFALSE;
     vTaskNotifyGiveFromISR(serialInTaskHandle, &xHigherPriorityTaskWoken);
-    portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+    //portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
 }
-
+#endif
 
 
 // 1st byte: info (8 bits) - (0?no_ack:ack) (0?nodata:data) (0?motor_enable) (0?encoder_reset) (0?reserved) (0?reserved) (0?reserved) (0?reserved)
 
+#if BINARY_SERIAL
+
 // Serial communication receiver task (struct)
 void serialCommInTask(void * parameter) {
   for (;;) {
+    #if SERIAL_INTERRUPT
     // Wait for notification from ISR
     ulTaskNotifyTake(pdTRUE, pdMS_TO_TICKS(portMAX_DELAY));
     // wait 2ms for the rest of the packet
     vTaskDelay(2 / portTICK_PERIOD_MS);
+    #endif
     if (Serial.available() >= 3) {
       Serial.readBytesUntil(ENDBYTE, request, sizeof(request));
       if (request[0] == STARTBYTE) {
@@ -173,8 +199,8 @@ void serialCommInTask(void * parameter) {
           }
          xTaskNotifyGive(serialOutTaskHandle);
         }
-        // Debug output (optional, for verification)
-        #ifndef debug
+        // DEBUG output (optional, for verification)
+        #if DEBUG
         Serial.printf("Received: (%d, %d, %d, %d), velocity: %d\n", request_header[0], request_header[1], request_header[2], request_header[3], velocity);
         #endif
         // Reset timeout flag
@@ -193,32 +219,92 @@ void serialCommInTask(void * parameter) {
       // Timeout handling
       if (serial_cycles > serial_timeout_cycles) {
         serial_timeout_flag = true;
+
       }
       if (bad_packets > bad_packet_limit) {
         // Reset the serial port
         Serial.end();
         Serial.begin(SERIAL_BAUD_RATE);
         bad_packets = 0;
-        #ifndef debug
+        #if DEBUG
         Serial.println("Serial reset");
         #endif
       }
+    #if !SERIAL_INTERRUPT
+    vTaskDelay(20 / portTICK_PERIOD_MS);
+    #endif
   }
 }
+
+// Function to calculate the checksum byte
+int16_t calculateChecksum(uint8_t value1, int16_t value2, int16_t value3) {
+    checksum = 0 ^ value1; // XOR info byte
+    checksum ^= (value2 & 0xFF);       // XOR lower byte of value2
+    checksum ^= ((value2 >> 8) & 0xFF); // XOR upper byte of value2
+    checksum ^= (value3 & 0xFF);       // XOR lower byte of value3
+    checksum ^= ((value3 >> 8) & 0xFF); // XOR upper byte of value3
+    return checksum;
+}
+
+// void prepInfoByte(bool motor_enable) {
+//     info = 0;
+//     info |= motor_enable << 5;
+//     // TODO: Finish info byte (add more flags)
+// }
+
+// void createPacket(uint8_t * packet) {
+//     packet[0] = STARTBYTE;
+//     packet[1] = STARTBYTE;
+//     info |= motor_enable << 5;
+//     packet[2] = info;
+//     std::memcpy(packet + 3, const_cast<const int16_t*>(&velocity), sizeof(VEL_TYPE));
+//     int16_t truncated_position = static_cast<int16_t>(position); // Cast int64_t to int16_t
+//     std::memcpy(packet + 3 + sizeof(VEL_TYPE), &position, sizeof(POS_TYPE));
+//     checksum = calculateChecksum(packet[3], velocity, position);
+//     packet[2 + sizeof(INFO_TYPE) + (VEL_TYPE) + sizeof(POS_TYPE)] = checksum & 0xFF;
+//     packet[2 + sizeof(INFO_TYPE) + (VEL_TYPE) + sizeof(POS_TYPE) + 1] = checksum >> 8;
+//     packet[2 + sizeof(INFO_TYPE) + (VEL_TYPE) + sizeof(POS_TYPE) + sizeof(CHKSUM_TYPE)] = ENDBYTE;
+// }
+
+  void createPacket(uint8_t * packet) {
+      packet[0] = STARTBYTE;
+      packet[1] = STARTBYTE;
+      info |= motor_enable << 5;
+      packet[2] = info;
+      
+      // Copy velocity (int16_t) to packet
+      std::memcpy(packet + 3, const_cast<const int16_t*>(&velocity), sizeof(VEL_TYPE));
+      
+      // Cast int64_t position to int16_t and copy to packet
+      int16_t truncated_position = static_cast<int16_t>(position) + encoder_offset;
+      std::memcpy(packet + 3 + sizeof(VEL_TYPE), &truncated_position, sizeof(POS_TYPE));
+      
+      // Calculate checksum
+      checksum = calculateChecksum(packet[2], velocity, truncated_position);
+      packet[3 + sizeof(VEL_TYPE) + sizeof(POS_TYPE)] = checksum & 0xFF;
+      packet[3 + sizeof(VEL_TYPE) + sizeof(POS_TYPE) + 1] = checksum >> 8;
+      
+      // Set end byte
+      packet[3 + sizeof(VEL_TYPE) + sizeof(POS_TYPE) + sizeof(CHKSUM_TYPE)] = ENDBYTE;
+  }
 
 // serial communication sender task (struct)
 void serialCommOutTask(void * parameter) {
   for (;;) {
-    ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    //ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
     if (send) {
-      if (ack) {
-        Serial.write(ack_pack, 3);
+      if (false) {// if (ack) {
+        Serial.write(ack_pack, sizeof(ack_pack));
         ack = false;
       }
       else {
-        vTaskResume(sendDataTaskHandle);
+        //vTaskResume(sendDataTaskHandle);
+        createPacket(packet);
+        Serial.write(packet, sizeof(packet));
+        //printf("Packet sent: %d, %d\n", velocity, position);
       }
     }
+    vTaskDelay(20 / portTICK_PERIOD_MS); // Serial communication delay
   }
 }
 
@@ -231,13 +317,6 @@ void stopSendTask(void * parameter) {
   }
 }
 
-void createPacket(uint8_t * packet) {
-    packet[0] = STARTBYTE;
-    std::memcpy(packet + 1, const_cast<const int16_t*>(&velocity), sizeof(VEL_TYPE));
-    std::memcpy(packet + 1 + sizeof(VEL_TYPE), &position, sizeof(POS_TYPE));
-    packet[sizeof(VEL_TYPE) + sizeof(POS_TYPE) + 1] = ENDBYTE;
-}
-
 void sendDataTask(void * parameter) {
   for (;;) {
     if (send && !ack) {
@@ -247,6 +326,36 @@ void sendDataTask(void * parameter) {
     }
     vTaskDelay(100 / portTICK_PERIOD_MS); // Serial communication delay
   }
+#else
+
+#endif
+
+#if DEBUG
+
+void printPaddedString(int velocity, int64_t position, size_t width) {
+    char buffer[width + 1]; // +1 for the null terminator
+    snprintf(buffer, sizeof(buffer), "V %d, Position: %lld", velocity, position);
+    Serial.printf("%-*s\r", width, buffer); // Left-align and pad the string
+}
+
+// serial communication sender task (struct)
+void serialCommOutTask(void * parameter) {
+  for (;;) {
+    //ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
+    send = true;
+    if (send) {
+      if (ack) {
+        Serial.println("ACK");
+        ack = false;
+      }
+      else {
+        printPaddedString(velocity, position, maxWidth);
+      }
+    }
+    vTaskDelay(100 / portTICK_PERIOD_MS); // Serial communication delay
+  }
+}
+#endif
 
 void setVelocityTask(void * parameter) {
   for (;;) {
@@ -292,7 +401,7 @@ void motorMonitorTask(void * parameter) {
       motor_enable = false;
       xTaskNotifyGive(motorMoveTaskHandle);
     }
-    vTaskDelay(5 / portTICK_PERIOD_MS); // Motor monitor delay
+    vTaskDelay(50 / portTICK_PERIOD_MS); // Motor monitor delay
   }
 }
 
@@ -326,7 +435,7 @@ void motorMoveTask(void * parameter) {
   }
 }
 
-#ifndef tmc2209_connected
+#if TMC2209
 
 SerialData serialParseString(String receivedData) {
   int separator1 = receivedData.indexOf(',');
@@ -474,16 +583,15 @@ void setup() {
   //pinMode(2, OUTPUT);
  
   // Serial communication setup
-  Serial.setRxBufferSize(64);
-  Serial.setTxBufferSize(64);
-  Serial.begin(115200);
-
-
+  Serial.setRxBufferSize(200);
+  Serial.setTxBufferSize(200);
+  Serial.begin(SERIAL_BAUD_RATE);
+  //Serial.onReceive(serialfunction);
   // Stepper setup
   engine.init();
   stepper = engine.stepperConnectToPin(stepPin);
   if (stepper) {
-    stepper->attachToPulseCounter(PCNT_UNIT_7, 0, 0);
+    stepper->attachToPulseCounter(PCNT_UNIT_6);
     stepper->setDirectionPin(dirPin);
     stepper->setEnablePin(enablePin);
     stepper->setAutoEnable(true);
@@ -499,18 +607,19 @@ void setup() {
 
   // Encoder Setup
   ESP32Encoder::useInternalWeakPullResistors = puType::up;
-  encoder_dummy.attachSingleEdge(32, 33);
+  //encoder_dummy.attachSingleEdge(32, 33);
   encoder.attachSingleEdge(Apin, Bpin);
   encoder.clearCount();
   encoder.setFilter(1023);
-  //loopTaskWDTEnabled = true;
-  //esp_task_wdt_add(loopTaskHandle);
+  #if WD
+  loopTaskWDTEnabled = true;
+  esp_task_wdt_add(loopTaskHandle);
+  #endif
 
-
-  #ifndef tmc2209_connected
+  #if TMC2209
 
   // Set stalled motor flag with function stored in IRAM
-  attachInterrupt(digitalPinToInterrupt(stallGuardPin), handleInterrupt, RISING);
+  attachSERIAL_INTERRUPT(digitalPinToSERIAL_INTERRUPT(stallGuardPin), handleSERIAL_INTERRUPT, RISING);
 
   // TMC2209 driver (uart) setup
   pinMode(stallGuardPin, INPUT);
@@ -545,8 +654,10 @@ void setup() {
   xTaskCreate(motorMoveTask, "motorMoveTask", 4096, NULL, 2, &motorMoveTaskHandle);
   xTaskCreate(motorMonitorTask, "motorMonitorTask", 4096, NULL, 2, &motorMonitorTaskHandle);
   xTaskCreate(setVelocityTask, "setVelocityTask", 4096, NULL, 1, &setVelocityTaskHandle);
+  #if BINARY_SERIAL
   xTaskCreate(sendDataTask, "sendDataTask", 4096, NULL, 1, &sendDataTaskHandle);
   xTaskCreate(stopSendTask, "stopSendTask", 4096, NULL, 1, &stopSendTaskHandle);
+  #endif
 }
 
 

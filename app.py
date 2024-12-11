@@ -178,7 +178,7 @@ class MainWindow(QMainWindow):
                     self.handle_console_output(f"{datetime.datetime.now().strftime('%H:%M')} - Sent velocity: {int(self.EmgUnit.control_output)}")
                 self.print_velocity += 1
                 #self.serial_comm.send(f"{int(self.EmgUnit.control_output)},1,0,0\n")
-                elf.serial_comm.send_packet(1,0,0,int(self.EmgUnit.control_output))
+                self.serial_comm.send_packet(1,0,0,int(self.EmgUnit.control_output))
 
     
 
@@ -295,35 +295,35 @@ class MainWindow(QMainWindow):
     def update_serial_data(self):
         if self.connection_status:
             try:
-                data = self.serial_comm.read_data()
-                if data:
-                    if len(data) == 3:
-                        # this is probably an ack message
-                        start, info, end = struct.unpack('@BBB', data)
-                        if bool(info & 0b00000001):
+                data = self.serial_comm.rl.read_data()
+                if data is not None:
+                    if data == "ACK":
+                        pass
+                        start, ack, new_checksum, end = data#struct.unpack('<BBHB', data)
+                        if new_checksum == self.serial_comm.rl.checksum:
                             # ack received
                             pass
                         else:
                             # bad ack or malformed packet
                             print(f"Bad ack or malformed packet received: {data}") 
                         
-                    elif len(data) == 13:  # Ensure we have the complete struct
+                    elif len(data) == 6:  # Ensure we have the complete struct
                         # Unpack the binary struct of a startbyte, byte, int16, int64, endbyte
-                        unpacked_data = struct.unpack('@BBhiB', data)
-                        start, bool_byte, self.velocity, self.encoder_value, end = unpacked_data
-
+                        #unpacked_data = struct.unpack('<BBhqB', data)
+                        #start, bool_byte, self.velocity, self.encoder_value, end = unpacked_data
+                        self.MotorEnabled, self.MotorStalled, enc_rst, self.velocity, self.encoder_value, checksum = data
                         # Extract individual booleans from the packed byte
                         # var1 = bool(bool_byte & 0b00000001)
                         # var2 = bool(bool_byte & 0b00000010)
                         # var3 = bool(bool_byte & 0b00000100)
                         # var4 = bool(bool_byte & 0b00001000)
-                        self.MotorEnabled = bool(bool_byte & 0b00010000)
-                        self.MotorStalled = bool(bool_byte & 0b00100000)
+                        # self.MotorEnabled = bool(bool_byte & 0b00010000)
+                        # self.MotorStalled = bool(bool_byte & 0b00100000)
                         # home = bool(bool_byte & 0b010000000)
                         # encoder_reset = bool(bool_byte & 0b10000000)
                         
                         # data received, send an ack
-                        self.serial_comm.send_ack()
+                        self.serial_comm.rl.send_ack()
                         
                         # Update the GUI elements with the parsed data
                         self.stall_guard_label.setText(f"Motor Enable: {self.MotorEnabled}")
@@ -338,15 +338,15 @@ class MainWindow(QMainWindow):
                             self.enable_motor_button.setText("Enable Motor")
                             self.enable_motor_button.setStyleSheet(design.GREEN_BUTTON)
 
-                        if self.MotorStalled or not self.velocity and self.MotorEnabled:
+                        if self.MotorStalled or not self.MotorEnabled or self.velocity == 0:
                             self.stall_motor_button.setText("Motor is stopped")
                             self.stall_motor_button.setStyleSheet(design.RED_BUTTON)
-                        elif self.MotorEnabled:
+                        elif self.MotorEnabled and abs(self.velocity) > 0:
                             self.stall_motor_button.setText("Motor is running")
                             self.stall_motor_button.setStyleSheet(design.GREEN_BUTTON)
                         else:
-                            print("Incomplete binary struct received.")
-                            self.handle_console_output(f"Incomplete binary struct received. Data: {data}")
+                            print("Failed to update stall motor button")
+                            self.handle_console_output(f"Failed to update stall motor button. |  Data: {data}")
                     else:
                         # Treat this as an error message string
                         error_message = data
@@ -358,7 +358,7 @@ class MainWindow(QMainWindow):
                             raw_bytes = ' '.join(f"{byte:02x}" for byte in error_message)
                             self.handle_console_output(f"Error bytes of len. {msg_len} received: {raw_bytes}")
                 else:
-                    print(f"No data read. {data}")
+                    print(f"No data read")
                     self.handle_console_output(f"No data received. {data}")
             except Exception as e:
                 print(f"Error reading from serial port: {e}")
