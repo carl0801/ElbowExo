@@ -272,8 +272,8 @@ class EMG_Shimmer():
             self.Filter.set_signal(sensor1_sequential, sensor2_sequential)
             self.shimmer_output_processed = self.Filter.get_filtered_signals()
             self.control_output = self.Filter.get_control_value()
-            print(sensor1_sequential[-1])
-            #print(f"Control output: {self.control_output}")
+            #print(sensor1_sequential[-1])
+            print(f"Control output: {self.control_output}")
             # Dynamic sleep time adjuster for specified frequency
             total_updates += 1
             time.sleep(sleep_time)
@@ -286,7 +286,7 @@ class EMG_Shimmer():
             if sleep_time < 0.01:
                 sleep_time = 0.0            
 
-    def calibrate(self, target_max_value = 70, max_muscle_exertion = 0.2, min_muscle_exertion = 0.05):
+    def calibrate(self, target_max_value = 800*2, max_muscle_exertion = 0.5, min_muscle_exertion = 0.1):
         calibrations_values = []
         run = time.time()
         while run + 10 > time.time():
