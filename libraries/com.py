@@ -286,7 +286,7 @@ class EMG_Shimmer():
             if sleep_time < 0.01:
                 sleep_time = 0.0            
 
-    def calibrate(self, target_max_value = 800*2, max_muscle_exertion = 0.5, min_muscle_exertion = 0.1):
+    def calibrate(self, target_max_value = 3200, max_muscle_exertion = 0.5, min_muscle_exertion = 0.1):
         calibrations_values = []
         run = time.time()
         while run + 10 > time.time():
