@@ -172,7 +172,7 @@ class EMG_Shimmer():
         try:
             #self.PORT = self.find_bluetooth_com_port(self.device_name, "00:06:66:C5:5F:90")
             self.shimmer_device = Shimmer3(self.TYPE, debug=True)
-            self.res = self.shimmer_device.connect(com_port="COM7", write_rtc=True, update_all_properties=True, reset_sensors=True)
+            self.res = self.shimmer_device.connect(com_port="COM6", write_rtc=True, update_all_properties=True, reset_sensors=True)
             self.shimmer_device.set_sampling_rate(650)
             self.shimmer_device.set_enabled_sensors(util.SENSOR_ExG1_16BIT, util.SENSOR_ExG2_16BIT)
             if self.res:
@@ -286,7 +286,7 @@ class EMG_Shimmer():
             if sleep_time < 0.01:
                 sleep_time = 0.0            
 
-    def calibrate(self, target_max_value = 800*2, max_muscle_exertion = 0.5, min_muscle_exertion = 0.1):
+    def calibrate(self, target_max_value = 3200, max_muscle_exertion = 0.2, min_muscle_exertion = 0.05):
         calibrations_values = []
         run = time.time()
         while run + 10 > time.time():
